@@ -1,19 +1,24 @@
 package com.ibaiqzzaaziza.rutex.screen
 
 import android.content.res.Configuration
+import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.lazy.LazyRow
+import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowForward
+import androidx.compose.material.icons.filled.Check
 import androidx.compose.material.icons.filled.MoreVert
 import androidx.compose.material.icons.filled.Star
 import androidx.compose.material.icons.outlined.AltRoute
 import androidx.compose.material.icons.outlined.DirectionsSubway
+import androidx.compose.material.icons.outlined.LocationOn
 import androidx.compose.material.icons.outlined.Notifications
 import androidx.compose.material.icons.outlined.Place
 import androidx.compose.material.icons.outlined.Schedule
@@ -44,19 +49,23 @@ fun HomeScreen() {
             modifier = Modifier
                 .fillMaxSize()
                 .padding(paddingValues)
-                .padding(horizontal = 16.dp)
                 .verticalScroll(rememberScrollState())
         ) {
             Spacer(modifier = Modifier.height(16.dp))
 
-            HomeHeader()
-            Spacer(modifier = Modifier.height(20.dp))
-            HomeSearchBar()
-            Spacer(modifier = Modifier.height(24.dp))
-            AiBannerSection()
-            Spacer(modifier = Modifier.height(24.dp))
-            RecentRouteSection()
-            Spacer(modifier = Modifier.height(24.dp))
+            Column(modifier = Modifier.padding(horizontal = 16.dp)) {
+                HomeHeader()
+                Spacer(modifier = Modifier.height(20.dp))
+                HomeSearchBar()
+                Spacer(modifier = Modifier.height(24.dp))
+                AiBannerSection()
+                Spacer(modifier = Modifier.height(24.dp))
+                RecentRouteSection()
+                Spacer(modifier = Modifier.height(24.dp))
+            }
+
+            PopularDestinationsSection()
+            Spacer(modifier = Modifier.height(32.dp))
         }
     }
 }
@@ -75,12 +84,12 @@ fun HomeTopBar() {
                 text = stringResource(id = R.string.app_name),
                 fontSize = 22.sp,
                 fontWeight = FontWeight.ExtraBold,
-                color = Color(0xFF1E293B) // Dark Slate
+                color = Color(0xFF1E293B)
             )
             Text(
                 text = stringResource(id = R.string.app_subtitle),
                 fontSize = 11.sp,
-                color = Color(0xFFE65100), // Orange
+                color = Color(0xFFE65100),
                 fontWeight = FontWeight.Medium
             )
         }
@@ -93,7 +102,7 @@ fun HomeTopBar() {
                 imageVector = Icons.Outlined.Notifications,
                 contentDescription = "Notifikasi",
                 modifier = Modifier.size(24.dp),
-                tint = Color(0xFF475569) // Slate Gray
+                tint = Color(0xFF475569)
             )
 
             Image(
@@ -113,7 +122,7 @@ fun HomeHeader() {
     Column(modifier = Modifier.fillMaxWidth()) {
         Text(
             text = stringResource(id = R.string.greeting),
-            color = Color(0xFFE86B00), // Orange
+            color = Color(0xFFE86B00),
             fontWeight = FontWeight.SemiBold,
             fontSize = 14.sp
         )
@@ -122,14 +131,14 @@ fun HomeHeader() {
             text = stringResource(id = R.string.main_question),
             fontWeight = FontWeight.Bold,
             fontSize = 24.sp,
-            color = Color(0xFF1E293B), // Dark Slate
+            color = Color(0xFF1E293B),
             lineHeight = 32.sp
         )
         Spacer(modifier = Modifier.height(8.dp))
         Text(
             text = stringResource(id = R.string.sub_question),
             fontSize = 14.sp,
-            color = Color(0xFF64748B) // Slate Gray
+            color = Color(0xFF64748B)
         )
     }
 }
@@ -204,7 +213,7 @@ fun AiBannerSection() {
             )
             Spacer(modifier = Modifier.height(20.dp))
             Button(
-                onClick = { /* TODO: Navigasi ke Buat Rute AI */ },
+                onClick = { },
                 colors = ButtonDefaults.buttonColors(containerColor = Color(0xFFE86B00)),
                 modifier = Modifier
                     .fillMaxWidth()
@@ -239,7 +248,7 @@ fun RecentRouteSection() {
                 Icon(
                     imageVector = Icons.Outlined.AltRoute,
                     contentDescription = null,
-                    tint = Color(0xFFD97706), // Warna kecoklatan/orange
+                    tint = Color(0xFFD97706),
                     modifier = Modifier.size(20.dp)
                 )
                 Spacer(modifier = Modifier.width(8.dp))
@@ -252,7 +261,7 @@ fun RecentRouteSection() {
             }
             Text(
                 text = stringResource(id = R.string.see_all),
-                color = Color(0xFF3B82F6), // Warna Biru
+                color = Color(0xFF3B82F6),
                 fontSize = 12.sp,
                 fontWeight = FontWeight.Medium
             )
@@ -267,7 +276,6 @@ fun RecentRouteSection() {
             modifier = Modifier.fillMaxWidth()
         ) {
             Column(modifier = Modifier.padding(16.dp)) {
-
                 Row(
                     modifier = Modifier.fillMaxWidth(),
                     horizontalArrangement = Arrangement.SpaceBetween,
@@ -283,7 +291,6 @@ fun RecentRouteSection() {
                         Text(text = "•", color = Color(0xFF94A3B8), fontSize = 12.sp)
                         Spacer(modifier = Modifier.width(8.dp))
 
-                        // Badge "Selesai"
                         Row(
                             verticalAlignment = Alignment.CenterVertically,
                             modifier = Modifier
@@ -294,13 +301,13 @@ fun RecentRouteSection() {
                                 modifier = Modifier
                                     .size(6.dp)
                                     .clip(CircleShape)
-                                    .background(Color(0xFF10B981)) // Titik Hijau
+                                    .background(Color(0xFF10B981))
                             )
                             Spacer(modifier = Modifier.width(4.dp))
                             Text(
                                 text = stringResource(id = R.string.route_status),
                                 fontSize = 10.sp,
-                                color = Color(0xFF3B82F6), // Teks Biru
+                                color = Color(0xFF3B82F6),
                                 fontWeight = FontWeight.Medium
                             )
                         }
@@ -380,7 +387,7 @@ fun RecentRouteSection() {
                         Icon(
                             imageVector = Icons.Outlined.DirectionsSubway,
                             contentDescription = null,
-                            tint = Color(0xFFF59E0B), // Icon Orange
+                            tint = Color(0xFFF59E0B),
                             modifier = Modifier.size(16.dp)
                         )
                         Spacer(modifier = Modifier.width(8.dp))
@@ -396,6 +403,214 @@ fun RecentRouteSection() {
                         contentDescription = null,
                         tint = Color(0xFF94A3B8),
                         modifier = Modifier.size(16.dp)
+                    )
+                }
+            }
+        }
+    }
+}
+
+@Composable
+fun PopularDestinationsSection() {
+    Column(modifier = Modifier.fillMaxWidth()) {
+        Column(modifier = Modifier.padding(horizontal = 16.dp)) {
+            Text(
+                text = stringResource(id = R.string.popular_destinations),
+                fontWeight = FontWeight.Bold,
+                fontSize = 18.sp,
+                color = Color(0xFF1E293B)
+            )
+            Spacer(modifier = Modifier.height(4.dp))
+            Text(
+                text = stringResource(id = R.string.popular_desc),
+                fontSize = 12.sp,
+                color = Color(0xFF64748B)
+            )
+        }
+
+        Spacer(modifier = Modifier.height(16.dp))
+
+        LazyRow(
+            modifier = Modifier.fillMaxWidth(),
+            contentPadding = PaddingValues(horizontal = 16.dp),
+            horizontalArrangement = Arrangement.spacedBy(8.dp)
+        ) {
+            val categories = listOf(
+                R.string.chip_all to true,
+                R.string.chip_culture to false,
+                R.string.chip_culinary to false,
+                R.string.chip_history to false
+            )
+
+            items(categories) { (stringRes, isSelected) ->
+                Surface(
+                    shape = RoundedCornerShape(50),
+                    color = if (isSelected) Color(0xFF1E293B) else Color.White,
+                    border = if (!isSelected) BorderStroke(1.dp, Color(0xFFE2E8F0)) else null,
+                    modifier = Modifier.height(32.dp)
+                ) {
+                    Row(
+                        modifier = Modifier.padding(horizontal = 16.dp, vertical = 6.dp),
+                        verticalAlignment = Alignment.CenterVertically
+                    ) {
+                        if (isSelected) {
+                            Icon(
+                                imageVector = Icons.Filled.Check,
+                                contentDescription = null,
+                                tint = Color.White,
+                                modifier = Modifier.size(14.dp)
+                            )
+                            Spacer(modifier = Modifier.width(4.dp))
+                        }
+                        Text(
+                            text = stringResource(id = stringRes),
+                            color = if (isSelected) Color.White else Color(0xFF64748B),
+                            fontSize = 12.sp,
+                            fontWeight = if (isSelected) FontWeight.Medium else FontWeight.Normal
+                        )
+                    }
+                }
+            }
+        }
+
+        Spacer(modifier = Modifier.height(16.dp))
+
+        LazyRow(
+            modifier = Modifier.fillMaxWidth(),
+            contentPadding = PaddingValues(horizontal = 16.dp),
+            horizontalArrangement = Arrangement.spacedBy(12.dp)
+        ) {
+            item {
+                DestinationCard(
+                    title = stringResource(id = R.string.dest_keraton_title),
+                    location = stringResource(id = R.string.dest_keraton_loc),
+                    priceLabel = stringResource(id = R.string.dest_keraton_price_label),
+                    price = stringResource(id = R.string.dest_keraton_price),
+                    badgeText = stringResource(id = R.string.dest_keraton_badge),
+                    rating = stringResource(id = R.string.dest_keraton_rating),
+                    imageResId = android.R.drawable.ic_menu_gallery
+                )
+            }
+            item {
+                DestinationCard(
+                    title = stringResource(id = R.string.dest_jamblang_title),
+                    location = stringResource(id = R.string.dest_jamblang_loc),
+                    priceLabel = stringResource(id = R.string.dest_jamblang_price_label),
+                    price = stringResource(id = R.string.dest_jamblang_price),
+                    badgeText = stringResource(id = R.string.dest_jamblang_badge),
+                    rating = stringResource(id = R.string.dest_jamblang_rating),
+                    imageResId = android.R.drawable.ic_menu_gallery
+                )
+            }
+        }
+    }
+}
+
+@Composable
+fun DestinationCard(
+    title: String,
+    location: String,
+    priceLabel: String,
+    price: String,
+    badgeText: String,
+    rating: String,
+    imageResId: Int
+) {
+    Card(
+        shape = RoundedCornerShape(16.dp),
+        colors = CardDefaults.cardColors(containerColor = Color.White),
+        elevation = CardDefaults.cardElevation(defaultElevation = 2.dp),
+        modifier = Modifier.width(240.dp)
+    ) {
+        Column {
+            Box(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .height(120.dp)
+                    .background(Color(0xFFE2E8F0))
+            ) {
+                Image(
+                    painter = painterResource(id = imageResId),
+                    contentDescription = title,
+                    modifier = Modifier.fillMaxSize(),
+                    contentScale = ContentScale.Crop
+                )
+
+                Box(
+                    modifier = Modifier
+                        .padding(8.dp)
+                        .align(Alignment.TopStart)
+                        .background(Color.White, RoundedCornerShape(50))
+                        .padding(horizontal = 10.dp, vertical = 4.dp)
+                ) {
+                    Text(
+                        text = badgeText,
+                        color = Color(0xFFD97706),
+                        fontSize = 10.sp,
+                        fontWeight = FontWeight.Bold
+                    )
+                }
+
+                Row(
+                    modifier = Modifier
+                        .padding(8.dp)
+                        .align(Alignment.TopEnd)
+                        .background(Color(0xCC1E293B), RoundedCornerShape(50))
+                        .padding(horizontal = 8.dp, vertical = 4.dp),
+                    verticalAlignment = Alignment.CenterVertically
+                ) {
+                    Icon(
+                        imageVector = Icons.Filled.Star,
+                        contentDescription = "Rating",
+                        tint = Color(0xFFFBBF24),
+                        modifier = Modifier.size(12.dp)
+                    )
+                    Spacer(modifier = Modifier.width(4.dp))
+                    Text(
+                        text = rating,
+                        color = Color.White,
+                        fontSize = 10.sp,
+                        fontWeight = FontWeight.Bold
+                    )
+                }
+            }
+
+            Column(modifier = Modifier.padding(12.dp)) {
+                Text(
+                    text = title,
+                    fontWeight = FontWeight.Bold,
+                    fontSize = 16.sp,
+                    color = Color(0xFF1E293B)
+                )
+                Spacer(modifier = Modifier.height(4.dp))
+                Row(verticalAlignment = Alignment.CenterVertically) {
+                    Icon(
+                        imageVector = Icons.Outlined.LocationOn,
+                        contentDescription = null,
+                        tint = Color(0xFF94A3B8),
+                        modifier = Modifier.size(12.dp)
+                    )
+                    Spacer(modifier = Modifier.width(4.dp))
+                    Text(
+                        text = location,
+                        fontSize = 11.sp,
+                        color = Color(0xFF64748B)
+                    )
+                }
+
+                Spacer(modifier = Modifier.height(16.dp))
+
+                Column {
+                    Text(
+                        text = priceLabel,
+                        fontSize = 10.sp,
+                        color = Color(0xFF64748B)
+                    )
+                    Text(
+                        text = price,
+                        fontWeight = FontWeight.Bold,
+                        fontSize = 14.sp,
+                        color = Color(0xFFD97706)
                     )
                 }
             }

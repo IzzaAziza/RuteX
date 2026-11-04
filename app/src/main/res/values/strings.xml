@@ -66,4 +66,20 @@
     <string name="link_login">Masuk di sini</string>
 
     <string name="footer_badge_text">Kurasi Rute Resmi Keraton, Kuliner &amp; Batik Cirebon</string>
+
+    <!-- Destinasi Populer: Keraton -->
+    <string name="dest_keraton_title">Keraton Kasepuhan</string>
+    <string name="dest_keraton_loc">Jalan Kasepuhan, Lemahwungkuk</string>
+    <string name="dest_keraton_price_label">Tiket Masuk</string>
+    <string name="dest_keraton_price">Rp25.000</string>
+    <string name="dest_keraton_badge">Wisata Budaya</string>
+    <string name="dest_keraton_rating">4.8</string>
+
+    <!-- Destinasi Populer: Nasi Jamblang -->
+    <string name="dest_jamblang_title">Nasi Jamblang</string>
+    <string name="dest_jamblang_loc">Jl. Cangkring 2</string>
+    <string name="dest_jamblang_price_label">Mulai Dari</string>
+    <string name="dest_jamblang_price">Rp30.000</string>
+    <string name="dest_jamblang_badge">Kuliner Legendaris</string>
+    <string name="dest_jamblang_rating">4.7</string>
 </resources>
