@@ -87,9 +87,5 @@
     <string name="tips_title">Tips Wisata Cirebon</string>
     <string name="tips_desc">Gunakan angkot D6 atau sewa motor untuk menjangkau spot kuliner...</string>
 
-    <!-- Bottom Navigation -->
-    <string name="nav_home">Beranda</string>
-    <string name="nav_create">Buat Rute</string>
-    <string name="nav_history">Riwayat</string>
-    <string name="nav_profile">Profil</string>
+
 </resources>
