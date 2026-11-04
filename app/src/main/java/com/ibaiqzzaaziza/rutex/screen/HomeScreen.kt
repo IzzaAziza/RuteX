@@ -8,6 +8,8 @@ import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.ArrowForward
+import androidx.compose.material.icons.filled.Star
 import androidx.compose.material.icons.outlined.Notifications
 import androidx.compose.material.icons.outlined.Search
 import androidx.compose.material3.*
@@ -40,10 +42,16 @@ fun HomeScreen() {
                 .verticalScroll(rememberScrollState())
         ) {
             Spacer(modifier = Modifier.height(16.dp))
+
             HomeHeader()
             Spacer(modifier = Modifier.height(20.dp))
             HomeSearchBar()
             Spacer(modifier = Modifier.height(24.dp))
+
+            // --- Penambahan Commit Ketiga ---
+            AiBannerSection()
+            Spacer(modifier = Modifier.height(24.dp))
+            // --------------------------------
         }
     }
 }
@@ -150,6 +158,68 @@ fun HomeSearchBar() {
         ),
         singleLine = true
     )
+}
+
+@Composable
+fun AiBannerSection() {
+    Card(
+        shape = RoundedCornerShape(16.dp),
+        colors = CardDefaults.cardColors(containerColor = Color(0xFF1B253C)),
+        modifier = Modifier.fillMaxWidth()
+    ) {
+        Column(modifier = Modifier.padding(20.dp)) {
+            Row(verticalAlignment = Alignment.CenterVertically) {
+                Icon(
+                    imageVector = Icons.Filled.Star,
+                    contentDescription = null,
+                    tint = Color(0xFFE86B00),
+                    modifier = Modifier.size(16.dp)
+                )
+                Spacer(modifier = Modifier.width(6.dp))
+                Text(
+                    text = stringResource(id = R.string.ai_badge),
+                    color = Color.White,
+                    fontSize = 10.sp,
+                    fontWeight = FontWeight.Bold
+                )
+            }
+            Spacer(modifier = Modifier.height(12.dp))
+            Text(
+                text = stringResource(id = R.string.ai_title),
+                color = Color.White,
+                fontWeight = FontWeight.Bold,
+                fontSize = 20.sp
+            )
+            Spacer(modifier = Modifier.height(8.dp))
+            Text(
+                text = stringResource(id = R.string.ai_desc),
+                color = Color.LightGray,
+                fontSize = 12.sp,
+                lineHeight = 18.sp
+            )
+            Spacer(modifier = Modifier.height(20.dp))
+            Button(
+                onClick = { /* TODO: Navigasi ke Buat Rute AI */ },
+                colors = ButtonDefaults.buttonColors(containerColor = Color(0xFFE86B00)),
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .height(48.dp),
+                shape = RoundedCornerShape(50)
+            ) {
+                Text(
+                    text = stringResource(id = R.string.ai_btn),
+                    color = Color.White,
+                    fontWeight = FontWeight.SemiBold
+                )
+                Spacer(modifier = Modifier.width(8.dp))
+                Icon(
+                    imageVector = Icons.Filled.ArrowForward,
+                    contentDescription = null,
+                    modifier = Modifier.size(18.dp)
+                )
+            }
+        }
+    }
 }
 
 @Preview(showBackground = true)
