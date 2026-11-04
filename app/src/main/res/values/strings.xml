@@ -1,3 +1,69 @@
 <resources>
+    <!--Main Screen-->
     <string name="app_name">RuteX</string>
+    <string name="app_subtitle">Cirebon AI Planner</string>
+
+    <string name="greeting">Halo, Petualang! \uD83D\uDC4B</string>
+    <string name="main_question">Mau jalan-jalan ke mana hari ini?</string>
+    <string name="sub_question">Biarkan AI membantu menyusun perjalananmu.</string>
+
+    <string name="search_placeholder">Cari empal gentong, keraton, batik...</string>
+
+    <string name="ai_badge">AI TRAVEL ENGINE</string>
+    <string name="ai_title">BUAT RUTE BARU</string>
+    <string name="ai_desc">Susun itinerary wisata Cirebon cerdas dengan rekomendasi AI dalam hitungan detik.</string>
+    <string name="ai_btn">Mulai Rute AI</string>
+
+    <string name="recent_routes">Rute Terakhir</string>
+    <string name="see_all">Lihat Semua ></string>
+    <string name="route_date">Kemarin, 24 Okt</string>
+    <string name="route_status">Selesai</string>
+    <string name="route_name">Wisata Budaya &amp; Kuliner Keraton</string>
+    <string name="route_destinations">5 Destinasi</string>
+    <string name="route_duration">7 jam 50 menit</string>
+    <string name="route_start">Mulai: Stasiun Cirebon Kejaksaan</string>
+
+    <string name="popular_destinations">Destinasi Populer Cirebon</string>
+    <string name="popular_desc">Dipilih khusus sesuai tren pelancong pekan ini</string>
+
+    <string name="chip_all">Semua</string>
+    <string name="chip_culture">Budaya</string>
+    <string name="chip_culinary">Kuliner</string>
+    <string name="chip_history">Sejarah</string>
+
+    <string name="nav_home">Beranda</string>
+    <string name="nav_create">Buat Rute</string>
+    <string name="nav_history">Riwayat</string>
+    <string name="nav_profile">Profil</string>
+
+    <!-- Register Screen Strings -->
+    <string name="register_topbar_title">Create Account</string>
+    <string name="register_header_title">Mulai Petualanganmu</string>
+    <string name="register_header_subtitle">Daftar untuk simpan rute AI, akses offline, dan rekomendasi destinasi Cirebon personal.</string>
+
+    <string name="label_fullname">Nama Lengkap</string>
+    <string name="placeholder_fullname">misal: Izza Aziza</string>
+
+    <string name="label_email">Email Aktif</string>
+    <string name="placeholder_email">nama\@email.com</string>
+
+    <string name="label_whatsapp">Nomor WhatsApp (untuk notifikasi rute)</string>
+    <string name="label_optional">Opsional</string>
+    <string name="prefix_phone">+62</string>
+    <string name="placeholder_phone">812–3456–7890</string>
+
+    <string name="label_password">Kata Sandi</string>
+    <string name="placeholder_password">Minimal 8 karakter</string>
+
+    <string name="label_confirm_password">Konfirmasi Kata Sandi</string>
+    <string name="placeholder_confirm_password">Ulangi kata sandi</string>
+
+    <string name="btn_create_account">Buat Akun RuteX</string>
+    <string name="divider_or">atau daftar lebih cepat dengan</string>
+    <string name="btn_google">Daftar dengan Google</string>
+
+    <string name="txt_have_account">Sudah memiliki akun? </string>
+    <string name="link_login">Masuk di sini</string>
+
+    <string name="footer_badge_text">Kurasi Rute Resmi Keraton, Kuliner &amp; Batik Cirebon</string>
 </resources>
