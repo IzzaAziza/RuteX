@@ -14,12 +14,17 @@ import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowForward
 import androidx.compose.material.icons.filled.Check
+import androidx.compose.material.icons.filled.Home
 import androidx.compose.material.icons.filled.MoreVert
 import androidx.compose.material.icons.filled.Star
 import androidx.compose.material.icons.outlined.AltRoute
+import androidx.compose.material.icons.outlined.Create
+import androidx.compose.material.icons.outlined.DateRange
 import androidx.compose.material.icons.outlined.DirectionsSubway
+import androidx.compose.material.icons.outlined.Lightbulb
 import androidx.compose.material.icons.outlined.LocationOn
 import androidx.compose.material.icons.outlined.Notifications
+import androidx.compose.material.icons.outlined.Person
 import androidx.compose.material.icons.outlined.Place
 import androidx.compose.material.icons.outlined.Schedule
 import androidx.compose.material.icons.outlined.Search
@@ -43,6 +48,7 @@ import com.ibaiqzzaaziza.rutex.ui.theme.RuteXTheme
 fun HomeScreen() {
     Scaffold(
         topBar = { HomeTopBar() },
+        bottomBar = { HomeBottomBar() },
         containerColor = Color.White
     ) { paddingValues ->
         Column(
@@ -65,7 +71,12 @@ fun HomeScreen() {
             }
 
             PopularDestinationsSection()
-            Spacer(modifier = Modifier.height(32.dp))
+            Spacer(modifier = Modifier.height(20.dp))
+
+            Column(modifier = Modifier.padding(horizontal = 16.dp)) {
+                TipsSection()
+                Spacer(modifier = Modifier.height(32.dp))
+            }
         }
     }
 }
@@ -114,6 +125,56 @@ fun HomeTopBar() {
                 contentScale = ContentScale.Crop
             )
         }
+    }
+}
+
+@Composable
+fun HomeBottomBar() {
+    NavigationBar(
+        containerColor = Color.White,
+        tonalElevation = 8.dp
+    ) {
+        NavigationBarItem(
+            icon = { Icon(Icons.Filled.Home, contentDescription = null) },
+            label = { Text("Beranda") },
+            selected = true,
+            onClick = { },
+            colors = NavigationBarItemDefaults.colors(
+                selectedIconColor = Color(0xFFE86B00),
+                selectedTextColor = Color(0xFFE86B00),
+                indicatorColor = Color.Transparent
+            )
+        )
+        NavigationBarItem(
+            icon = { Icon(Icons.Outlined.Create, contentDescription = null) },
+            label = { Text("Buat Rute") },
+            selected = false,
+            onClick = { },
+            colors = NavigationBarItemDefaults.colors(
+                unselectedIconColor = Color(0xFF64748B),
+                unselectedTextColor = Color(0xFF64748B)
+            )
+        )
+        NavigationBarItem(
+            icon = { Icon(Icons.Outlined.DateRange, contentDescription = null) },
+            label = { Text("Riwayat") },
+            selected = false,
+            onClick = { },
+            colors = NavigationBarItemDefaults.colors(
+                unselectedIconColor = Color(0xFF64748B),
+                unselectedTextColor = Color(0xFF64748B)
+            )
+        )
+        NavigationBarItem(
+            icon = { Icon(Icons.Outlined.Person, contentDescription = null) },
+            label = { Text("Profil") },
+            selected = false,
+            onClick = { },
+            colors = NavigationBarItemDefaults.colors(
+                unselectedIconColor = Color(0xFF64748B),
+                unselectedTextColor = Color(0xFF64748B)
+            )
+        )
     }
 }
 
@@ -614,6 +675,65 @@ fun DestinationCard(
                     )
                 }
             }
+        }
+    }
+}
+
+@Composable
+fun TipsSection() {
+    Card(
+        shape = RoundedCornerShape(16.dp),
+        colors = CardDefaults.cardColors(containerColor = Color(0xFFEFF6FF)),
+        modifier = Modifier.fillMaxWidth()
+    ) {
+        Row(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(16.dp),
+            verticalAlignment = Alignment.CenterVertically,
+            horizontalArrangement = Arrangement.SpaceBetween
+        ) {
+            Row(
+                verticalAlignment = Alignment.CenterVertically,
+                modifier = Modifier.weight(1f)
+            ) {
+                Box(
+                    modifier = Modifier
+                        .size(40.dp)
+                        .clip(CircleShape)
+                        .background(Color(0xFFDBEAFE)),
+                    contentAlignment = Alignment.Center
+                ) {
+                    Icon(
+                        imageVector = Icons.Outlined.Lightbulb,
+                        contentDescription = null,
+                        tint = Color(0xFF2563EB),
+                        modifier = Modifier.size(20.dp)
+                    )
+                }
+                Spacer(modifier = Modifier.width(12.dp))
+                Column {
+                    Text(
+                        text = "Tips Wisata Cirebon",
+                        fontWeight = FontWeight.Bold,
+                        fontSize = 14.sp,
+                        color = Color(0xFF1E293B)
+                    )
+                    Spacer(modifier = Modifier.height(2.dp))
+                    Text(
+                        text = "Gunakan angkot D6 atau sewa motor untuk menjangkau spot kuliner...",
+                        fontSize = 11.sp,
+                        color = Color(0xFF64748B),
+                        maxLines = 1
+                    )
+                }
+            }
+            Icon(
+                imageVector = Icons.Filled.ArrowForward,
+                contentDescription = null,
+                tint = Color(0xFF94A3B8),
+                modifier = Modifier.size(16.dp)
+            )
         }
     }
 }

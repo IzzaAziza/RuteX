@@ -82,4 +82,14 @@
     <string name="dest_jamblang_price">Rp30.000</string>
     <string name="dest_jamblang_badge">Kuliner Legendaris</string>
     <string name="dest_jamblang_rating">4.7</string>
+
+    <!-- Tips Wisata -->
+    <string name="tips_title">Tips Wisata Cirebon</string>
+    <string name="tips_desc">Gunakan angkot D6 atau sewa motor untuk menjangkau spot kuliner...</string>
+
+    <!-- Bottom Navigation -->
+    <string name="nav_home">Beranda</string>
+    <string name="nav_create">Buat Rute</string>
+    <string name="nav_history">Riwayat</string>
+    <string name="nav_profile">Profil</string>
 </resources>
