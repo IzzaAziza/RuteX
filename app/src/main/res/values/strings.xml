@@ -97,4 +97,27 @@
     <string name="splash_loading">Menyiapkan rute pintar Cirebon...</string>
     <string name="splash_trust">Didukung Rekomendasi Resmi Wisata Cirebon</string>
     <string name="splash_version">Versi 2.4.0 (Build 418)</string>
+
+    <!-- Komponen Umum -->
+    <string name="back">Kembali</string>
+    <string name="profile_desc">Profil pengguna</string>
+    <string name="show_password">Tampilkan kata sandi</string>
+    <string name="hide_password">Sembunyikan kata sandi</string>
+    <string name="feature_coming_soon">Fitur ini akan segera hadir</string>
+
+    <!-- Login Screen -->
+    <string name="login_topbar_title">Sign In</string>
+    <string name="login_title">Selamat Datang Kembali!</string>
+    <string name="login_subtitle">Masuk untuk melanjutkan rencana perjalanan cerdasmu di Cirebon.</string>
+    <string name="label_email_phone">Email atau Nomor Telepon</string>
+    <string name="placeholder_password_login">••••••••</string>
+    <string name="remember_me">Ingat saya</string>
+    <string name="forgot_password">Lupa Kata Sandi?</string>
+    <string name="btn_login">Masuk Sekarang</string>
+    <string name="login_divider">atau masuk dengan</string>
+    <string name="btn_google_login">Lanjutkan dengan Google</string>
+    <string name="txt_no_account">Belum punya akun?</string>
+    <string name="link_register">Daftar Sekarang</string>
+    <string name="error_email_phone_empty">Email atau nomor telepon wajib diisi</string>
+    <string name="error_password_empty">Kata sandi wajib diisi</string>
 </resources>

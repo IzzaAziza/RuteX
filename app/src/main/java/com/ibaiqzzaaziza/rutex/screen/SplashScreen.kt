@@ -79,7 +79,7 @@ fun SplashScreen(navController: NavHostController) {
             animationSpec = tween(durationMillis = SPLASH_DURATION_MS, easing = LinearEasing)
         )
         // Splash tidak boleh muncul lagi ketika pengguna menekan tombol Back
-        navController.navigate(Screen.Home.route) {
+        navController.navigate(Screen.Login.route) {
             popUpTo(Screen.Splash.route) { inclusive = true }
         }
     }
