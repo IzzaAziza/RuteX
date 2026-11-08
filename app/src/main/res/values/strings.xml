@@ -87,5 +87,14 @@
     <string name="tips_title">Tips Wisata Cirebon</string>
     <string name="tips_desc">Gunakan angkot D6 atau sewa motor untuk menjangkau spot kuliner...</string>
 
-
+    <!-- Splash Screen -->
+    <string name="logo_desc">Logo RuteX</string>
+    <string name="cirebon_edition">Cirebon Edition</string>
+    <string name="smart_city_ai">Smart City AI</string>
+    <string name="ai_label">AI</string>
+    <string name="splash_tagline">AI-Powered Travel Planner</string>
+    <string name="splash_pill">Menghubungkan Budaya, Kuliner &amp; Destinasi</string>
+    <string name="splash_loading">Menyiapkan rute pintar Cirebon...</string>
+    <string name="splash_trust">Didukung Rekomendasi Resmi Wisata Cirebon</string>
+    <string name="splash_version">Versi 2.4.0 (Build 418)</string>
 </resources>

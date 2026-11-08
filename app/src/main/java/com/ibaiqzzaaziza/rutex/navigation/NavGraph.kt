@@ -6,13 +6,17 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.ibaiqzzaaziza.rutex.screen.HomeScreen
+import com.ibaiqzzaaziza.rutex.screen.SplashScreen
 
 @Composable
 fun SetupNavGraph(navController: NavHostController = rememberNavController()) {
     NavHost(
         navController = navController,
-        startDestination = Screen.Home.route
+        startDestination = Screen.Splash.route
     ) {
+        composable(route = Screen.Splash.route) {
+            SplashScreen(navController)
+        }
         composable(route = Screen.Home.route) {
             HomeScreen()
         }
