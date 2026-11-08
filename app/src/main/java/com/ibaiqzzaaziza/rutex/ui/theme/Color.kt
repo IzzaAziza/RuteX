@@ -7,6 +7,7 @@ val RuteOrange = Color(0xFFFF7A00)
 val RuteOrangeDark = Color(0xFF994700)
 val RuteOrangeDeep = Color(0xFF753400)
 val RutePeach = Color(0xFFFFDBC8)
+val RutePeachLight = Color(0xFFFBF0EA)
 
 // Warna teks dan latar gelap
 val RuteNavy = Color(0xFF0B1C30)

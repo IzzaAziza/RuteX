@@ -127,4 +127,34 @@
     <string name="added_to_plan">%1$s ditambahkan ke rencana</string>
     <string name="destination_image_desc">Foto %1$s</string>
     <string name="empty_destination">Belum ada destinasi untuk kategori ini.</string>
+
+    <!-- Buat Rute & Mode -->
+    <string name="buat_rute_title">Pilih Mode Perencanaan</string>
+    <string name="buat_rute_subtitle">Tentukan cara terbaik untuk merancang itinerary liburan Cirebon sesuai gayamu.</string>
+    <string name="metode_penjadwalan">Metode Penjadwalan</string>
+    <plurals name="jumlah_pilihan">
+        <item quantity="one">%1$d Pilihan Tersedia</item>
+        <item quantity="other">%1$d Pilihan Tersedia</item>
+    </plurals>
+
+    <string name="mode_manual_title">Buat Manual</string>
+    <string name="mode_manual_badge">Kustom Total</string>
+    <string name="mode_manual_desc">Pilih destinasi mandiri, susun jadwal waktu per jam, serta tentukan moda transportasi bebas hambatan.</string>
+    <string name="mode_manual_tag_1">Urutkan Titik Singgah</string>
+    <string name="mode_manual_tag_2">Jadwal Mandiri</string>
+    <string name="mode_manual_tag_3">Semua Jenis Kendaraan</string>
+
+    <string name="mode_constraint_title">Dengan Constraint</string>
+    <string name="mode_constraint_badge">Rekomendasi</string>
+    <string name="mode_constraint_desc">Atur batasan seperti anggaran, batas jam pulang, jumlah maksimal lokasi, dan ritme santai vs intensif.</string>
+    <string name="mode_constraint_tag_1">Filter Anggaran</string>
+    <string name="mode_constraint_tag_2">Limit Waktu &amp; Durasi</string>
+    <string name="mode_constraint_tag_3">Rute TSP Optimal</string>
+
+    <string name="mode_ai_title">Tanpa Constraint</string>
+    <string name="mode_ai_badge">Rekomendasi AI</string>
+    <string name="mode_ai_desc">Biarkan AI RuteX menghasilkan rekomendasi itinerary terbaik secara menyeluruh secara otomatis seketika.</string>
+    <string name="mode_ai_tag_1">Generasi Otomatis</string>
+    <string name="mode_ai_tag_2">Destinasi Top Rating</string>
+    <string name="mode_ai_tag_3">Siap Pakai</string>
 </resources>

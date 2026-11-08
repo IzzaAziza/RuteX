@@ -104,9 +104,6 @@ import com.ibaiqzzaaziza.rutex.ui.theme.RuteXTheme
 
 @Composable
 fun HomeScreen(navController: NavHostController) {
-    val context = LocalContext.current
-    val comingSoon = stringResource(R.string.feature_coming_soon)
-
     Scaffold(
         topBar = { RuteMainTopBar() },
         bottomBar = { RuteBottomBar(navController, Screen.Home.route) },
@@ -114,7 +111,13 @@ fun HomeScreen(navController: NavHostController) {
     ) { innerPadding ->
         HomeContent(
             modifier = Modifier.padding(innerPadding),
-            onStartRoute = { Toast.makeText(context, comingSoon, Toast.LENGTH_SHORT).show() }
+            onStartRoute = {
+                navController.navigate(Screen.BuatRute.route) {
+                    popUpTo(Screen.Home.route) { saveState = true }
+                    launchSingleTop = true
+                    restoreState = true
+                }
+            }
         )
     }
 }

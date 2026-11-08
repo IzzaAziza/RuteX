@@ -87,7 +87,7 @@ private enum class BottomNavItem(
     val route: String?
 ) {
     BERANDA(R.string.nav_home, Icons.Outlined.Home, Screen.Home.route),
-    BUAT_RUTE(R.string.nav_create, Icons.Outlined.AutoAwesome, null),
+    BUAT_RUTE(R.string.nav_create, Icons.Outlined.AutoAwesome, Screen.BuatRute.route),
     RIWAYAT(R.string.nav_history, Icons.Outlined.History, null),
     PROFIL(R.string.nav_profile, Icons.Outlined.Person, null)
 }
