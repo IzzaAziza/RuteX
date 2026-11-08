@@ -7,6 +7,7 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.ibaiqzzaaziza.rutex.screen.HomeScreen
 import com.ibaiqzzaaziza.rutex.screen.LoginScreen
+import com.ibaiqzzaaziza.rutex.screen.RegisterScreen
 import com.ibaiqzzaaziza.rutex.screen.SplashScreen
 
 @Composable
@@ -20,6 +21,9 @@ fun SetupNavGraph(navController: NavHostController = rememberNavController()) {
         }
         composable(route = Screen.Login.route) {
             LoginScreen(navController)
+        }
+        composable(route = Screen.Register.route) {
+            RegisterScreen(navController)
         }
         composable(route = Screen.Home.route) {
             HomeScreen()

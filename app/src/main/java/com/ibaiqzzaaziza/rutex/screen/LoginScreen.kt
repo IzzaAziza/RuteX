@@ -71,7 +71,7 @@ fun LoginScreen(navController: NavHostController) {
                     popUpTo(Screen.Login.route) { inclusive = true }
                 }
             },
-            onRegisterClick = { }
+            onRegisterClick = { navController.navigate(Screen.Register.route) }
         )
     }
 }

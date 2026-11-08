@@ -120,4 +120,18 @@
     <string name="link_register">Daftar Sekarang</string>
     <string name="error_email_phone_empty">Email atau nomor telepon wajib diisi</string>
     <string name="error_password_empty">Kata sandi wajib diisi</string>
+
+    <!-- Register Screen: syarat & validasi -->
+    <string name="terms_prefix">Saya menyetujui</string>
+    <string name="terms_link">Syarat &amp; Ketentuan</string>
+    <string name="terms_middle">serta</string>
+    <string name="privacy_link">Kebijakan Privasi</string>
+    <string name="terms_suffix">RuteX.</string>
+    <string name="error_fullname_empty">Nama lengkap wajib diisi</string>
+    <string name="error_email_invalid">Format email tidak valid</string>
+    <string name="error_phone_invalid">Nomor WhatsApp harus 9–13 digit</string>
+    <string name="error_password_min">Kata sandi minimal 8 karakter</string>
+    <string name="error_password_mismatch">Konfirmasi kata sandi tidak sama</string>
+    <string name="error_terms">Setujui Syarat &amp; Ketentuan terlebih dahulu</string>
+    <string name="register_success">Akun berhasil dibuat. Selamat datang!</string>
 </resources>
