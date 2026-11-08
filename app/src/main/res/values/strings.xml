@@ -15,13 +15,13 @@
     <string name="ai_btn">Mulai Rute AI</string>
 
     <string name="recent_routes">Rute Terakhir</string>
-    <string name="see_all">Lihat Semua ></string>
+    <string name="see_all">Lihat Semua</string>
     <string name="route_date">Kemarin, 24 Okt</string>
     <string name="route_status">Selesai</string>
     <string name="route_name">Wisata Budaya &amp; Kuliner Keraton</string>
     <string name="route_destinations">5 Destinasi</string>
     <string name="route_duration">7 jam 50 menit</string>
-    <string name="route_start">Mulai: Stasiun Cirebon Kejaksaan</string>
+    <string name="route_start">Mulai: Stasiun Cirebon Kejaksan</string>
 
     <string name="popular_destinations">Destinasi Populer Cirebon</string>
     <string name="popular_desc">Dipilih khusus sesuai tren pelancong pekan ini</string>
@@ -30,6 +30,7 @@
     <string name="chip_culture">Budaya</string>
     <string name="chip_culinary">Kuliner</string>
     <string name="chip_history">Sejarah</string>
+    <string name="chip_nature">Alam</string>
 
     <string name="nav_home">Beranda</string>
     <string name="nav_create">Buat Rute</string>
@@ -67,25 +68,9 @@
 
     <string name="footer_badge_text">Kurasi Rute Resmi Keraton, Kuliner &amp; Batik Cirebon</string>
 
-    <!-- Destinasi Populer: Keraton -->
-    <string name="dest_keraton_title">Keraton Kasepuhan</string>
-    <string name="dest_keraton_loc">Jalan Kasepuhan, Lemahwungkuk</string>
-    <string name="dest_keraton_price_label">Tiket Masuk</string>
-    <string name="dest_keraton_price">Rp25.000</string>
-    <string name="dest_keraton_badge">Wisata Budaya</string>
-    <string name="dest_keraton_rating">4.8</string>
-
-    <!-- Destinasi Populer: Nasi Jamblang -->
-    <string name="dest_jamblang_title">Nasi Jamblang</string>
-    <string name="dest_jamblang_loc">Jl. Cangkring 2</string>
-    <string name="dest_jamblang_price_label">Mulai Dari</string>
-    <string name="dest_jamblang_price">Rp30.000</string>
-    <string name="dest_jamblang_badge">Kuliner Legendaris</string>
-    <string name="dest_jamblang_rating">4.7</string>
-
     <!-- Tips Wisata -->
     <string name="tips_title">Tips Wisata Cirebon</string>
-    <string name="tips_desc">Gunakan angkot D6 atau sewa motor untuk menjangkau spot kuliner...</string>
+    <string name="tips_desc">Gunakan angkot D6 atau sewa motor untuk menjangkau spot kuliner…</string>
 
     <!-- Splash Screen -->
     <string name="logo_desc">Logo RuteX</string>
@@ -134,4 +119,12 @@
     <string name="error_password_mismatch">Konfirmasi kata sandi tidak sama</string>
     <string name="error_terms">Setujui Syarat &amp; Ketentuan terlebih dahulu</string>
     <string name="register_success">Akun berhasil dibuat. Selamat datang!</string>
+
+    <!-- Home Dashboard -->
+    <string name="notifications_desc">Notifikasi</string>
+    <string name="route_options_desc">Opsi rute</string>
+    <string name="add_to_plan_desc">Tambahkan ke rencana</string>
+    <string name="added_to_plan">%1$s ditambahkan ke rencana</string>
+    <string name="destination_image_desc">Foto %1$s</string>
+    <string name="empty_destination">Belum ada destinasi untuk kategori ini.</string>
 </resources>
