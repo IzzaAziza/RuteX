@@ -4,12 +4,18 @@ import android.content.Context
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import com.ibaiqzzaaziza.rutex.database.RuteXDb
+import com.ibaiqzzaaziza.rutex.network.UserDataStore
+import com.ibaiqzzaaziza.rutex.screen.AuthViewModel
 import com.ibaiqzzaaziza.rutex.screen.RuteAiViewModel
 import com.ibaiqzzaaziza.rutex.screen.RuteManualViewModel
 
 class ViewModelFactory(private val context: Context) : ViewModelProvider.Factory {
     @Suppress("unchecked_cast")
     override fun <T : ViewModel> create(modelClass: Class<T>): T {
+        if (modelClass.isAssignableFrom(AuthViewModel::class.java)) {
+            return AuthViewModel(UserDataStore(context)) as T
+        }
+
         val dao = RuteXDb.getInstance(context).dao
         if (modelClass.isAssignableFrom(RuteManualViewModel::class.java)) {
             return RuteManualViewModel(dao) as T

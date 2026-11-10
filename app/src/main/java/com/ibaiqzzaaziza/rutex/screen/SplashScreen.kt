@@ -35,6 +35,7 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.geometry.Offset
@@ -54,6 +55,8 @@ import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
 import com.ibaiqzzaaziza.rutex.R
 import com.ibaiqzzaaziza.rutex.navigation.Screen
+import com.ibaiqzzaaziza.rutex.network.UserDataStore
+import kotlinx.coroutines.flow.first
 import com.ibaiqzzaaziza.rutex.ui.theme.RuteBackground
 import com.ibaiqzzaaziza.rutex.ui.theme.RuteBadge
 import com.ibaiqzzaaziza.rutex.ui.theme.RuteBlue
@@ -71,6 +74,7 @@ private const val SPLASH_DURATION_MS = 2500
 
 @Composable
 fun SplashScreen(navController: NavHostController) {
+    val context = LocalContext.current
     val progress = remember { Animatable(0f) }
 
     LaunchedEffect(Unit) {
@@ -78,8 +82,12 @@ fun SplashScreen(navController: NavHostController) {
             targetValue = 1f,
             animationSpec = tween(durationMillis = SPLASH_DURATION_MS, easing = LinearEasing)
         )
+        // Jika sesi login masih tersimpan, pengguna langsung masuk ke Beranda
+        val sudahLogin = UserDataStore(context).isLoggedInFlow.first()
+        val tujuan = if (sudahLogin) Screen.Home.route else Screen.Login.route
+
         // Splash tidak boleh muncul lagi ketika pengguna menekan tombol Back
-        navController.navigate(Screen.Login.route) {
+        navController.navigate(tujuan) {
             popUpTo(Screen.Splash.route) { inclusive = true }
         }
     }

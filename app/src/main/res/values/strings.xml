@@ -49,7 +49,6 @@
     <string name="placeholder_email">nama\@email.com</string>
 
     <string name="label_whatsapp">Nomor WhatsApp (untuk notifikasi rute)</string>
-    <string name="label_optional">Opsional</string>
     <string name="prefix_phone">+62</string>
     <string name="placeholder_phone">812–3456–7890</string>
 
@@ -94,7 +93,6 @@
     <string name="login_topbar_title">Sign In</string>
     <string name="login_title">Selamat Datang Kembali!</string>
     <string name="login_subtitle">Masuk untuk melanjutkan rencana perjalanan cerdasmu di Cirebon.</string>
-    <string name="label_email_phone">Email atau Nomor Telepon</string>
     <string name="placeholder_password_login">••••••••</string>
     <string name="remember_me">Ingat saya</string>
     <string name="forgot_password">Lupa Kata Sandi?</string>
@@ -103,8 +101,10 @@
     <string name="btn_google_login">Lanjutkan dengan Google</string>
     <string name="txt_no_account">Belum punya akun?</string>
     <string name="link_register">Daftar Sekarang</string>
-    <string name="error_email_phone_empty">Email atau nomor telepon wajib diisi</string>
     <string name="error_password_empty">Kata sandi wajib diisi</string>
+    <string name="label_email_login">Email</string>
+    <string name="login_success">Berhasil masuk. Selamat datang kembali!</string>
+    <string name="error_koneksi">Tidak dapat terhubung ke server. Periksa koneksi internetmu.</string>
 
     <!-- Register Screen: syarat & validasi -->
     <string name="terms_prefix">Saya menyetujui</string>

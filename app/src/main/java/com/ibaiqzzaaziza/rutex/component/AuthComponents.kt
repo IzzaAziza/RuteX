@@ -18,6 +18,7 @@ import androidx.compose.material.icons.automirrored.filled.ArrowForward
 import androidx.compose.material.icons.outlined.Person
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
@@ -123,20 +124,33 @@ fun RuteLogoWithText(modifier: Modifier = Modifier, height: Dp = 60.dp) {
 fun RutePrimaryButton(
     text: String,
     onClick: () -> Unit,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
+    isLoading: Boolean = false
 ) {
     Button(
         onClick = onClick,
+        // Selama proses berjalan tombol dinonaktifkan agar tidak terkirim dua kali
+        enabled = !isLoading,
         modifier = modifier
             .fillMaxWidth()
             .height(50.dp),
         shape = RoundedCornerShape(12.dp),
         colors = ButtonDefaults.buttonColors(
             containerColor = RuteOrange,
-            contentColor = Color.White
+            contentColor = Color.White,
+            disabledContainerColor = RuteOrange.copy(alpha = 0.7f),
+            disabledContentColor = Color.White
         ),
         elevation = ButtonDefaults.buttonElevation(defaultElevation = 4.dp)
     ) {
+        if (isLoading) {
+            CircularProgressIndicator(
+                color = Color.White,
+                strokeWidth = 2.dp,
+                modifier = Modifier.size(20.dp)
+            )
+            return@Button
+        }
         Text(
             text = text,
             fontSize = 14.sp,

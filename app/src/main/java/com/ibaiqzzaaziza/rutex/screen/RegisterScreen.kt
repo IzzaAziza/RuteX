@@ -35,6 +35,8 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.saveable.rememberSaveable
@@ -56,6 +58,7 @@ import androidx.compose.ui.text.withLink
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import com.ibaiqzzaaziza.rutex.R
@@ -66,6 +69,7 @@ import com.ibaiqzzaaziza.rutex.component.RuteLogoWithText
 import com.ibaiqzzaaziza.rutex.component.RutePrimaryButton
 import com.ibaiqzzaaziza.rutex.component.RuteTextField
 import com.ibaiqzzaaziza.rutex.navigation.Screen
+import com.ibaiqzzaaziza.rutex.network.ApiStatus
 import com.ibaiqzzaaziza.rutex.ui.theme.RuteBackground
 import com.ibaiqzzaaziza.rutex.ui.theme.RuteBlue
 import com.ibaiqzzaaziza.rutex.ui.theme.RuteChip
@@ -75,6 +79,7 @@ import com.ibaiqzzaaziza.rutex.ui.theme.RuteNavy
 import com.ibaiqzzaaziza.rutex.ui.theme.RuteOrange
 import com.ibaiqzzaaziza.rutex.ui.theme.RuteSlate
 import com.ibaiqzzaaziza.rutex.ui.theme.RuteXTheme
+import com.ibaiqzzaaziza.rutex.util.ViewModelFactory
 
 private const val MIN_PASSWORD_LENGTH = 8
 private const val MIN_PHONE_LENGTH = 9
@@ -82,6 +87,32 @@ private const val MAX_PHONE_LENGTH = 13
 
 @Composable
 fun RegisterScreen(navController: NavHostController) {
+    val context = LocalContext.current
+    val factory = ViewModelFactory(context)
+    val viewModel: AuthViewModel = viewModel(factory = factory)
+    val status by viewModel.status.collectAsState()
+    val errorMessage by viewModel.errorMessage
+
+    val pesanSukses = stringResource(R.string.register_success)
+    val pesanGagalKoneksi = stringResource(R.string.error_koneksi)
+
+    LaunchedEffect(status) {
+        when (status) {
+            ApiStatus.SUCCESS -> {
+                Toast.makeText(context, pesanSukses, Toast.LENGTH_SHORT).show()
+                viewModel.clearStatus()
+                navController.navigate(Screen.Home.route) {
+                    popUpTo(Screen.Login.route) { inclusive = true }
+                }
+            }
+            ApiStatus.FAILED -> {
+                Toast.makeText(context, errorMessage ?: pesanGagalKoneksi, Toast.LENGTH_LONG).show()
+                viewModel.clearStatus()
+            }
+            else -> {}
+        }
+    }
+
     Scaffold(
         topBar = {
             AuthTopBar(
@@ -93,10 +124,9 @@ fun RegisterScreen(navController: NavHostController) {
     ) { innerPadding ->
         RegisterContent(
             modifier = Modifier.padding(innerPadding),
-            onRegisterSuccess = {
-                navController.navigate(Screen.Home.route) {
-                    popUpTo(Screen.Login.route) { inclusive = true }
-                }
+            isLoading = status == ApiStatus.LOADING,
+            onRegisterClick = { nama, email, phone, password, confirmPassword ->
+                viewModel.register(nama, email, phone, password, confirmPassword)
             },
             onLoginClick = { navController.popBackStack() }
         )
@@ -106,13 +136,13 @@ fun RegisterScreen(navController: NavHostController) {
 @Composable
 fun RegisterContent(
     modifier: Modifier = Modifier,
-    onRegisterSuccess: () -> Unit,
+    isLoading: Boolean = false,
+    onRegisterClick: (nama: String, email: String, phone: String, password: String, confirmPassword: String) -> Unit,
     onLoginClick: () -> Unit
 ) {
     val context = LocalContext.current
     val comingSoon = stringResource(R.string.feature_coming_soon)
     val termsError = stringResource(R.string.error_terms)
-    val successMessage = stringResource(R.string.register_success)
 
     var fullName by rememberSaveable { mutableStateOf("") }
     var email by rememberSaveable { mutableStateOf("") }
@@ -189,10 +219,9 @@ fun RegisterContent(
 
                 RuteTextField(
                     value = phone,
-                    // Nomor WhatsApp hanya boleh berisi angka
-                    onValueChange = { input -> phone = input.filter { it.isDigit() } },
+                    // Nomor WhatsApp hanya boleh berisi angka, angka 0 di depan dibuang karena sudah ada +62
+                    onValueChange = { input -> phone = input.filter { it.isDigit() }.trimStart('0') },
                     label = stringResource(R.string.label_whatsapp),
-                    labelTrailing = stringResource(R.string.label_optional),
                     placeholder = stringResource(R.string.placeholder_phone),
                     leadingIcon = Icons.Outlined.Sms,
                     leadingExtra = { PhonePrefix() },
@@ -241,12 +270,13 @@ fun RegisterContent(
 
                 RutePrimaryButton(
                     text = stringResource(R.string.btn_create_account),
+                    isLoading = isLoading,
                     onClick = {
                         // Sanity check sebelum akun dibuat
                         fullNameError = fullName.isBlank()
                         emailError = !Patterns.EMAIL_ADDRESS.matcher(email.trim()).matches()
-                        phoneError = phone.isNotEmpty() &&
-                                phone.length !in MIN_PHONE_LENGTH..MAX_PHONE_LENGTH
+                        // Nomor WhatsApp wajib diisi karena dibutuhkan server saat mendaftar
+                        phoneError = phone.length !in MIN_PHONE_LENGTH..MAX_PHONE_LENGTH
                         passwordError = password.length < MIN_PASSWORD_LENGTH
                         confirmError = confirmPassword != password
 
@@ -255,8 +285,8 @@ fun RegisterContent(
                         if (formValid && !agreeTerms) {
                             Toast.makeText(context, termsError, Toast.LENGTH_SHORT).show()
                         } else if (formValid) {
-                            Toast.makeText(context, successMessage, Toast.LENGTH_SHORT).show()
-                            onRegisterSuccess()
+                            // Server meminta nomor berupa angka saja, jadi +62 diubah menjadi awalan 0
+                            onRegisterClick(fullName, email, "0$phone", password, confirmPassword)
                         }
                     }
                 )

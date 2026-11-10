@@ -1,5 +1,6 @@
 package com.ibaiqzzaaziza.rutex.screen
 
+import android.util.Patterns
 import android.widget.Toast
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -25,6 +26,8 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.saveable.rememberSaveable
@@ -41,6 +44,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import com.ibaiqzzaaziza.rutex.R
@@ -51,25 +55,52 @@ import com.ibaiqzzaaziza.rutex.component.RuteLogoWithText
 import com.ibaiqzzaaziza.rutex.component.RutePrimaryButton
 import com.ibaiqzzaaziza.rutex.component.RuteTextField
 import com.ibaiqzzaaziza.rutex.navigation.Screen
+import com.ibaiqzzaaziza.rutex.network.ApiStatus
 import com.ibaiqzzaaziza.rutex.ui.theme.RuteBackground
 import com.ibaiqzzaaziza.rutex.ui.theme.RuteBlue
 import com.ibaiqzzaaziza.rutex.ui.theme.RuteNavy
 import com.ibaiqzzaaziza.rutex.ui.theme.RuteOrange
 import com.ibaiqzzaaziza.rutex.ui.theme.RuteSlate
 import com.ibaiqzzaaziza.rutex.ui.theme.RuteXTheme
+import com.ibaiqzzaaziza.rutex.util.ViewModelFactory
 
 @Composable
 fun LoginScreen(navController: NavHostController) {
+    val context = LocalContext.current
+    val factory = ViewModelFactory(context)
+    val viewModel: AuthViewModel = viewModel(factory = factory)
+    val status by viewModel.status.collectAsState()
+    val errorMessage by viewModel.errorMessage
+
+    val pesanSukses = stringResource(R.string.login_success)
+    val pesanGagalKoneksi = stringResource(R.string.error_koneksi)
+
+    LaunchedEffect(status) {
+        when (status) {
+            ApiStatus.SUCCESS -> {
+                Toast.makeText(context, pesanSukses, Toast.LENGTH_SHORT).show()
+                viewModel.clearStatus()
+                navController.navigate(Screen.Home.route) {
+                    popUpTo(Screen.Login.route) { inclusive = true }
+                }
+            }
+            ApiStatus.FAILED -> {
+                Toast.makeText(context, errorMessage ?: pesanGagalKoneksi, Toast.LENGTH_LONG).show()
+                viewModel.clearStatus()
+            }
+            else -> {}
+        }
+    }
+
     Scaffold(
         topBar = { AuthTopBar(title = stringResource(R.string.login_topbar_title)) },
         containerColor = RuteBackground
     ) { innerPadding ->
         LoginContent(
             modifier = Modifier.padding(innerPadding),
-            onLoginSuccess = {
-                navController.navigate(Screen.Home.route) {
-                    popUpTo(Screen.Login.route) { inclusive = true }
-                }
+            isLoading = status == ApiStatus.LOADING,
+            onLoginClick = { email, password, rememberMe ->
+                viewModel.login(email, password, rememberMe)
             },
             onRegisterClick = { navController.navigate(Screen.Register.route) }
         )
@@ -79,13 +110,14 @@ fun LoginScreen(navController: NavHostController) {
 @Composable
 fun LoginContent(
     modifier: Modifier = Modifier,
-    onLoginSuccess: () -> Unit,
+    isLoading: Boolean = false,
+    onLoginClick: (email: String, password: String, rememberMe: Boolean) -> Unit,
     onRegisterClick: () -> Unit
 ) {
     val context = LocalContext.current
     val comingSoon = stringResource(R.string.feature_coming_soon)
 
-    var emailOrPhone by rememberSaveable { mutableStateOf("") }
+    var email by rememberSaveable { mutableStateOf("") }
     var password by rememberSaveable { mutableStateOf("") }
     var rememberMe by rememberSaveable { mutableStateOf(true) }
     var emailError by rememberSaveable { mutableStateOf(false) }
@@ -129,12 +161,12 @@ fun LoginContent(
         ) {
             Column(modifier = Modifier.padding(24.dp)) {
                 RuteTextField(
-                    value = emailOrPhone,
-                    onValueChange = { emailOrPhone = it },
-                    label = stringResource(R.string.label_email_phone),
+                    value = email,
+                    onValueChange = { email = it },
+                    label = stringResource(R.string.label_email_login),
                     placeholder = stringResource(R.string.placeholder_email),
                     leadingIcon = Icons.Outlined.MailOutline,
-                    errorMessage = if (emailError) stringResource(R.string.error_email_phone_empty) else null,
+                    errorMessage = if (emailError) stringResource(R.string.error_email_invalid) else null,
                     keyboardType = KeyboardType.Email,
                     cornerRadius = 8.dp,
                     labelFontSize = 14.sp
@@ -193,12 +225,13 @@ fun LoginContent(
                 Spacer(modifier = Modifier.height(4.dp))
                 RutePrimaryButton(
                     text = stringResource(R.string.btn_login),
+                    isLoading = isLoading,
                     onClick = {
-                        // Sanity check: input tidak boleh kosong
-                        emailError = emailOrPhone.isBlank()
+                        // Sanity check sebelum dikirim ke server
+                        emailError = !Patterns.EMAIL_ADDRESS.matcher(email.trim()).matches()
                         passwordError = password.isBlank()
                         if (!emailError && !passwordError) {
-                            onLoginSuccess()
+                            onLoginClick(email, password, rememberMe)
                         }
                     }
                 )
