@@ -382,7 +382,7 @@ fun RuteTimePickerDialog(
     }
 }
 
-/** Dialog konfirmasi sebelum meninggalkan form yang sudah diisi. */
+// kita buat dialog sebelum meninggalkan form yang sudah kita isi
 @Composable
 fun KonfirmasiKeluarDialog(
     onDismissRequest: () -> Unit,

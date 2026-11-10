@@ -15,6 +15,7 @@ import com.google.android.libraries.identity.googleid.GoogleIdTokenCredential
 import com.google.android.libraries.identity.googleid.GoogleIdTokenParsingException
 import com.ibaiqzzaaziza.rutex.BuildConfig
 import com.ibaiqzzaaziza.rutex.model.User
+import kotlinx.coroutines.flow.first
 
 enum class GoogleSignInResult { SUCCESS, CANCELLED, NO_CLIENT_ID, FAILED }
 
@@ -72,8 +73,21 @@ private suspend fun handleSignIn(
     }
 }
 
-/** Menghapus credential Google dan data pengguna yang tersimpan saat logout. */
+/**
+ * Logout: token server dicabut (khusus akun email/password),
+ * credential Google dihapus, lalu data pengguna di DataStore dibersihkan.
+ */
 suspend fun signOut(context: Context, dataStore: UserDataStore) {
+    val user = dataStore.userFlow.first()
+    if (user.refreshToken.isNotEmpty()) {
+        try {
+            RuteXApi.service.logout("Bearer ${user.accessToken}", user.refreshToken)
+        } catch (e: Exception) {
+            // Tetap lanjut logout di perangkat walaupun server tidak bisa dihubungi
+            Log.e("SIGN-OUT", "Error: ${e.message}")
+        }
+    }
+
     try {
         val credentialManager = CredentialManager.create(context)
         credentialManager.clearCredentialState(ClearCredentialStateRequest())

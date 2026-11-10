@@ -52,6 +52,7 @@ interface RuteXApiService {
     @FormUrlEncoded
     @POST("auth/logout")
     suspend fun logout(
+        @Header("Authorization") bearerToken: String,
         @Field("token") refreshToken: String
     ): Response<ApiResponse<Any>>
 

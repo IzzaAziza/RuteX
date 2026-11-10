@@ -130,7 +130,7 @@ fun RuteManualScreen(navController: NavHostController) {
     BackHandler(enabled = adaIsian) { showKeluarDialog = true }
 
     Scaffold(
-        topBar = { RuteMainTopBar() },
+        topBar = { RuteMainTopBar(navController) },
         bottomBar = { RuteBottomBar(navController, Screen.BuatRute.route) },
         containerColor = RuteBackground
     ) { innerPadding ->

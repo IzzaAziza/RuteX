@@ -106,7 +106,7 @@ import com.ibaiqzzaaziza.rutex.ui.theme.RuteXTheme
 @Composable
 fun HomeScreen(navController: NavHostController) {
     Scaffold(
-        topBar = { RuteMainTopBar() },
+        topBar = { RuteMainTopBar(navController) },
         bottomBar = { RuteBottomBar(navController, Screen.Home.route) },
         containerColor = RuteBackground
     ) { innerPadding ->

@@ -2,9 +2,11 @@ package com.ibaiqzzaaziza.rutex.component
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
@@ -29,15 +31,19 @@ import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import coil.compose.AsyncImage
 import com.ibaiqzzaaziza.rutex.R
 import com.ibaiqzzaaziza.rutex.ui.theme.RuteBackground
 import com.ibaiqzzaaziza.rutex.ui.theme.RuteBadge
@@ -78,20 +84,50 @@ fun AuthTopBar(title: String, onBackClick: (() -> Unit)? = null) {
     )
 }
 
+/**
+ * Avatar bulat pengguna. Jika [photoUrl] ada (login Google), foto ditampilkan,
+ * jika tidak, tampil ikon orang. Avatar bisa diklik bila [onClick] diisi.
+ */
 @Composable
-fun UserAvatar(modifier: Modifier = Modifier) {
+fun UserAvatar(
+    modifier: Modifier = Modifier,
+    photoUrl: String = "",
+    size: Dp = 32.dp,
+    onClick: (() -> Unit)? = null
+) {
     Box(
         modifier = modifier
-            .size(32.dp)
-            .background(RuteOrangeDark, CircleShape),
+            .size(size)
+            .clip(CircleShape)
+            .background(RuteOrangeDark)
+            .then(
+                if (onClick != null) {
+                    Modifier.clickable(
+                        onClickLabel = stringResource(R.string.lihat_profil),
+                        role = Role.Button,
+                        onClick = onClick
+                    )
+                } else {
+                    Modifier
+                }
+            ),
         contentAlignment = Alignment.Center
     ) {
-        Icon(
-            imageVector = Icons.Outlined.Person,
-            contentDescription = stringResource(R.string.profile_desc),
-            tint = Color.White,
-            modifier = Modifier.size(16.dp)
-        )
+        if (photoUrl.isNotEmpty()) {
+            AsyncImage(
+                model = photoUrl,
+                contentDescription = stringResource(R.string.profile_desc),
+                contentScale = ContentScale.Crop,
+                modifier = Modifier.fillMaxSize()
+            )
+        } else {
+            Icon(
+                imageVector = Icons.Outlined.Person,
+                contentDescription = stringResource(R.string.profile_desc),
+                tint = Color.White,
+                modifier = Modifier.size(size / 2)
+            )
+        }
     }
 }
 

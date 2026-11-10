@@ -125,7 +125,7 @@ private enum class ModePerencanaan(
 @Composable
 fun BuatRuteScreen(navController: NavHostController) {
     Scaffold(
-        topBar = { RuteMainTopBar() },
+        topBar = { RuteMainTopBar(navController) },
         bottomBar = { RuteBottomBar(navController, Screen.BuatRute.route) },
         containerColor = RuteBackground
     ) { innerPadding ->

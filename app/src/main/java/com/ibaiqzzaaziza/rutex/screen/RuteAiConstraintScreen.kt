@@ -129,7 +129,7 @@ fun RuteAiConstraintScreen(navController: NavHostController) {
     }
 
     Scaffold(
-        topBar = { RuteMainTopBar() },
+        topBar = { RuteMainTopBar(navController) },
         bottomBar = {
             Column {
                 // Tombol Generate menempel di atas bottom navigation, sesuai desain

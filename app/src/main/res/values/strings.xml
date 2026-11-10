@@ -107,6 +107,11 @@
     <string name="login_google_success">Berhasil masuk dengan akun Google</string>
     <string name="error_google_login">Gagal masuk dengan akun Google. Coba lagi.</string>
     <string name="error_google_client_id">Login Google belum aktif: Web client ID belum diisi di local.properties</string>
+    <string name="lihat_profil">Lihat profil</string>
+    <string name="profil_tanpa_nama">Pengguna RuteX</string>
+    <string name="tombol_tutup">Tutup</string>
+    <string name="tombol_logout">Keluar</string>
+    <string name="logout_success">Kamu sudah keluar dari akun</string>
     <string name="error_koneksi">Tidak dapat terhubung ke server. Periksa koneksi internetmu.</string>
 
     <!-- Register Screen: syarat & validasi -->
