@@ -157,4 +157,85 @@
     <string name="mode_ai_tag_1">Generasi Otomatis</string>
     <string name="mode_ai_tag_2">Destinasi Top Rating</string>
     <string name="mode_ai_tag_3">Siap Pakai</string>
+
+    <!-- Komponen Form -->
+    <string name="tombol_pilih">Pilih</string>
+    <string name="tombol_batal">Batal</string>
+    <string name="pilih_jam">Pilih Jam</string>
+    <string name="keluar_form_title">Batalkan rencana?</string>
+    <string name="keluar_form_pesan">Isian yang sudah kamu masukkan akan hilang jika keluar dari halaman ini.</string>
+    <string name="tombol_keluar">Keluar</string>
+    <string name="tombol_lanjut_isi">Lanjut Mengisi</string>
+    <string name="error_form_belum_lengkap">Periksa kembali isian yang ditandai merah</string>
+
+    <!-- Rute Manual -->
+    <string name="badge_mode_manual">Mode Dengan Manual</string>
+    <string name="manual_title">Rencanakan Wisata Mandiri</string>
+    <string name="manual_subtitle">Pilih destinasi, waktu keberangkatan, dan atur rute sesuai ritmemu.</string>
+    <string name="sapaan_label">WISATA CIREBON</string>
+    <string name="sapaan_title">Hai! Mau kemana hari ini?</string>
+    <string name="sapaan_desc">Ayo rencanakan perjalananmu bersama RUTEX!</string>
+    <string name="manual_hint_kategori">*Klik salah satu kategori untuk melihat pilihan destinasi</string>
+    <string name="label_tanggal_berangkat">Tanggal Keberangkatan</string>
+    <string name="placeholder_tanggal">dd/mm/yyyy</string>
+    <string name="label_jam_berangkat">Jam Keberangkatan</string>
+    <string name="placeholder_jam">--:--</string>
+    <string name="label_titik_awal">Titik Awal</string>
+    <string name="placeholder_titik_awal">Pilih titik awal</string>
+    <string name="hint_titik_awal">*Titik awal tidak boleh sama dengan destinasi</string>
+    <string name="label_tujuan_destinasi">Tujuan Destinasi %1$d</string>
+    <string name="label_durasi_kunjungan">Durasi Kunjungan %1$d</string>
+    <string name="placeholder_destinasi">Pilih destinasi</string>
+    <string name="hint_destinasi_sama">*Tujuan destinasi tidak boleh sama</string>
+    <string name="error_destinasi_kosong">Pilih tujuan destinasi terlebih dahulu</string>
+    <string name="tambah_destinasi">Tambah destinasi</string>
+    <string name="hapus_destinasi">Hapus</string>
+    <string name="durasi_menit">%1$d Menit</string>
+    <string name="durasi_jam">%1$s Jam</string>
+    <string name="label_kendaraan">Kendaraan</string>
+    <string name="kendaraan_mobil">Mobil</string>
+    <string name="kendaraan_motor">Motor</string>
+    <string name="kendaraan_jalan_kaki">Jalan Kaki</string>
+    <string name="error_kendaraan">Pilih kendaraan yang akan digunakan</string>
+    <string name="error_tanggal_kosong">Tanggal wajib diisi</string>
+    <string name="error_jam_kosong">Jam wajib diisi</string>
+    <string name="error_jam_lewat">Jam sudah lewat</string>
+    <string name="btn_buat_plan">Buat Plan</string>
+    <string name="rencana_tersimpan">Rencana perjalanan berhasil disimpan</string>
+    <string name="manual_footer">Sistem otomatis menghitung rute tercepat di Cirebon</string>
+
+    <!-- Rute AI (Dengan & Tanpa Constraint) -->
+    <string name="badge_mode_constraint">Mode Dengan Constraint</string>
+    <string name="badge_mode_tanpa_constraint">Mode Tanpa Constraint</string>
+    <string name="ai_form_title">Rencanakan Wisata Dengan AI</string>
+    <string name="ai_form_subtitle">Biarkan AI menganalisis preferensi Anda dan menemukan rute wisata paling optimal.</string>
+    <string name="preferensi_title">Preferensi Perjalanan</string>
+    <string name="badge_natural_language">Natural Language AI</string>
+    <string name="preferensi_placeholder_constraint">Contoh: Saya ingin mengunjungi 5 tempat wisata budaya dan kuliner dalam waktu 8 jam…</string>
+    <string name="preferensi_placeholder_tanpa">Contoh: Saya ingin mengunjungi tempat wisata budaya dan kuliner khas Cirebon seharian dengan santai…</string>
+    <string name="preferensi_hint_constraint">Deskripsikan keinginan perjalanan Anda secara bebas</string>
+    <string name="preferensi_hint_tanpa">Bebas deskripsikan tanpa batasan kaku</string>
+    <string name="error_preferensi">Ceritakan preferensimu minimal %1$d karakter</string>
+    <string name="btn_dikte">Dikte</string>
+    <string name="inspirasi_title">Inspirasi Cepat:</string>
+    <string name="inspirasi_kuliner">Wisata Kuliner Khas</string>
+    <string name="inspirasi_kuliner_kalimat">Saya ingin mencicipi kuliner khas Cirebon seperti empal gentong, nasi jamblang, dan tahu gejrot.</string>
+    <string name="inspirasi_keraton">Keliling Keraton &amp; Batik</string>
+    <string name="inspirasi_keraton_kalimat">Saya ingin keliling keraton bersejarah di Cirebon lalu belanja batik di Trusmi.</string>
+    <string name="inspirasi_keluarga">Family Friendly</string>
+    <string name="inspirasi_keluarga_kalimat">Saya ingin wisata santai bersama keluarga dan anak-anak dengan tempat yang nyaman.</string>
+    <string name="label_lokasi_awal">Lokasi Awal</string>
+    <string name="label_waktu_mulai">Waktu Mulai</string>
+    <string name="waktu_lokal">WIB (Waktu Lokal)</string>
+    <string name="target_destinasi_title">Target Destinasi</string>
+    <string name="target_destinasi_saran">Disarankan 3–5</string>
+    <string name="jumlah_tempat_label">Jumlah Tempat Dikunjungi</string>
+    <string name="jumlah_tempat_desc">Termasuk waktu singgah rata-rata 60–90m</string>
+    <string name="kurangi_tempat">Kurangi jumlah tempat</string>
+    <string name="tambah_tempat">Tambah jumlah tempat</string>
+    <string name="ai_info_constraint">AI akan menghitung rute efisien berdasarkan titik awal dan preferensi Anda agar jadwal perjalanan optimal.</string>
+    <string name="ai_info_tanpa_title">Otomasi AI Tanpa Batasan</string>
+    <string name="ai_info_tanpa">AI RuteX secara otomatis menentukan jumlah destinasi optimal, durasi singgah terbaik, serta urutan rute paling efisien tanpa Anda perlu repot mengatur constraint.</string>
+    <string name="btn_generate_rute">Generate Rute</string>
+    <string name="rencana_ai_tersimpan">Permintaan rute AI berhasil disimpan</string>
 </resources>

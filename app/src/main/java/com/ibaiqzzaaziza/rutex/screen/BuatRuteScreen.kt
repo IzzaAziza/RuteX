@@ -75,7 +75,8 @@ private enum class ModePerencanaan(
     val tags: List<Int>,
     val icon: ImageVector,
     val iconBackground: Color,
-    val iconTint: Color
+    val iconTint: Color,
+    val route: String
 ) {
     MANUAL(
         judul = R.string.mode_manual_title,
@@ -88,7 +89,8 @@ private enum class ModePerencanaan(
         ),
         icon = Icons.Outlined.EditCalendar,
         iconBackground = RuteBlueLight,
-        iconTint = RuteNavy
+        iconTint = RuteNavy,
+        route = Screen.RuteManual.route
     ),
     DENGAN_CONSTRAINT(
         judul = R.string.mode_constraint_title,
@@ -101,7 +103,8 @@ private enum class ModePerencanaan(
         ),
         icon = Icons.Outlined.Tune,
         iconBackground = RutePeach,
-        iconTint = RuteOrangeDark
+        iconTint = RuteOrangeDark,
+        route = Screen.RuteAi.withMode(pakaiConstraint = true)
     ),
     TANPA_CONSTRAINT(
         judul = R.string.mode_ai_title,
@@ -114,7 +117,8 @@ private enum class ModePerencanaan(
         ),
         icon = Icons.Outlined.AutoAwesome,
         iconBackground = RuteBlueSoft,
-        iconTint = RuteNavy
+        iconTint = RuteNavy,
+        route = Screen.RuteAi.withMode(pakaiConstraint = false)
     )
 }
 
@@ -125,12 +129,18 @@ fun BuatRuteScreen(navController: NavHostController) {
         bottomBar = { RuteBottomBar(navController, Screen.BuatRute.route) },
         containerColor = RuteBackground
     ) { innerPadding ->
-        BuatRuteContent(modifier = Modifier.padding(innerPadding))
+        BuatRuteContent(
+            modifier = Modifier.padding(innerPadding),
+            onModeClick = { route -> navController.navigate(route) }
+        )
     }
 }
 
 @Composable
-fun BuatRuteContent(modifier: Modifier = Modifier) {
+fun BuatRuteContent(
+    modifier: Modifier = Modifier,
+    onModeClick: (route: String) -> Unit = {}
+) {
     // Mode "Dengan Constraint" menjadi pilihan awal karena direkomendasikan
     var modeTerpilih by rememberSaveable { mutableStateOf(ModePerencanaan.DENGAN_CONSTRAINT) }
 
@@ -199,7 +209,10 @@ fun BuatRuteContent(modifier: Modifier = Modifier) {
                 ModeCard(
                     mode = mode,
                     selected = mode == modeTerpilih,
-                    onClick = { modeTerpilih = mode }
+                    onClick = {
+                        modeTerpilih = mode
+                        onModeClick(mode.route)
+                    }
                 )
             }
         }
