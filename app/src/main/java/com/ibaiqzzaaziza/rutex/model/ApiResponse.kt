@@ -25,11 +25,15 @@ data class ProfilData(
     val phone: String? = null
 )
 
-/** Data akun yang disimpan di perangkat setelah pengguna berhasil masuk. */
+/**
+ * Data akun yang disimpan di perangkat setelah pengguna berhasil masuk.
+ * Login dengan akun Google tidak memiliki token server, jadi [accessToken] dan [refreshToken] kosong.
+ */
 data class User(
     val id: Int = 0,
     val name: String = "",
     val email: String = "",
+    val photoUrl: String = "",
     val accessToken: String = "",
     val refreshToken: String = ""
 )

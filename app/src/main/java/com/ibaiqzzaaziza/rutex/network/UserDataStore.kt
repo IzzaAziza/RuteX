@@ -22,6 +22,7 @@ class UserDataStore(private val context: Context) {
         private val USER_ID = intPreferencesKey("id")
         private val USER_NAME = stringPreferencesKey("name")
         private val USER_EMAIL = stringPreferencesKey("email")
+        private val USER_PHOTO = stringPreferencesKey("photoUrl")
         private val ACCESS_TOKEN = stringPreferencesKey("access_token")
         private val REFRESH_TOKEN = stringPreferencesKey("refresh_token")
         private val REMEMBER_ME = booleanPreferencesKey("remember_me")
@@ -32,6 +33,7 @@ class UserDataStore(private val context: Context) {
             id = preferences[USER_ID] ?: 0,
             name = preferences[USER_NAME] ?: "",
             email = preferences[USER_EMAIL] ?: "",
+            photoUrl = preferences[USER_PHOTO] ?: "",
             accessToken = preferences[ACCESS_TOKEN] ?: "",
             refreshToken = preferences[REFRESH_TOKEN] ?: ""
         )
@@ -40,7 +42,7 @@ class UserDataStore(private val context: Context) {
     // Pengguna langsung masuk ke Beranda saat membuka aplikasi
     // jika sudah login dan memilih "Ingat saya"
     val isLoggedInFlow: Flow<Boolean> = context.dataStore.data.map { preferences ->
-        !preferences[ACCESS_TOKEN].isNullOrEmpty() && preferences[REMEMBER_ME] == true
+        !preferences[USER_EMAIL].isNullOrEmpty() && preferences[REMEMBER_ME] == true
     }
 
     suspend fun saveData(user: User, rememberMe: Boolean) {
@@ -48,6 +50,7 @@ class UserDataStore(private val context: Context) {
             preferences[USER_ID] = user.id
             preferences[USER_NAME] = user.name
             preferences[USER_EMAIL] = user.email
+            preferences[USER_PHOTO] = user.photoUrl
             preferences[ACCESS_TOKEN] = user.accessToken
             preferences[REFRESH_TOKEN] = user.refreshToken
             preferences[REMEMBER_ME] = rememberMe

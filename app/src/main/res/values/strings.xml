@@ -104,6 +104,9 @@
     <string name="error_password_empty">Kata sandi wajib diisi</string>
     <string name="label_email_login">Email</string>
     <string name="login_success">Berhasil masuk. Selamat datang kembali!</string>
+    <string name="login_google_success">Berhasil masuk dengan akun Google</string>
+    <string name="error_google_login">Gagal masuk dengan akun Google. Coba lagi.</string>
+    <string name="error_google_client_id">Login Google belum aktif: Web client ID belum diisi di local.properties</string>
     <string name="error_koneksi">Tidak dapat terhubung ke server. Periksa koneksi internetmu.</string>
 
     <!-- Register Screen: syarat & validasi -->

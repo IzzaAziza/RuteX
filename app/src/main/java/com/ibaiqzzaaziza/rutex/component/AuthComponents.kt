@@ -172,20 +172,32 @@ fun GoogleButton(
     onClick: () -> Unit,
     modifier: Modifier = Modifier,
     containerColor: Color = RuteInput,
-    elevation: Dp = 0.dp
+    elevation: Dp = 0.dp,
+    isLoading: Boolean = false
 ) {
     Button(
         onClick = onClick,
+        enabled = !isLoading,
         modifier = modifier
             .fillMaxWidth()
             .height(48.dp),
         shape = RoundedCornerShape(12.dp),
         colors = ButtonDefaults.buttonColors(
             containerColor = containerColor,
-            contentColor = RuteNavy
+            contentColor = RuteNavy,
+            disabledContainerColor = containerColor,
+            disabledContentColor = RuteNavy
         ),
         elevation = ButtonDefaults.buttonElevation(defaultElevation = elevation)
     ) {
+        if (isLoading) {
+            CircularProgressIndicator(
+                color = RuteOrange,
+                strokeWidth = 2.dp,
+                modifier = Modifier.size(20.dp)
+            )
+            return@Button
+        }
         Image(
             painter = painterResource(R.drawable.ic_google),
             contentDescription = null,

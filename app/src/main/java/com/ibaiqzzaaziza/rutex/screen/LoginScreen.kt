@@ -73,6 +73,12 @@ fun LoginScreen(navController: NavHostController) {
     val errorMessage by viewModel.errorMessage
 
     val pesanSukses = stringResource(R.string.login_success)
+    val keBeranda = {
+        navController.navigate(Screen.Home.route) {
+            popUpTo(Screen.Login.route) { inclusive = true }
+        }
+    }
+    val googleSignIn = rememberGoogleSignIn(onSuccess = keBeranda)
     val pesanGagalKoneksi = stringResource(R.string.error_koneksi)
 
     LaunchedEffect(status) {
@@ -80,9 +86,7 @@ fun LoginScreen(navController: NavHostController) {
             ApiStatus.SUCCESS -> {
                 Toast.makeText(context, pesanSukses, Toast.LENGTH_SHORT).show()
                 viewModel.clearStatus()
-                navController.navigate(Screen.Home.route) {
-                    popUpTo(Screen.Login.route) { inclusive = true }
-                }
+                keBeranda()
             }
             ApiStatus.FAILED -> {
                 Toast.makeText(context, errorMessage ?: pesanGagalKoneksi, Toast.LENGTH_LONG).show()
@@ -99,6 +103,8 @@ fun LoginScreen(navController: NavHostController) {
         LoginContent(
             modifier = Modifier.padding(innerPadding),
             isLoading = status == ApiStatus.LOADING,
+            isGoogleLoading = googleSignIn.isLoading,
+            onGoogleClick = googleSignIn.signIn,
             onLoginClick = { email, password, rememberMe ->
                 viewModel.login(email, password, rememberMe)
             },
@@ -111,6 +117,8 @@ fun LoginScreen(navController: NavHostController) {
 fun LoginContent(
     modifier: Modifier = Modifier,
     isLoading: Boolean = false,
+    isGoogleLoading: Boolean = false,
+    onGoogleClick: () -> Unit = {},
     onLoginClick: (email: String, password: String, rememberMe: Boolean) -> Unit,
     onRegisterClick: () -> Unit
 ) {
@@ -242,7 +250,8 @@ fun LoginContent(
                 Spacer(modifier = Modifier.height(24.dp))
                 GoogleButton(
                     text = stringResource(R.string.btn_google_login),
-                    onClick = { Toast.makeText(context, comingSoon, Toast.LENGTH_SHORT).show() }
+                    onClick = onGoogleClick,
+                    isLoading = isGoogleLoading
                 )
             }
         }
