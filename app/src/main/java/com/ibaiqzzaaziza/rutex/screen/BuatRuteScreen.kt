@@ -104,7 +104,7 @@ private enum class ModePerencanaan(
         icon = Icons.Outlined.Tune,
         iconBackground = RutePeach,
         iconTint = RuteOrangeDark,
-        route = Screen.RuteAi.withMode(pakaiConstraint = true)
+        route = Screen.RuteAiConstraint.route
     ),
     TANPA_CONSTRAINT(
         judul = R.string.mode_ai_title,
@@ -118,7 +118,7 @@ private enum class ModePerencanaan(
         icon = Icons.Outlined.AutoAwesome,
         iconBackground = RuteBlueSoft,
         iconTint = RuteNavy,
-        route = Screen.RuteAi.withMode(pakaiConstraint = false)
+        route = Screen.RuteAiTanpaConstraint.route
     )
 }
 

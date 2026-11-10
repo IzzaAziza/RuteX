@@ -225,17 +225,20 @@
     <string name="inspirasi_keluarga">Family Friendly</string>
     <string name="inspirasi_keluarga_kalimat">Saya ingin wisata santai bersama keluarga dan anak-anak dengan tempat yang nyaman.</string>
     <string name="label_lokasi_awal">Lokasi Awal</string>
+    <string name="placeholder_lokasi_awal">Mulai dari mana?</string>
+    <string name="default_lokasi_awal">Stasiun Cirebon</string>
     <string name="label_waktu_mulai">Waktu Mulai</string>
     <string name="waktu_lokal">WIB (Waktu Lokal)</string>
     <string name="target_destinasi_title">Target Destinasi</string>
-    <string name="target_destinasi_saran">Disarankan 3–5</string>
+    <string name="target_destinasi_saran">Disarankan 3-5</string>
     <string name="jumlah_tempat_label">Jumlah Tempat Dikunjungi</string>
-    <string name="jumlah_tempat_desc">Termasuk waktu singgah rata-rata 60–90m</string>
+    <string name="jumlah_tempat_desc">Termasuk waktu singgah rata-rata 60-90m</string>
     <string name="kurangi_tempat">Kurangi jumlah tempat</string>
     <string name="tambah_tempat">Tambah jumlah tempat</string>
     <string name="ai_info_constraint">AI akan menghitung rute efisien berdasarkan titik awal dan preferensi Anda agar jadwal perjalanan optimal.</string>
     <string name="ai_info_tanpa_title">Otomasi AI Tanpa Batasan</string>
     <string name="ai_info_tanpa">AI RuteX secara otomatis menentukan jumlah destinasi optimal, durasi singgah terbaik, serta urutan rute paling efisien tanpa Anda perlu repot mengatur constraint.</string>
     <string name="btn_generate_rute">Generate Rute</string>
+    <string name="estimasi_kalkulasi">Estimasi kalkulasi multi-lokasi ~3 detik</string>
     <string name="rencana_ai_tersimpan">Permintaan rute AI berhasil disimpan</string>
 </resources>

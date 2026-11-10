@@ -3,7 +3,6 @@ package com.ibaiqzzaaziza.rutex.screen
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.ibaiqzzaaziza.rutex.database.RencanaRuteDao
-import com.ibaiqzzaaziza.rutex.model.DataWisataCirebon
 import com.ibaiqzzaaziza.rutex.model.ModeRute
 import com.ibaiqzzaaziza.rutex.model.RencanaRute
 import com.ibaiqzzaaziza.rutex.screen.RuteManualViewModel.Companion.FORMAT_JAM
@@ -15,8 +14,6 @@ import java.time.LocalDateTime
 import java.time.LocalTime
 
 class RuteAiViewModel(private val dao: RencanaRuteDao) : ViewModel() {
-
-    val titikAwal = DataWisataCirebon.titikAwal
 
     /**
      * Menyimpan permintaan rute AI.

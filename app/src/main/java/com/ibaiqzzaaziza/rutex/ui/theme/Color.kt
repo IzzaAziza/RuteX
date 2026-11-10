@@ -6,6 +6,7 @@ import androidx.compose.ui.graphics.Color
 val RuteOrange = Color(0xFFFF7A00)
 val RuteOrangeDark = Color(0xFF994700)
 val RuteOrangeDeep = Color(0xFF753400)
+val RuteOrangeInk = Color(0xFF321200)
 val RutePeach = Color(0xFFFFDBC8)
 val RutePeachLight = Color(0xFFFBF0EA)
 

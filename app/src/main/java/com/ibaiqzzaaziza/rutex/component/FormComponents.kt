@@ -60,9 +60,9 @@ import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.ibaiqzzaaziza.rutex.R
-import com.ibaiqzzaaziza.rutex.ui.theme.RuteChip
 import com.ibaiqzzaaziza.rutex.ui.theme.RuteDivider
 import com.ibaiqzzaaziza.rutex.ui.theme.RuteError
+import com.ibaiqzzaaziza.rutex.ui.theme.RuteInput
 import com.ibaiqzzaaziza.rutex.ui.theme.RuteNavy
 import com.ibaiqzzaaziza.rutex.ui.theme.RuteOrange
 import com.ibaiqzzaaziza.rutex.ui.theme.RuteOrangeDeep
@@ -81,7 +81,11 @@ fun FormHeader(
     badge: String,
     title: String,
     subtitle: String,
-    onBackClick: () -> Unit
+    onBackClick: () -> Unit,
+    badgeTextColor: Color = RuteOrangeDeep,
+    badgeBordered: Boolean = false,
+    titleWeight: FontWeight = FontWeight.ExtraBold,
+    subtitleColor: Color = RuteSlate
 ) {
     Column {
         Row(
@@ -91,7 +95,7 @@ fun FormHeader(
         ) {
             IconButton(
                 onClick = onBackClick,
-                colors = IconButtonDefaults.iconButtonColors(containerColor = RuteChip),
+                colors = IconButtonDefaults.iconButtonColors(containerColor = RuteInput),
                 modifier = Modifier.size(44.dp)
             ) {
                 Icon(
@@ -103,21 +107,27 @@ fun FormHeader(
             Row(
                 modifier = Modifier
                     .background(RutePeach, CircleShape)
+                    .border(
+                        width = 1.dp,
+                        color = if (badgeBordered) RuteOrange.copy(alpha = 0.3f) else Color.Transparent,
+                        shape = CircleShape
+                    )
                     .padding(horizontal = 12.dp, vertical = 4.dp),
                 verticalAlignment = Alignment.CenterVertically
             ) {
                 Icon(
                     imageVector = Icons.Outlined.AutoAwesome,
                     contentDescription = null,
-                    tint = RuteOrangeDeep,
+                    tint = badgeTextColor,
                     modifier = Modifier.size(14.dp)
                 )
                 Spacer(modifier = Modifier.width(6.dp))
                 Text(
                     text = badge,
                     fontSize = 12.sp,
-                    fontWeight = FontWeight.SemiBold,
-                    color = RuteOrangeDeep
+                    fontWeight = if (badgeBordered) FontWeight.Bold else FontWeight.SemiBold,
+                    color = badgeTextColor,
+                    letterSpacing = 0.24.sp
                 )
             }
         }
@@ -125,18 +135,18 @@ fun FormHeader(
         Spacer(modifier = Modifier.height(20.dp))
         Text(
             text = title,
-            fontSize = 22.sp,
+            fontSize = 20.sp,
             lineHeight = 30.sp,
-            fontWeight = FontWeight.Bold,
+            fontWeight = titleWeight,
             color = RuteNavy,
-            letterSpacing = (-0.5).sp
+            letterSpacing = (-0.4).sp
         )
         Spacer(modifier = Modifier.height(4.dp))
         Text(
             text = subtitle,
-            fontSize = 13.sp,
+            fontSize = 12.sp,
             lineHeight = 20.sp,
-            color = RuteSlate
+            color = subtitleColor
         )
     }
 }
