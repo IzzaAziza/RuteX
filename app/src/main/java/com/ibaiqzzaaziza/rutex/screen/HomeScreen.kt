@@ -68,6 +68,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.LocalResources
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
@@ -129,6 +130,7 @@ fun HomeContent(
 ) {
     val viewModel: HomeViewModel = viewModel()
     val context = LocalContext.current
+    val resources = LocalResources.current
 
     var query by rememberSaveable { mutableStateOf("") }
     var kategori by rememberSaveable { mutableStateOf(KategoriDestinasi.SEMUA) }
@@ -161,7 +163,7 @@ fun HomeContent(
             kategoriTerpilih = kategori,
             onKategoriClick = { kategori = it },
             onAddClick = { item ->
-                val message = context.getString(R.string.added_to_plan, item.nama)
+                val message = resources.getString(R.string.added_to_plan, item.nama)
                 Toast.makeText(context, message, Toast.LENGTH_SHORT).show()
             }
         )
