@@ -112,6 +112,33 @@
     <string name="tombol_tutup">Tutup</string>
     <string name="tombol_logout">Keluar</string>
     <string name="logout_success">Kamu sudah keluar dari akun</string>
+    <!-- Riwayat -->
+    <string name="riwayat_title">Riwayat Rute</string>
+    <string name="riwayat_subtitle">Rencana perjalanan dan rute yang telah dijelajahi di Cirebon</string>
+    <string name="riwayat_cari">Cari riwayat perjalanan, empal, keraton…</string>
+    <string name="stat_rute_tersimpan">Rute Tersimpan</string>
+    <string name="stat_destinasi">Destinasi</string>
+    <string name="stat_total_durasi">Total Durasi</string>
+    <string name="filter_semua">Semua</string>
+    <string name="filter_manual">Manual</string>
+    <string name="filter_ai">AI</string>
+    <string name="mode_label_manual">Manual</string>
+    <string name="mode_label_constraint">AI Constraint</string>
+    <string name="mode_label_tanpa_constraint">AI Otomatis</string>
+    <string name="kategori_rute_manual">RUTE MANUAL</string>
+    <string name="kategori_rute_ai">PERMINTAAN RUTE AI</string>
+    <string name="jalur_rute">Jalur Rute:</string>
+    <string name="jumlah_destinasi">%1$d Destinasi</string>
+    <string name="jumlah_otomatis">Jumlah destinasi otomatis</string>
+    <string name="mulai_jam">Mulai %1$s</string>
+    <string name="durasi_singkat_menit">%1$dm</string>
+    <string name="durasi_singkat_jam">%1$dj</string>
+    <string name="durasi_singkat_jam_menit">%1$dj %2$dm</string>
+    <string name="riwayat_kosong">Belum ada rencana tersimpan.\nBuat rute pertamamu di menu Buat Rute.</string>
+    <string name="riwayat_tidak_ditemukan">Tidak ada riwayat yang cocok.</string>
+    <string name="hapus_riwayat_title">Hapus rencana ini?</string>
+    <string name="hapus_riwayat_pesan">Rencana yang dihapus tidak bisa dikembalikan.</string>
+    <string name="tombol_hapus">Hapus</string>
     <string name="error_koneksi">Tidak dapat terhubung ke server. Periksa koneksi internetmu.</string>
 
     <!-- Register Screen: syarat & validasi -->

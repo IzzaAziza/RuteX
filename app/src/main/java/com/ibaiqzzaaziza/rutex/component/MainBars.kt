@@ -132,7 +132,7 @@ private enum class BottomNavItem(
 ) {
     BERANDA(R.string.nav_home, Icons.Outlined.Home, Screen.Home.route),
     BUAT_RUTE(R.string.nav_create, Icons.Outlined.AutoAwesome, Screen.BuatRute.route),
-    RIWAYAT(R.string.nav_history, Icons.Outlined.History, null),
+    RIWAYAT(R.string.nav_history, Icons.Outlined.History, Screen.Riwayat.route),
     PROFIL(R.string.nav_profile, Icons.Outlined.Person, null)
 }
 
@@ -152,7 +152,7 @@ fun RuteBottomBar(navController: NavHostController, currentRoute: String) {
                 onClick = {
                     val route = item.route
                     if (route == null) {
-                        // Screen Riwayat & Profil belum dibuat
+                        // Screen Profil belum dibuat
                         Toast.makeText(context, comingSoon, Toast.LENGTH_SHORT).show()
                     } else if (!selected) {
                         navController.navigate(route) {

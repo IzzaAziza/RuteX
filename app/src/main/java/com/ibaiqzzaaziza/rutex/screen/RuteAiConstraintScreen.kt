@@ -122,8 +122,9 @@ fun RuteAiConstraintScreen(navController: NavHostController) {
                 jumlahDestinasi = jumlahTempat
             )
             Toast.makeText(context, R.string.rencana_ai_tersimpan, Toast.LENGTH_SHORT).show()
-            navController.navigate(Screen.Home.route) {
-                popUpTo(Screen.Home.route) { inclusive = true }
+            // Rencana yang baru disimpan langsung terlihat di Riwayat
+            navController.navigate(Screen.Riwayat.route) {
+                popUpTo(Screen.Home.route)
             }
         }
     }

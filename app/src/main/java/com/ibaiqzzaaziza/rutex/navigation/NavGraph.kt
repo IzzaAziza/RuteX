@@ -9,6 +9,7 @@ import com.ibaiqzzaaziza.rutex.screen.BuatRuteScreen
 import com.ibaiqzzaaziza.rutex.screen.HomeScreen
 import com.ibaiqzzaaziza.rutex.screen.LoginScreen
 import com.ibaiqzzaaziza.rutex.screen.RegisterScreen
+import com.ibaiqzzaaziza.rutex.screen.RiwayatScreen
 import com.ibaiqzzaaziza.rutex.screen.RuteAiConstraintScreen
 import com.ibaiqzzaaziza.rutex.screen.RuteAiTanpaConstraintScreen
 import com.ibaiqzzaaziza.rutex.screen.RuteManualScreen
@@ -43,6 +44,9 @@ fun SetupNavGraph(navController: NavHostController = rememberNavController()) {
         }
         composable(route = Screen.RuteAiTanpaConstraint.route) {
             RuteAiTanpaConstraintScreen(navController)
+        }
+        composable(route = Screen.Riwayat.route) {
+            RiwayatScreen(navController)
         }
     }
 }

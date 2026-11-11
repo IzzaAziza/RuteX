@@ -36,7 +36,9 @@ data class RencanaRute(
     val kendaraan: Kendaraan? = null,
     val preferensi: String? = null,
     val jumlahDestinasi: Int,
-    val dibuatPada: String
+    val dibuatPada: String,
+    // Pemilik rencana, agar riwayat tiap akun terpisah di perangkat yang sama
+    val emailPengguna: String = ""
 )
 
 // Serializable agar daftar destinasi di form bisa disimpan dengan rememberSaveable

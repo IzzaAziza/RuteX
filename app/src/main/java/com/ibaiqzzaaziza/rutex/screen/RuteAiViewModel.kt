@@ -7,13 +7,18 @@ import com.ibaiqzzaaziza.rutex.model.ModeRute
 import com.ibaiqzzaaziza.rutex.model.RencanaRute
 import com.ibaiqzzaaziza.rutex.screen.RuteManualViewModel.Companion.FORMAT_JAM
 import com.ibaiqzzaaziza.rutex.screen.RuteManualViewModel.Companion.FORMAT_WAKTU
+import com.ibaiqzzaaziza.rutex.network.UserDataStore
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
 import java.time.LocalDate
 import java.time.LocalDateTime
 import java.time.LocalTime
 
-class RuteAiViewModel(private val dao: RencanaRuteDao) : ViewModel() {
+class RuteAiViewModel(
+    private val dao: RencanaRuteDao,
+    private val dataStore: UserDataStore
+) : ViewModel() {
 
     /**
      * Menyimpan permintaan rute AI.
@@ -27,17 +32,17 @@ class RuteAiViewModel(private val dao: RencanaRuteDao) : ViewModel() {
         jam: LocalTime,
         jumlahDestinasi: Int
     ) {
-        val rencana = RencanaRute(
-            mode = mode,
-            titikAwal = titikAwal,
-            tanggal = LocalDate.now().toString(),
-            jamMulai = jam.format(FORMAT_JAM),
-            preferensi = preferensi.trim(),
-            jumlahDestinasi = jumlahDestinasi,
-            dibuatPada = LocalDateTime.now().format(FORMAT_WAKTU)
-        )
-
         viewModelScope.launch(Dispatchers.IO) {
+            val rencana = RencanaRute(
+                mode = mode,
+                titikAwal = titikAwal,
+                tanggal = LocalDate.now().toString(),
+                jamMulai = jam.format(FORMAT_JAM),
+                preferensi = preferensi.trim(),
+                jumlahDestinasi = jumlahDestinasi,
+                dibuatPada = LocalDateTime.now().format(FORMAT_WAKTU),
+                emailPengguna = dataStore.userFlow.first().email
+            )
             dao.insert(rencana)
         }
     }
