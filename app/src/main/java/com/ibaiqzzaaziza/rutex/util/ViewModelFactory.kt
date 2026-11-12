@@ -6,6 +6,7 @@ import androidx.lifecycle.ViewModelProvider
 import com.ibaiqzzaaziza.rutex.database.RuteXDb
 import com.ibaiqzzaaziza.rutex.network.UserDataStore
 import com.ibaiqzzaaziza.rutex.screen.AuthViewModel
+import com.ibaiqzzaaziza.rutex.screen.DetailRuteViewModel
 import com.ibaiqzzaaziza.rutex.screen.ProfilViewModel
 import com.ibaiqzzaaziza.rutex.screen.RiwayatViewModel
 import com.ibaiqzzaaziza.rutex.screen.RuteAiViewModel
@@ -26,6 +27,8 @@ class ViewModelFactory(private val context: Context) : ViewModelProvider.Factory
             return RuteAiViewModel(dao, dataStore) as T
         } else if (modelClass.isAssignableFrom(RiwayatViewModel::class.java)) {
             return RiwayatViewModel(dao, dataStore) as T
+        } else if (modelClass.isAssignableFrom(DetailRuteViewModel::class.java)) {
+            return DetailRuteViewModel(dao) as T
         } else if (modelClass.isAssignableFrom(ProfilViewModel::class.java)) {
             return ProfilViewModel(dao, dataStore, SettingsDataStore(context)) as T
         }

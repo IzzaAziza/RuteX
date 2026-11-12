@@ -9,6 +9,7 @@ import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
 import com.ibaiqzzaaziza.rutex.screen.BuatRuteScreen
 import com.ibaiqzzaaziza.rutex.screen.DetailDestinasiScreen
+import com.ibaiqzzaaziza.rutex.screen.DetailRuteScreen
 import com.ibaiqzzaaziza.rutex.screen.HomeScreen
 import com.ibaiqzzaaziza.rutex.screen.LoginScreen
 import com.ibaiqzzaaziza.rutex.screen.ProfilScreen
@@ -64,6 +65,15 @@ fun SetupNavGraph(navController: NavHostController = rememberNavController()) {
         }
         composable(route = Screen.Profil.route) {
             ProfilScreen(navController)
+        }
+        composable(
+            route = Screen.DetailRute.route,
+            arguments = listOf(
+                navArgument(KEY_ID_RENCANA) { type = NavType.LongType }
+            )
+        ) { navBackStackEntry ->
+            val id = navBackStackEntry.arguments?.getLong(KEY_ID_RENCANA) ?: 0L
+            DetailRuteScreen(navController, id)
         }
         composable(
             route = Screen.DetailDestinasi.route,

@@ -4,6 +4,7 @@ import android.net.Uri
 
 const val KEY_ID_DESTINASI = "idDestinasi"
 const val KEY_NAMA_DESTINASI = "destinasi"
+const val KEY_ID_RENCANA = "idRencana"
 
 sealed class Screen(val route: String) {
     data object Splash : Screen("splashScreen")
@@ -20,6 +21,9 @@ sealed class Screen(val route: String) {
     data object RuteAiTanpaConstraint : Screen("ruteAiTanpaConstraintScreen")
     data object Riwayat : Screen("riwayatScreen")
     data object Profil : Screen("profilScreen")
+    data object DetailRute : Screen("detailRuteScreen/{$KEY_ID_RENCANA}") {
+        fun withId(id: Long) = "detailRuteScreen/$id"
+    }
     data object DetailDestinasi : Screen("detailDestinasiScreen/{$KEY_ID_DESTINASI}") {
         fun withId(id: Int) = "detailDestinasiScreen/$id"
     }

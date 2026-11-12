@@ -2,6 +2,7 @@ package com.ibaiqzzaaziza.rutex.screen
 
 import androidx.annotation.StringRes
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -89,12 +90,7 @@ import com.ibaiqzzaaziza.rutex.ui.theme.RutePeach
 import com.ibaiqzzaaziza.rutex.ui.theme.RuteSlate
 import com.ibaiqzzaaziza.rutex.ui.theme.RuteXTheme
 import com.ibaiqzzaaziza.rutex.util.ViewModelFactory
-import java.time.LocalDate
-import java.time.format.DateTimeFormatter
-import java.util.Locale
-
-private val FORMAT_TANGGAL_RIWAYAT: DateTimeFormatter =
-    DateTimeFormatter.ofPattern("d MMM yyyy", Locale.forLanguageTag("id-ID"))
+import com.ibaiqzzaaziza.rutex.util.formatTanggalRencana
 
 private enum class FilterRiwayat(@param:StringRes val label: Int) {
     SEMUA(R.string.filter_semua),
@@ -165,6 +161,7 @@ fun RiwayatScreen(navController: NavHostController) {
                 items(tampil, key = { it.id }) { rencana ->
                     RiwayatCard(
                         rencana = rencana,
+                        onClick = { navController.navigate(Screen.DetailRute.withId(rencana.id)) },
                         onDeleteClick = { idAkanDihapus = rencana.id }
                     )
                 }
@@ -394,6 +391,7 @@ private fun FilterTabs(
 @Composable
 private fun RiwayatCard(
     rencana: RencanaRute,
+    onClick: () -> Unit,
     onDeleteClick: () -> Unit
 ) {
     val shape = RoundedCornerShape(16.dp)
@@ -403,7 +401,9 @@ private fun RiwayatCard(
         modifier = Modifier
             .fillMaxWidth()
             .shadow(1.dp, shape)
-            .background(Color.White, shape)
+            .clip(shape)
+            .background(Color.White)
+            .clickable(onClick = onClick)
             .padding(16.dp)
     ) {
         // Baris atas: jenis rencana, tanggal, dan tombol hapus
@@ -429,7 +429,7 @@ private fun RiwayatCard(
             }
             Spacer(modifier = Modifier.width(8.dp))
             Text(
-                text = formatTanggal(rencana.tanggal),
+                text = formatTanggalRencana(rencana.tanggal),
                 fontSize = 12.sp,
                 fontWeight = FontWeight.Medium,
                 color = RuteSlate,
@@ -579,15 +579,6 @@ private fun formatDurasi(totalMenit: Int): String {
         jam == 0 -> stringResource(R.string.durasi_singkat_menit, menit)
         menit == 0 -> stringResource(R.string.durasi_singkat_jam, jam)
         else -> stringResource(R.string.durasi_singkat_jam_menit, jam, menit)
-    }
-}
-
-// Tanggal disimpan dengan format yyyy-MM-dd, ditampilkan menjadi "24 Okt 2024"
-private fun formatTanggal(tanggal: String): String {
-    return try {
-        LocalDate.parse(tanggal).format(FORMAT_TANGGAL_RIWAYAT)
-    } catch (e: Exception) {
-        tanggal
     }
 }
 

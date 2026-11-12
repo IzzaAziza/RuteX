@@ -149,8 +149,8 @@ fun RuteManualScreen(navController: NavHostController, destinasiAwal: String? = 
                 val id = idTersimpan
                 viewModel.clearStatusSimpan()
                 if (id != null) {
-                    // Rencana yang baru disimpan langsung terlihat di Riwayat
-                    navController.navigate(Screen.Riwayat.route) {
+                    // Hasil susunan rute langsung ditampilkan di Detail Rute
+                    navController.navigate(Screen.DetailRute.withId(id)) {
                         popUpTo(Screen.Home.route)
                     }
                 }

@@ -352,4 +352,19 @@
     <string name="error_titik_awal_kosong">Pilih titik awal terlebih dahulu</string>
     <string name="error_butuh_login_email">Penyusunan rute membutuhkan akun email RuteX. Silakan keluar lalu masuk dengan email.</string>
     <string name="error_buat_rute">Gagal menyusun rute. Coba lagi.</string>
+    <!-- Detail Rute -->
+    <string name="detail_rute_title">Detail Rute</string>
+    <string name="tab_itinerary">Itinerary</string>
+    <string name="tab_peta_rute">Peta Rute</string>
+    <string name="rute_teroptimasi">RUTE TEROPTIMASI</string>
+    <string name="titik_keberangkatan">TITIK KEBERANGKATAN</string>
+    <string name="jam_wib">%1$s WIB</string>
+    <string name="tiba_pukul">Tiba</string>
+    <string name="buka_maps">Buka Maps</string>
+    <string name="waktu_tempuh">%1$s perjalanan</string>
+    <string name="perkiraan_selesai">Perkiraan selesai %1$s WIB</string>
+    <string name="mulai_navigasi">Mulai Navigasi</string>
+    <string name="rencana_tidak_ditemukan">Rencana tidak ditemukan</string>
+    <string name="itinerary_kosong">Itinerary belum tersedia untuk rencana ini.</string>
+    <string name="bagikan_rute">Rencana perjalananku di Cirebon (%1$s):\n%2$s\n\nDisusun dengan RuteX.</string>
 </resources>
