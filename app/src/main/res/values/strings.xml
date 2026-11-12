@@ -16,12 +16,6 @@
 
     <string name="recent_routes">Rute Terakhir</string>
     <string name="see_all">Lihat Semua</string>
-    <string name="route_date">Kemarin, 24 Okt</string>
-    <string name="route_status">Selesai</string>
-    <string name="route_name">Wisata Budaya &amp; Kuliner Keraton</string>
-    <string name="route_destinations">5 Destinasi</string>
-    <string name="route_duration">7 jam 50 menit</string>
-    <string name="route_start">Mulai: Stasiun Cirebon Kejaksan</string>
 
     <string name="popular_destinations">Destinasi Populer Cirebon</string>
     <string name="popular_desc">Dipilih khusus sesuai tren pelancong pekan ini</string>
@@ -209,9 +203,7 @@
 
     <!-- Home Dashboard -->
     <string name="notifications_desc">Notifikasi</string>
-    <string name="route_options_desc">Opsi rute</string>
     <string name="add_to_plan_desc">Tambahkan ke rencana</string>
-    <string name="added_to_plan">%1$s ditambahkan ke rencana</string>
     <string name="destination_image_desc">Foto %1$s</string>
     <string name="empty_destination">Belum ada destinasi untuk kategori ini.</string>
 
@@ -367,4 +359,10 @@
     <string name="itinerary_kosong">Itinerary belum tersedia untuk rencana ini.</string>
     <string name="bagikan_rute">Rencana perjalananku di Cirebon (%1$s):\n%2$s\n\nDisusun dengan RuteX.</string>
     <string name="menyusun_rute">Menyusun rute…</string>
+    <!-- Rute terakhir di Beranda -->
+    <string name="status_tersimpan">Tersimpan</string>
+    <string name="rentang_jam">%1$s–%2$s</string>
+    <string name="mulai_dari">Mulai: %1$s</string>
+    <string name="belum_ada_rute">Belum ada rute</string>
+    <string name="belum_ada_rute_desc">Susun rute pertamamu sekarang</string>
 </resources>

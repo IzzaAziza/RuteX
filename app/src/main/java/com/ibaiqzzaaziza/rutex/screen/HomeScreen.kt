@@ -3,6 +3,7 @@ package com.ibaiqzzaaziza.rutex.screen
 import android.widget.Toast
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -26,18 +27,16 @@ import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowForward
+import androidx.compose.material.icons.automirrored.outlined.AltRoute
 import androidx.compose.material.icons.automirrored.outlined.ArrowForward
 import androidx.compose.material.icons.automirrored.outlined.KeyboardArrowRight
 import androidx.compose.material.icons.filled.Check
 import androidx.compose.material.icons.outlined.Add
-import androidx.compose.material.icons.outlined.AltRoute
 import androidx.compose.material.icons.outlined.AutoAwesome
 import androidx.compose.material.icons.outlined.BrokenImage
-import androidx.compose.material.icons.outlined.DirectionsSubway
 import androidx.compose.material.icons.outlined.Image
 import androidx.compose.material.icons.outlined.Landscape
 import androidx.compose.material.icons.outlined.LocationOn
-import androidx.compose.material.icons.outlined.MoreVert
 import androidx.compose.material.icons.outlined.Place
 import androidx.compose.material.icons.outlined.Schedule
 import androidx.compose.material.icons.outlined.Search
@@ -73,9 +72,9 @@ import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.graphics.vector.rememberVectorPainter
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.platform.LocalResources
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.style.TextAlign
@@ -93,6 +92,7 @@ import com.ibaiqzzaaziza.rutex.component.RuteBottomBar
 import com.ibaiqzzaaziza.rutex.component.RuteMainTopBar
 import com.ibaiqzzaaziza.rutex.model.Destinasi
 import com.ibaiqzzaaziza.rutex.model.KategoriDestinasi
+import com.ibaiqzzaaziza.rutex.model.RencanaRute
 import com.ibaiqzzaaziza.rutex.navigation.Screen
 import com.ibaiqzzaaziza.rutex.network.ApiStatus
 import com.ibaiqzzaaziza.rutex.network.RuteXApi
@@ -111,7 +111,9 @@ import com.ibaiqzzaaziza.rutex.ui.theme.RuteOrangeDark
 import com.ibaiqzzaaziza.rutex.ui.theme.RutePeach
 import com.ibaiqzzaaziza.rutex.ui.theme.RuteSlate
 import com.ibaiqzzaaziza.rutex.ui.theme.RuteXTheme
+import com.ibaiqzzaaziza.rutex.util.ViewModelFactory
 import com.ibaiqzzaaziza.rutex.util.formatRupiah
+import com.ibaiqzzaaziza.rutex.util.formatTanggalRencana
 
 @Composable
 fun HomeScreen(navController: NavHostController) {
@@ -123,6 +125,15 @@ fun HomeScreen(navController: NavHostController) {
         HomeContent(
             modifier = Modifier.padding(innerPadding),
             onDestinasiClick = { navController.navigate(Screen.DetailDestinasi.withId(it.id)) },
+            onTambahKeRute = { navController.navigate(Screen.RuteManual.withDestinasi(it.name)) },
+            onRuteClick = { navController.navigate(Screen.DetailRute.withId(it.id)) },
+            onLihatSemua = {
+                navController.navigate(Screen.Riwayat.route) {
+                    popUpTo(Screen.Home.route) { saveState = true }
+                    launchSingleTop = true
+                    restoreState = true
+                }
+            },
             onStartRoute = {
                 navController.navigate(Screen.BuatRute.route) {
                     popUpTo(Screen.Home.route) { saveState = true }
@@ -138,11 +149,16 @@ fun HomeScreen(navController: NavHostController) {
 fun HomeContent(
     modifier: Modifier = Modifier,
     onDestinasiClick: (Destinasi) -> Unit = {},
+    onTambahKeRute: (Destinasi) -> Unit = {},
+    onRuteClick: (RencanaRute) -> Unit = {},
+    onLihatSemua: () -> Unit = {},
+    onTipsClick: () -> Unit = {},
     onStartRoute: () -> Unit
 ) {
-    val viewModel: HomeViewModel = viewModel()
     val context = LocalContext.current
-    val resources = LocalResources.current
+    val factory = ViewModelFactory(context)
+    val viewModel: HomeViewModel = viewModel(factory = factory)
+    val ruteTerakhir by viewModel.ruteTerakhir.collectAsState()
 
     var query by rememberSaveable { mutableStateOf("") }
     var kategori by rememberSaveable { mutableStateOf(KategoriDestinasi.SEMUA) }
@@ -169,7 +185,12 @@ fun HomeContent(
             Spacer(modifier = Modifier.height(24.dp))
             AiBannerSection(onStartRoute = onStartRoute)
             Spacer(modifier = Modifier.height(32.dp))
-            RecentRouteSection()
+            RecentRouteSection(
+                rencana = ruteTerakhir,
+                onClick = onRuteClick,
+                onLihatSemua = onLihatSemua,
+                onBuatRute = onStartRoute
+            )
             Spacer(modifier = Modifier.height(32.dp))
         }
 
@@ -180,15 +201,13 @@ fun HomeContent(
             onKategoriClick = { kategori = it },
             onRetry = { viewModel.retrieveData() },
             onDestinasiClick = onDestinasiClick,
-            onAddClick = { item ->
-                val message = resources.getString(R.string.added_to_plan, item.name)
-                Toast.makeText(context, message, Toast.LENGTH_SHORT).show()
-            }
+            // Tombol + membuka Rute Manual dengan destinasi ini sebagai tujuan pertama
+            onAddClick = onTambahKeRute
         )
 
         Column(modifier = Modifier.padding(horizontal = 16.dp)) {
             Spacer(modifier = Modifier.height(32.dp))
-            TipsSection()
+            TipsSection(onClick = onTipsClick)
             Spacer(modifier = Modifier.height(24.dp))
         }
     }
@@ -395,7 +414,12 @@ private fun InfoPill(
 }
 
 @Composable
-private fun RecentRouteSection() {
+private fun RecentRouteSection(
+    rencana: RencanaRute?,
+    onClick: (RencanaRute) -> Unit,
+    onLihatSemua: () -> Unit,
+    onBuatRute: () -> Unit
+) {
     Column(
         modifier = Modifier.fillMaxWidth(),
         verticalArrangement = Arrangement.spacedBy(12.dp)
@@ -407,7 +431,7 @@ private fun RecentRouteSection() {
         ) {
             Row(verticalAlignment = Alignment.CenterVertically) {
                 Icon(
-                    imageVector = Icons.Outlined.AltRoute,
+                    imageVector = Icons.AutoMirrored.Outlined.AltRoute,
                     contentDescription = null,
                     tint = RuteOrangeDark,
                     modifier = Modifier.size(18.dp)
@@ -415,7 +439,13 @@ private fun RecentRouteSection() {
                 Spacer(modifier = Modifier.width(8.dp))
                 SectionTitle(text = stringResource(R.string.recent_routes))
             }
-            Row(verticalAlignment = Alignment.CenterVertically) {
+            Row(
+                modifier = Modifier
+                    .clip(CircleShape)
+                    .clickable(role = Role.Button, onClick = onLihatSemua)
+                    .padding(horizontal = 4.dp, vertical = 2.dp),
+                verticalAlignment = Alignment.CenterVertically
+            ) {
                 Text(
                     text = stringResource(R.string.see_all),
                     color = RuteBlue,
@@ -431,7 +461,17 @@ private fun RecentRouteSection() {
             }
         }
 
+        if (rencana == null) {
+            KartuBelumAdaRute(onBuatRute = onBuatRute)
+            return@Column
+        }
+
+        val destinasi = rencana.itinerary.drop(1).map { it.nama }
+            .ifEmpty { rencana.destinasi.map { it.nama } }
+        val selesai = rencana.itinerary.lastOrNull()?.berangkat
+
         Card(
+            onClick = { onClick(rencana) },
             shape = RoundedCornerShape(16.dp),
             colors = CardDefaults.cardColors(containerColor = Color.White),
             elevation = CardDefaults.cardElevation(defaultElevation = 1.dp),
@@ -441,77 +481,66 @@ private fun RecentRouteSection() {
                 modifier = Modifier.padding(16.dp),
                 verticalArrangement = Arrangement.spacedBy(14.dp)
             ) {
-                Row(
-                    modifier = Modifier.fillMaxWidth(),
-                    horizontalArrangement = Arrangement.SpaceBetween,
-                    verticalAlignment = Alignment.Top
-                ) {
-                    Column(modifier = Modifier.weight(1f)) {
-                        Row(verticalAlignment = Alignment.CenterVertically) {
-                            Text(
-                                text = stringResource(R.string.route_date),
-                                fontSize = 12.sp,
-                                fontWeight = FontWeight.Medium,
-                                color = RuteSlate
-                            )
-                            Spacer(modifier = Modifier.width(8.dp))
+                Column {
+                    Row(verticalAlignment = Alignment.CenterVertically) {
+                        Text(
+                            text = formatTanggalRencana(rencana.tanggal),
+                            fontSize = 12.sp,
+                            fontWeight = FontWeight.Medium,
+                            color = RuteSlate
+                        )
+                        Spacer(modifier = Modifier.width(8.dp))
+                        Box(
+                            modifier = Modifier
+                                .size(4.dp)
+                                .background(RuteSlate.copy(alpha = 0.5f), CircleShape)
+                        )
+                        Spacer(modifier = Modifier.width(8.dp))
+                        Row(
+                            verticalAlignment = Alignment.CenterVertically,
+                            modifier = Modifier
+                                .background(RuteChip, CircleShape)
+                                .padding(horizontal = 8.dp, vertical = 2.dp)
+                        ) {
                             Box(
                                 modifier = Modifier
-                                    .size(4.dp)
-                                    .background(RuteSlate.copy(alpha = 0.5f), CircleShape)
+                                    .size(6.dp)
+                                    .background(RuteGreen, CircleShape)
                             )
-                            Spacer(modifier = Modifier.width(8.dp))
-                            Row(
-                                verticalAlignment = Alignment.CenterVertically,
-                                modifier = Modifier
-                                    .background(RuteChip, CircleShape)
-                                    .padding(horizontal = 8.dp, vertical = 2.dp)
-                            ) {
-                                Box(
-                                    modifier = Modifier
-                                        .size(6.dp)
-                                        .background(RuteGreen, CircleShape)
-                                )
-                                Spacer(modifier = Modifier.width(4.dp))
-                                Text(
-                                    text = stringResource(R.string.route_status),
-                                    fontSize = 12.sp,
-                                    color = RuteSlate,
-                                    fontWeight = FontWeight.Medium
-                                )
-                            }
+                            Spacer(modifier = Modifier.width(4.dp))
+                            Text(
+                                text = stringResource(R.string.status_tersimpan),
+                                fontSize = 12.sp,
+                                color = RuteSlate,
+                                fontWeight = FontWeight.Medium
+                            )
                         }
-                        Spacer(modifier = Modifier.height(4.dp))
-                        Text(
-                            text = stringResource(R.string.route_name),
-                            fontWeight = FontWeight.Bold,
-                            fontSize = 18.sp,
-                            lineHeight = 26.sp,
-                            color = RuteNavy,
-                            maxLines = 1,
-                            overflow = TextOverflow.Ellipsis
-                        )
                     }
-                    IconButton(onClick = { }, modifier = Modifier.size(32.dp)) {
-                        Icon(
-                            imageVector = Icons.Outlined.MoreVert,
-                            contentDescription = stringResource(R.string.route_options_desc),
-                            tint = RuteSlate
-                        )
-                    }
+                    Spacer(modifier = Modifier.height(4.dp))
+                    Text(
+                        text = destinasi.joinToString(" & "),
+                        fontWeight = FontWeight.Bold,
+                        fontSize = 18.sp,
+                        lineHeight = 26.sp,
+                        color = RuteNavy,
+                        maxLines = 1,
+                        overflow = TextOverflow.Ellipsis
+                    )
                 }
 
                 Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
                     InfoPill(
                         icon = Icons.Outlined.Place,
                         iconTint = RuteOrangeDark,
-                        text = stringResource(R.string.route_destinations)
+                        text = stringResource(R.string.jumlah_destinasi, destinasi.size)
                     )
-                    InfoPill(
-                        icon = Icons.Outlined.Schedule,
-                        iconTint = RuteBlue,
-                        text = stringResource(R.string.route_duration)
-                    )
+                    if (selesai != null) {
+                        InfoPill(
+                            icon = Icons.Outlined.Schedule,
+                            iconTint = RuteBlue,
+                            text = stringResource(R.string.rentang_jam, rencana.jamMulai, selesai)
+                        )
+                    }
                 }
 
                 Row(
@@ -522,19 +551,21 @@ private fun RecentRouteSection() {
                         .background(RuteInput.copy(alpha = 0.5f), RoundedCornerShape(12.dp))
                         .padding(horizontal = 12.dp, vertical = 8.dp)
                 ) {
-                    Row(verticalAlignment = Alignment.CenterVertically) {
+                    Row(verticalAlignment = Alignment.CenterVertically, modifier = Modifier.weight(1f)) {
                         Icon(
-                            imageVector = Icons.Outlined.DirectionsSubway,
+                            imageVector = Icons.Outlined.LocationOn,
                             contentDescription = null,
                             tint = RuteOrangeDark,
                             modifier = Modifier.size(16.dp)
                         )
                         Spacer(modifier = Modifier.width(8.dp))
                         Text(
-                            text = stringResource(R.string.route_start),
+                            text = stringResource(R.string.mulai_dari, rencana.titikAwal),
                             fontSize = 12.sp,
                             color = RuteNavy,
-                            fontWeight = FontWeight.Medium
+                            fontWeight = FontWeight.Medium,
+                            maxLines = 1,
+                            overflow = TextOverflow.Ellipsis
                         )
                     }
                     Icon(
@@ -545,6 +576,50 @@ private fun RecentRouteSection() {
                     )
                 }
             }
+        }
+    }
+}
+
+@Composable
+private fun KartuBelumAdaRute(onBuatRute: () -> Unit) {
+    Card(
+        onClick = onBuatRute,
+        shape = RoundedCornerShape(16.dp),
+        colors = CardDefaults.cardColors(containerColor = Color.White),
+        elevation = CardDefaults.cardElevation(defaultElevation = 1.dp),
+        modifier = Modifier.fillMaxWidth()
+    ) {
+        Row(
+            modifier = Modifier.padding(16.dp),
+            verticalAlignment = Alignment.CenterVertically
+        ) {
+            Box(
+                modifier = Modifier
+                    .size(44.dp)
+                    .background(RutePeach, RoundedCornerShape(12.dp)),
+                contentAlignment = Alignment.Center
+            ) {
+                Icon(imageVector = Icons.Outlined.Add, contentDescription = null, tint = RuteOrangeDark)
+            }
+            Spacer(modifier = Modifier.width(12.dp))
+            Column(modifier = Modifier.weight(1f)) {
+                Text(
+                    text = stringResource(R.string.belum_ada_rute),
+                    fontWeight = FontWeight.Bold,
+                    fontSize = 15.sp,
+                    color = RuteNavy
+                )
+                Text(
+                    text = stringResource(R.string.belum_ada_rute_desc),
+                    fontSize = 12.sp,
+                    color = RuteSlate
+                )
+            }
+            Icon(
+                imageVector = Icons.AutoMirrored.Outlined.KeyboardArrowRight,
+                contentDescription = null,
+                tint = RuteSlate
+            )
         }
     }
 }
@@ -844,11 +919,13 @@ fun FotoDestinasi(destinasi: Destinasi, modifier: Modifier = Modifier, indexFoto
 }
 
 @Composable
-private fun TipsSection() {
+private fun TipsSection(onClick: () -> Unit) {
     Row(
         modifier = Modifier
             .fillMaxWidth()
-            .background(RuteBadge, RoundedCornerShape(16.dp))
+            .clip(RoundedCornerShape(16.dp))
+            .background(RuteBadge)
+            .clickable(onClick = onClick)
             .padding(16.dp),
         verticalAlignment = Alignment.CenterVertically
     ) {
