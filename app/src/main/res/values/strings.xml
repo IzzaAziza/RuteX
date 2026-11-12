@@ -335,4 +335,16 @@
     <string name="tiket_masuk">Tiket Masuk</string>
     <string name="gratis">Gratis</string>
     <string name="harga_tidak_diketahui">-</string>
+    <!-- Detail Destinasi -->
+    <string name="detail_destinasi_title">Detail Destinasi</string>
+    <string name="jam_buka">Jam Buka</string>
+    <string name="kategori">Kategori</string>
+    <string name="fasilitas">Fasilitas</string>
+    <string name="tentang_destinasi">Tentang Destinasi</string>
+    <string name="buka_di_maps">Buka di Maps</string>
+    <string name="tambah_ke_rute">Tambah ke Rute</string>
+    <string name="bagikan">Bagikan</string>
+    <string name="bagikan_lewat">Bagikan lewat</string>
+    <string name="bagikan_destinasi">Yuk ke %1$s!\n%2$s\n\nDirekomendasikan oleh RuteX Cirebon.</string>
+    <string name="error_tidak_ada_aplikasi">Tidak ada aplikasi yang bisa membuka ini</string>
 </resources>

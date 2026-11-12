@@ -1,5 +1,7 @@
 package com.ibaiqzzaaziza.rutex.navigation
 
+const val KEY_ID_DESTINASI = "idDestinasi"
+
 sealed class Screen(val route: String) {
     data object Splash : Screen("splashScreen")
     data object Login : Screen("loginScreen")
@@ -11,4 +13,7 @@ sealed class Screen(val route: String) {
     data object RuteAiTanpaConstraint : Screen("ruteAiTanpaConstraintScreen")
     data object Riwayat : Screen("riwayatScreen")
     data object Profil : Screen("profilScreen")
+    data object DetailDestinasi : Screen("detailDestinasiScreen/{$KEY_ID_DESTINASI}") {
+        fun withId(id: Int) = "detailDestinasiScreen/$id"
+    }
 }

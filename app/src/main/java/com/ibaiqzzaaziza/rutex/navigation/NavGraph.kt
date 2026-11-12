@@ -2,10 +2,13 @@ package com.ibaiqzzaaziza.rutex.navigation
 
 import androidx.compose.runtime.Composable
 import androidx.navigation.NavHostController
+import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import androidx.navigation.navArgument
 import com.ibaiqzzaaziza.rutex.screen.BuatRuteScreen
+import com.ibaiqzzaaziza.rutex.screen.DetailDestinasiScreen
 import com.ibaiqzzaaziza.rutex.screen.HomeScreen
 import com.ibaiqzzaaziza.rutex.screen.LoginScreen
 import com.ibaiqzzaaziza.rutex.screen.ProfilScreen
@@ -51,6 +54,15 @@ fun SetupNavGraph(navController: NavHostController = rememberNavController()) {
         }
         composable(route = Screen.Profil.route) {
             ProfilScreen(navController)
+        }
+        composable(
+            route = Screen.DetailDestinasi.route,
+            arguments = listOf(
+                navArgument(KEY_ID_DESTINASI) { type = NavType.IntType }
+            )
+        ) { navBackStackEntry ->
+            val id = navBackStackEntry.arguments?.getInt(KEY_ID_DESTINASI) ?: 0
+            DetailDestinasiScreen(navController, id)
         }
     }
 }

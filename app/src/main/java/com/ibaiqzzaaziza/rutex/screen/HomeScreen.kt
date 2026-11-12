@@ -122,6 +122,7 @@ fun HomeScreen(navController: NavHostController) {
     ) { innerPadding ->
         HomeContent(
             modifier = Modifier.padding(innerPadding),
+            onDestinasiClick = { navController.navigate(Screen.DetailDestinasi.withId(it.id)) },
             onStartRoute = {
                 navController.navigate(Screen.BuatRute.route) {
                     popUpTo(Screen.Home.route) { saveState = true }
@@ -136,6 +137,7 @@ fun HomeScreen(navController: NavHostController) {
 @Composable
 fun HomeContent(
     modifier: Modifier = Modifier,
+    onDestinasiClick: (Destinasi) -> Unit = {},
     onStartRoute: () -> Unit
 ) {
     val viewModel: HomeViewModel = viewModel()
@@ -177,6 +179,7 @@ fun HomeContent(
             kategoriTerpilih = kategori,
             onKategoriClick = { kategori = it },
             onRetry = { viewModel.retrieveData() },
+            onDestinasiClick = onDestinasiClick,
             onAddClick = { item ->
                 val message = resources.getString(R.string.added_to_plan, item.name)
                 Toast.makeText(context, message, Toast.LENGTH_SHORT).show()
@@ -553,6 +556,7 @@ private fun PopularDestinationsSection(
     kategoriTerpilih: KategoriDestinasi,
     onKategoriClick: (KategoriDestinasi) -> Unit,
     onRetry: () -> Unit,
+    onDestinasiClick: (Destinasi) -> Unit,
     onAddClick: (Destinasi) -> Unit
 ) {
     Column(modifier = Modifier.fillMaxWidth()) {
@@ -626,7 +630,11 @@ private fun PopularDestinationsSection(
                 horizontalArrangement = Arrangement.spacedBy(16.dp)
             ) {
                 items(destinasi, key = { it.id }) { item ->
-                    DestinationCard(destinasi = item, onAddClick = { onAddClick(item) })
+                    DestinationCard(
+                        destinasi = item,
+                        onClick = { onDestinasiClick(item) },
+                        onAddClick = { onAddClick(item) }
+                    )
                 }
             }
         }
@@ -666,8 +674,9 @@ private fun CategoryChip(text: String, selected: Boolean, onClick: () -> Unit) {
 }
 
 @Composable
-private fun DestinationCard(destinasi: Destinasi, onAddClick: () -> Unit) {
+private fun DestinationCard(destinasi: Destinasi, onClick: () -> Unit, onAddClick: () -> Unit) {
     Card(
+        onClick = onClick,
         shape = RoundedCornerShape(16.dp),
         colors = CardDefaults.cardColors(containerColor = Color.White),
         elevation = CardDefaults.cardElevation(defaultElevation = 1.dp),
