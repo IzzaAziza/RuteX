@@ -139,6 +139,17 @@
     <string name="hapus_riwayat_title">Hapus rencana ini?</string>
     <string name="hapus_riwayat_pesan">Rencana yang dihapus tidak bisa dikembalikan.</string>
     <string name="tombol_hapus">Hapus</string>
+    <!-- Profil -->
+    <string name="profil_badge">RUTEX AI</string>
+    <string name="profil_konteks">Akun Pengguna</string>
+    <string name="profil_title">Profil</string>
+    <string name="profil_peran">Wisatawan</string>
+    <string name="profil_akun_terverifikasi">Akun aktif</string>
+    <plurals name="profil_rute_tersimpan">
+        <item quantity="one">%1$d Rute Tersimpan di Cirebon</item>
+        <item quantity="other">%1$d Rute Tersimpan di Cirebon</item>
+    </plurals>
+    <string name="profil_footer">RuteX Cirebon Edition • Hak Cipta Terpelihara</string>
     <string name="error_koneksi">Tidak dapat terhubung ke server. Periksa koneksi internetmu.</string>
 
     <!-- Register Screen: syarat & validasi -->

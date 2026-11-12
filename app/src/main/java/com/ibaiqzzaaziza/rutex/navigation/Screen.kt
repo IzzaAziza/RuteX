@@ -10,4 +10,5 @@ sealed class Screen(val route: String) {
     data object RuteAiConstraint : Screen("ruteAiConstraintScreen")
     data object RuteAiTanpaConstraint : Screen("ruteAiTanpaConstraintScreen")
     data object Riwayat : Screen("riwayatScreen")
+    data object Profil : Screen("profilScreen")
 }

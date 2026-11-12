@@ -15,6 +15,9 @@ interface RencanaRuteDao {
     @Query("SELECT * FROM rencana_rute WHERE emailPengguna = :email ORDER BY id DESC")
     fun getRencana(email: String): Flow<List<RencanaRute>>
 
+    @Query("SELECT COUNT(*) FROM rencana_rute WHERE emailPengguna = :email")
+    fun countRencana(email: String): Flow<Int>
+
     @Query("SELECT * FROM rencana_rute WHERE id = :id")
     suspend fun getRencanaById(id: Long): RencanaRute?
 

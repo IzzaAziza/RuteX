@@ -133,7 +133,7 @@ private enum class BottomNavItem(
     BERANDA(R.string.nav_home, Icons.Outlined.Home, Screen.Home.route),
     BUAT_RUTE(R.string.nav_create, Icons.Outlined.AutoAwesome, Screen.BuatRute.route),
     RIWAYAT(R.string.nav_history, Icons.Outlined.History, Screen.Riwayat.route),
-    PROFIL(R.string.nav_profile, Icons.Outlined.Person, null)
+    PROFIL(R.string.nav_profile, Icons.Outlined.Person, Screen.Profil.route)
 }
 
 @Composable

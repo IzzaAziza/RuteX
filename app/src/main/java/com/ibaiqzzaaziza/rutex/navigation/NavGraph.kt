@@ -8,6 +8,7 @@ import androidx.navigation.compose.rememberNavController
 import com.ibaiqzzaaziza.rutex.screen.BuatRuteScreen
 import com.ibaiqzzaaziza.rutex.screen.HomeScreen
 import com.ibaiqzzaaziza.rutex.screen.LoginScreen
+import com.ibaiqzzaaziza.rutex.screen.ProfilScreen
 import com.ibaiqzzaaziza.rutex.screen.RegisterScreen
 import com.ibaiqzzaaziza.rutex.screen.RiwayatScreen
 import com.ibaiqzzaaziza.rutex.screen.RuteAiConstraintScreen
@@ -47,6 +48,9 @@ fun SetupNavGraph(navController: NavHostController = rememberNavController()) {
         }
         composable(route = Screen.Riwayat.route) {
             RiwayatScreen(navController)
+        }
+        composable(route = Screen.Profil.route) {
+            ProfilScreen(navController)
         }
     }
 }

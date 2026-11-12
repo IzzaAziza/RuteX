@@ -1,0 +1,309 @@
+package com.ibaiqzzaaziza.rutex.screen
+
+import androidx.compose.foundation.background
+import androidx.compose.foundation.border
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.offset
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.verticalScroll
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.outlined.Bolt
+import androidx.compose.material.icons.outlined.Explore
+import androidx.compose.material.icons.outlined.Star
+import androidx.compose.material.icons.outlined.VerifiedUser
+import androidx.compose.material3.Icon
+import androidx.compose.material3.Scaffold
+import androidx.compose.material3.Text
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
+import androidx.compose.ui.Alignment
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
+import androidx.compose.ui.draw.shadow
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.pluralStringResource
+import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextOverflow
+import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
+import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.navigation.NavHostController
+import androidx.navigation.compose.rememberNavController
+import coil.compose.AsyncImage
+import com.ibaiqzzaaziza.rutex.R
+import com.ibaiqzzaaziza.rutex.component.RuteBottomBar
+import com.ibaiqzzaaziza.rutex.component.RuteMainTopBar
+import com.ibaiqzzaaziza.rutex.model.User
+import com.ibaiqzzaaziza.rutex.navigation.Screen
+import com.ibaiqzzaaziza.rutex.ui.theme.RuteBackground
+import com.ibaiqzzaaziza.rutex.ui.theme.RuteBadge
+import com.ibaiqzzaaziza.rutex.ui.theme.RuteBrown
+import com.ibaiqzzaaziza.rutex.ui.theme.RuteChip
+import com.ibaiqzzaaziza.rutex.ui.theme.RuteInput
+import com.ibaiqzzaaziza.rutex.ui.theme.RuteNavy
+import com.ibaiqzzaaziza.rutex.ui.theme.RuteOrange
+import com.ibaiqzzaaziza.rutex.ui.theme.RuteOrangeDark
+import com.ibaiqzzaaziza.rutex.ui.theme.RuteOrangeInk
+import com.ibaiqzzaaziza.rutex.ui.theme.RutePeach
+import com.ibaiqzzaaziza.rutex.ui.theme.RuteSlate
+import com.ibaiqzzaaziza.rutex.ui.theme.RuteXTheme
+import com.ibaiqzzaaziza.rutex.util.ViewModelFactory
+
+@Composable
+fun ProfilScreen(navController: NavHostController) {
+    val context = LocalContext.current
+    val factory = ViewModelFactory(context)
+    val viewModel: ProfilViewModel = viewModel(factory = factory)
+    val user by viewModel.user.collectAsState()
+    val jumlahRute by viewModel.jumlahRute.collectAsState()
+
+    Scaffold(
+        topBar = { RuteMainTopBar(navController) },
+        bottomBar = { RuteBottomBar(navController, Screen.Profil.route) },
+        containerColor = RuteBackground
+    ) { innerPadding ->
+        Column(
+            modifier = Modifier
+                .padding(innerPadding)
+                .fillMaxSize()
+                .verticalScroll(rememberScrollState())
+                .padding(horizontal = 16.dp, vertical = 8.dp),
+            verticalArrangement = Arrangement.spacedBy(24.dp)
+        ) {
+            ProfilHeader()
+            KartuAkun(user = user, jumlahRute = jumlahRute)
+
+            Text(
+                text = stringResource(R.string.profil_footer),
+                fontSize = 12.sp,
+                fontWeight = FontWeight.Medium,
+                color = RuteSlate,
+                modifier = Modifier
+                    .align(Alignment.CenterHorizontally)
+                    .padding(bottom = 16.dp)
+            )
+        }
+    }
+}
+
+@Composable
+private fun ProfilHeader() {
+    Row(
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(top = 8.dp),
+        verticalAlignment = Alignment.CenterVertically
+    ) {
+        Column(
+            modifier = Modifier.weight(1f),
+            verticalArrangement = Arrangement.spacedBy(4.dp)
+        ) {
+            Row(verticalAlignment = Alignment.CenterVertically) {
+                Row(
+                    modifier = Modifier
+                        .background(RuteOrange.copy(alpha = 0.15f), CircleShape)
+                        .padding(horizontal = 8.dp, vertical = 2.dp),
+                    verticalAlignment = Alignment.CenterVertically
+                ) {
+                    Icon(
+                        imageVector = Icons.Outlined.Bolt,
+                        contentDescription = null,
+                        tint = RuteOrangeDark,
+                        modifier = Modifier.size(12.dp)
+                    )
+                    Spacer(modifier = Modifier.width(4.dp))
+                    Text(
+                        text = stringResource(R.string.profil_badge),
+                        fontSize = 10.sp,
+                        fontWeight = FontWeight.Bold,
+                        color = RuteOrangeDark,
+                        letterSpacing = 0.5.sp
+                    )
+                }
+                Spacer(modifier = Modifier.width(6.dp))
+                Text(
+                    text = stringResource(R.string.profil_konteks),
+                    fontSize = 12.sp,
+                    fontWeight = FontWeight.Medium,
+                    color = RuteSlate
+                )
+            }
+            Text(
+                text = stringResource(R.string.profil_title),
+                fontSize = 24.sp,
+                lineHeight = 32.sp,
+                fontWeight = FontWeight.Bold,
+                color = RuteNavy
+            )
+        }
+        Box(
+            modifier = Modifier
+                .size(40.dp)
+                .background(RuteChip, CircleShape),
+            contentAlignment = Alignment.Center
+        ) {
+            Icon(
+                imageVector = Icons.Outlined.VerifiedUser,
+                contentDescription = stringResource(R.string.profil_akun_terverifikasi),
+                tint = RuteOrange,
+                modifier = Modifier.size(18.dp)
+            )
+        }
+    }
+}
+
+@Composable
+private fun KartuAkun(user: User, jumlahRute: Int) {
+    val shape = RoundedCornerShape(16.dp)
+    Column(
+        modifier = Modifier
+            .fillMaxWidth()
+            .shadow(1.dp, shape)
+            .clip(shape)
+            .background(Color.White)
+    ) {
+        Row(
+            modifier = Modifier.padding(16.dp),
+            verticalAlignment = Alignment.CenterVertically
+        ) {
+            AvatarProfil(user = user)
+            Spacer(modifier = Modifier.width(14.dp))
+            Column(modifier = Modifier.weight(1f)) {
+                Row(verticalAlignment = Alignment.CenterVertically) {
+                    Text(
+                        text = user.name.ifBlank { stringResource(R.string.profil_tanpa_nama) },
+                        fontSize = 18.sp,
+                        lineHeight = 26.sp,
+                        fontWeight = FontWeight.Bold,
+                        color = RuteNavy,
+                        maxLines = 1,
+                        overflow = TextOverflow.Ellipsis,
+                        modifier = Modifier.weight(1f, fill = false)
+                    )
+                    Spacer(modifier = Modifier.width(6.dp))
+                    Text(
+                        text = stringResource(R.string.profil_peran),
+                        fontSize = 11.sp,
+                        fontWeight = FontWeight.SemiBold,
+                        color = RuteBrown,
+                        modifier = Modifier
+                            .background(RuteBadge, CircleShape)
+                            .padding(horizontal = 8.dp, vertical = 2.dp)
+                    )
+                }
+                Text(
+                    text = user.email,
+                    fontSize = 14.sp,
+                    lineHeight = 20.sp,
+                    color = RuteSlate,
+                    maxLines = 1,
+                    overflow = TextOverflow.Ellipsis
+                )
+            }
+        }
+
+        Row(
+            modifier = Modifier
+                .fillMaxWidth()
+                .background(RuteInput.copy(alpha = 0.6f))
+                .padding(start = 16.dp, end = 16.dp, top = 8.dp, bottom = 12.dp),
+            verticalAlignment = Alignment.CenterVertically
+        ) {
+            Icon(
+                imageVector = Icons.Outlined.Explore,
+                contentDescription = null,
+                tint = RuteSlate,
+                modifier = Modifier.size(15.dp)
+            )
+            Spacer(modifier = Modifier.width(8.dp))
+            Text(
+                text = pluralStringResource(R.plurals.profil_rute_tersimpan, jumlahRute, jumlahRute),
+                fontSize = 12.sp,
+                fontWeight = FontWeight.Medium,
+                color = RuteSlate
+            )
+        }
+    }
+}
+
+/** Foto akun Google jika ada, jika tidak tampil inisial nama. */
+@Composable
+private fun AvatarProfil(user: User) {
+    Box {
+        Box(
+            modifier = Modifier
+                .size(56.dp)
+                .clip(CircleShape)
+                .background(RutePeach),
+            contentAlignment = Alignment.Center
+        ) {
+            if (user.photoUrl.isNotEmpty()) {
+                AsyncImage(
+                    model = user.photoUrl,
+                    contentDescription = stringResource(R.string.profile_desc),
+                    contentScale = ContentScale.Crop,
+                    modifier = Modifier.fillMaxSize()
+                )
+            } else {
+                Text(
+                    text = inisial(user),
+                    fontSize = 22.sp,
+                    fontWeight = FontWeight.Bold,
+                    color = RuteOrangeInk
+                )
+            }
+        }
+        Box(
+            modifier = Modifier
+                .align(Alignment.BottomEnd)
+                .offset(x = 4.dp, y = 4.dp)
+                .size(20.dp)
+                .border(2.dp, Color.White, CircleShape)
+                .background(RuteOrange, CircleShape),
+            contentAlignment = Alignment.Center
+        ) {
+            Icon(
+                imageVector = Icons.Outlined.Star,
+                contentDescription = null,
+                tint = Color.White,
+                modifier = Modifier.size(10.dp)
+            )
+        }
+    }
+}
+
+// "Izza Aziza" -> "IZ", jika nama kosong memakai huruf depan email
+private fun inisial(user: User): String {
+    val sumber = user.name.ifBlank { user.email }
+    val kata = sumber.trim().split(" ").filter { it.isNotEmpty() }
+    return when {
+        kata.isEmpty() -> "?"
+        kata.size == 1 -> kata[0].take(2)
+        else -> "${kata[0].first()}${kata[1].first()}"
+    }.uppercase()
+}
+
+@Preview(showBackground = true)
+@Composable
+fun ProfilScreenPreview() {
+    RuteXTheme {
+        ProfilScreen(rememberNavController())
+    }
+}
