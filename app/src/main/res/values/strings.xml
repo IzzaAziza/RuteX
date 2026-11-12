@@ -174,10 +174,8 @@
     <string name="bantuan_section_title">Bantuan &amp; Informasi</string>
     <string name="bantuan_title">Bantuan</string>
     <string name="bantuan_desc">Temukan jawaban atas pertanyaanmu</string>
-    <string name="bantuan_isi">• Buat rute di menu Buat Rute, pilih mode Manual atau AI.\n• Rencana yang disimpan muncul di menu Riwayat dan bisa dihapus dari sana.\n• Ubah preferensi perjalanan di halaman Profil agar rekomendasi lebih sesuai.</string>
     <string name="tentang_title">Tentang RuteX</string>
     <string name="tentang_desc">Informasi versi aplikasi dan pengembang</string>
-    <string name="tentang_isi">RuteX Cirebon Edition\nVersi %1$s\n\nAplikasi perencana wisata Cirebon.\nDikembangkan oleh Baiq Izza Aziza.</string>
     <string name="versi_singkat">v%1$s</string>
     <string name="edit_profil">Edit Profil</string>
     <string name="edit_profil_sukses">Nama berhasil diperbarui</string>
@@ -374,4 +372,64 @@
     <string name="kirim_tautan_reset">Kirim Tautan Reset</string>
     <string name="kembali_ke_login">Kembali ke Halaman Masuk</string>
     <string name="kirim_ulang">Kirim ulang ke email lain</string>
+    <!-- Bantuan -->
+    <string name="bantuan_pengantar">Pertanyaan yang sering ditanyakan seputar penggunaan RuteX.</string>
+    <string name="faq_1_tanya">Bagaimana cara membuat rute perjalanan?</string>
+    <string name="faq_1_jawab">Buka menu Buat Rute, lalu pilih Buat Manual untuk memilih destinasi sendiri, atau mode AI untuk mendapat rekomendasi dari preferensimu. Setelah form diisi, RuteX menyusun urutan kunjungan beserta perkiraan jam tibanya.</string>
+    <string name="faq_2_tanya">Apa beda mode Dengan Constraint dan Tanpa Constraint?</string>
+    <string name="faq_2_jawab">Pada mode Dengan Constraint kamu menentukan sendiri jumlah tempat yang ingin dikunjungi. Pada mode Tanpa Constraint, jumlah destinasi dipilihkan otomatis.</string>
+    <string name="faq_3_tanya">Kenapa rute tidak bisa disusun?</string>
+    <string name="faq_3_jawab">Penyusunan rute membutuhkan koneksi internet dan akun email RuteX. Pastikan titik awal berbeda dengan destinasi dan setiap destinasi hanya dipilih satu kali.</string>
+    <string name="faq_4_tanya">Di mana rencana yang sudah dibuat?</string>
+    <string name="faq_4_jawab">Semua rencana tersimpan di menu Riwayat. Ketuk salah satu rencana untuk melihat itinerary dan peta rutenya, atau ketuk ikon tempat sampah untuk menghapusnya.</string>
+    <string name="faq_5_tanya">Bagaimana cara memulai navigasi?</string>
+    <string name="faq_5_jawab">Di halaman Detail Rute, ketuk tombol Mulai Navigasi. RuteX akan membuka Google Maps dengan semua titik persinggahan sesuai urutan kunjungan.</string>
+    <string name="faq_6_tanya">Saya lupa kata sandi, apa yang harus dilakukan?</string>
+    <string name="faq_6_jawab">Di halaman Masuk, ketuk Lupa Kata Sandi lalu masukkan email akunmu. Tautan untuk membuat kata sandi baru akan dikirim ke email tersebut.</string>
+    <string name="kunjungi_web">Kunjungi Web RuteX</string>
+    <string name="alamat_web">rutex.id</string>
+
+    <!-- Tentang RuteX -->
+    <string name="tentang_versi">Versi %1$s</string>
+    <string name="tentang_deskripsi">RuteX adalah aplikasi perencana wisata Cirebon yang membantu menyusun rute kunjungan budaya, kuliner, alam, dan belanja dengan urutan yang efisien.</string>
+    <string name="tentang_fitur_title">Fitur Utama</string>
+    <string name="tentang_fitur_1">Rencana rute manual dengan destinasi pilihan sendiri</string>
+    <string name="tentang_fitur_2">Rekomendasi rute dari preferensi perjalanan</string>
+    <string name="tentang_fitur_3">Itinerary lengkap dengan jam tiba dan peta rute</string>
+    <string name="tentang_fitur_4">Riwayat rencana yang tersimpan di perangkat</string>
+    <string name="tentang_sumber_title">Sumber Data</string>
+    <string name="tentang_sumber_isi">Data destinasi dan penyusunan rute berasal dari server RuteX (api.rutex.id). Peta menggunakan data © kontributor OpenStreetMap.</string>
+    <string name="tentang_pengembang">Dikembangkan oleh Baiq Izza Aziza</string>
+
+    <!-- Syarat & Ketentuan -->
+    <string name="syarat_title">Syarat &amp; Ketentuan</string>
+    <string name="syarat_desc_singkat">Aturan penggunaan aplikasi RuteX</string>
+    <string name="syarat_1_judul">Penggunaan Aplikasi</string>
+    <string name="syarat_1_isi">RuteX digunakan untuk membantu merencanakan perjalanan wisata di Cirebon. Rute, jam tiba, dan waktu tempuh yang ditampilkan adalah perkiraan, sehingga kondisi sebenarnya di lapangan bisa berbeda.</string>
+    <string name="syarat_2_judul">Akun Pengguna</string>
+    <string name="syarat_2_isi">Pengguna bertanggung jawab menjaga kerahasiaan kata sandi akunnya. Data yang dimasukkan saat mendaftar harus benar agar fitur seperti atur ulang kata sandi dapat berfungsi.</string>
+    <string name="syarat_3_judul">Informasi Destinasi</string>
+    <string name="syarat_3_isi">Jam buka, harga tiket, dan fasilitas destinasi dapat berubah sewaktu-waktu. Sebaiknya periksa kembali informasi terbaru sebelum berkunjung.</string>
+    <string name="syarat_4_judul">Layanan Pihak Ketiga</string>
+    <string name="syarat_4_isi">Navigasi dibuka melalui Google Maps dan peta ditampilkan dengan data OpenStreetMap. Penggunaan layanan tersebut mengikuti ketentuan masing-masing penyedia.</string>
+
+    <!-- Kebijakan Privasi -->
+    <string name="privasi_title">Kebijakan Privasi</string>
+    <string name="privasi_desc_singkat">Cara RuteX mengelola datamu</string>
+    <string name="privasi_1_judul">Data yang Dikumpulkan</string>
+    <string name="privasi_1_isi">Saat mendaftar, RuteX meminta nama, email, nomor WhatsApp, dan kata sandi. Saat masuk dengan Google, RuteX menerima nama, email, dan foto profil dari akun Google.</string>
+    <string name="privasi_2_judul">Penyimpanan Data</string>
+    <string name="privasi_2_isi">Data akun dan token login disimpan di perangkat menggunakan DataStore. Rencana perjalanan disimpan di database lokal perangkat (Room) dan terhapus jika aplikasi dihapus.</string>
+    <string name="privasi_3_judul">Data yang Dikirim ke Server</string>
+    <string name="privasi_3_isi">Data akun email dan permintaan penyusunan rute (titik awal, destinasi, tanggal, dan jam) dikirim ke server RuteX untuk diproses.</string>
+    <string name="privasi_4_judul">Menghapus Data</string>
+    <string name="privasi_4_isi">Keluar dari akun akan menghapus data akun yang tersimpan di perangkat. Rencana perjalanan dapat dihapus satu per satu dari menu Riwayat.</string>
+
+    <!-- Notifikasi -->
+    <string name="notifikasi_title">Notifikasi</string>
+    <string name="notifikasi_kosong_title">Belum ada notifikasi</string>
+    <string name="notifikasi_kosong_desc">Pemberitahuan dari RuteX akan muncul di sini.</string>
+    <string name="notifikasi_mati_title">Notifikasi dimatikan</string>
+    <string name="notifikasi_mati_desc">Aktifkan kembali notifikasi di halaman Profil agar tidak ketinggalan informasi dari RuteX.</string>
+    <string name="atur_notifikasi">Atur Notifikasi</string>
 </resources>

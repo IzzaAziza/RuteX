@@ -186,8 +186,8 @@ fun ProfilScreen(navController: NavHostController) {
                 onNotifikasiChange = { viewModel.simpanNotifikasi(it) }
             )
             BantuanSection(
-                onBantuanClick = { dialog = DialogProfil.BANTUAN },
-                onTentangClick = { dialog = DialogProfil.TENTANG }
+                onBantuanClick = { navController.navigate(Screen.Bantuan.route) },
+                onTentangClick = { navController.navigate(Screen.Tentang.route) }
             )
             TombolKeluar(onClick = { dialog = DialogProfil.LOGOUT })
 
@@ -237,16 +237,6 @@ fun ProfilScreen(navController: NavHostController) {
                 dialog = null
             }
         )
-        DialogProfil.BANTUAN -> InfoDialog(
-            title = stringResource(R.string.bantuan_title),
-            text = stringResource(R.string.bantuan_isi),
-            onDismissRequest = { dialog = null }
-        )
-        DialogProfil.TENTANG -> InfoDialog(
-            title = stringResource(R.string.tentang_title),
-            text = stringResource(R.string.tentang_isi, BuildConfig.VERSION_NAME),
-            onDismissRequest = { dialog = null }
-        )
         DialogProfil.EDIT_PROFIL -> EditNamaDialog(
             namaAwal = user.name,
             isLoading = editStatus == ApiStatus.LOADING,
@@ -289,7 +279,7 @@ fun ProfilScreen(navController: NavHostController) {
     }
 }
 
-private enum class DialogProfil { JENIS_WISATA, DURASI, GAYA, BANTUAN, TENTANG, EDIT_PROFIL, LOGOUT }
+private enum class DialogProfil { JENIS_WISATA, DURASI, GAYA, EDIT_PROFIL, LOGOUT }
 
 @Composable
 private fun EditNamaDialog(
@@ -377,21 +367,6 @@ private fun TombolKeluar(onClick: () -> Unit) {
             color = RuteErrorDark
         )
     }
-}
-
-@Composable
-private fun InfoDialog(title: String, text: String, onDismissRequest: () -> Unit) {
-    AlertDialog(
-        title = { Text(text = title) },
-        text = { Text(text = text, lineHeight = 22.sp) },
-        confirmButton = {
-            TextButton(onClick = onDismissRequest) {
-                Text(text = stringResource(R.string.tombol_tutup))
-            }
-        },
-        onDismissRequest = onDismissRequest,
-        containerColor = Color.White
-    )
 }
 
 @Composable

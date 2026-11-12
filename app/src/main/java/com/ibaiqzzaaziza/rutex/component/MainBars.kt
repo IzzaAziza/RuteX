@@ -47,7 +47,6 @@ import com.ibaiqzzaaziza.rutex.ui.theme.RuteSlate
 @Composable
 fun RuteMainTopBar(navController: NavHostController) {
     val context = LocalContext.current
-    val comingSoon = stringResource(R.string.feature_coming_soon)
 
     val dataStore = remember { UserDataStore(context) }
     val user by dataStore.userFlow.collectAsState(User())
@@ -75,7 +74,9 @@ fun RuteMainTopBar(navController: NavHostController) {
         },
         actions = {
             IconButton(
-                onClick = { Toast.makeText(context, comingSoon, Toast.LENGTH_SHORT).show() }
+                onClick = {
+                    navController.navigate(Screen.Notifikasi.route) { launchSingleTop = true }
+                }
             ) {
                 Icon(
                     imageVector = Icons.Outlined.Notifications,

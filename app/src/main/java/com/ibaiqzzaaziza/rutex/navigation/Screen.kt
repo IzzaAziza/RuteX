@@ -22,6 +22,11 @@ sealed class Screen(val route: String) {
     data object RuteAiTanpaConstraint : Screen("ruteAiTanpaConstraintScreen")
     data object Riwayat : Screen("riwayatScreen")
     data object Profil : Screen("profilScreen")
+    data object Bantuan : Screen("bantuanScreen")
+    data object Tentang : Screen("tentangScreen")
+    data object SyaratKetentuan : Screen("syaratKetentuanScreen")
+    data object KebijakanPrivasi : Screen("kebijakanPrivasiScreen")
+    data object Notifikasi : Screen("notifikasiScreen")
     data object DetailRute : Screen("detailRuteScreen/{$KEY_ID_RENCANA}") {
         fun withId(id: Long) = "detailRuteScreen/$id"
     }

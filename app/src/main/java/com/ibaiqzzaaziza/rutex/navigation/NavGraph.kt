@@ -7,12 +7,15 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
+import com.ibaiqzzaaziza.rutex.screen.BantuanScreen
 import com.ibaiqzzaaziza.rutex.screen.BuatRuteScreen
 import com.ibaiqzzaaziza.rutex.screen.DetailDestinasiScreen
 import com.ibaiqzzaaziza.rutex.screen.DetailRuteScreen
 import com.ibaiqzzaaziza.rutex.screen.HomeScreen
+import com.ibaiqzzaaziza.rutex.screen.KebijakanPrivasiScreen
 import com.ibaiqzzaaziza.rutex.screen.LoginScreen
 import com.ibaiqzzaaziza.rutex.screen.LupaPasswordScreen
+import com.ibaiqzzaaziza.rutex.screen.NotifikasiScreen
 import com.ibaiqzzaaziza.rutex.screen.ProfilScreen
 import com.ibaiqzzaaziza.rutex.screen.RegisterScreen
 import com.ibaiqzzaaziza.rutex.screen.RiwayatScreen
@@ -20,6 +23,8 @@ import com.ibaiqzzaaziza.rutex.screen.RuteAiConstraintScreen
 import com.ibaiqzzaaziza.rutex.screen.RuteAiTanpaConstraintScreen
 import com.ibaiqzzaaziza.rutex.screen.RuteManualScreen
 import com.ibaiqzzaaziza.rutex.screen.SplashScreen
+import com.ibaiqzzaaziza.rutex.screen.SyaratKetentuanScreen
+import com.ibaiqzzaaziza.rutex.screen.TentangScreen
 
 @Composable
 fun SetupNavGraph(navController: NavHostController = rememberNavController()) {
@@ -69,6 +74,21 @@ fun SetupNavGraph(navController: NavHostController = rememberNavController()) {
         }
         composable(route = Screen.Profil.route) {
             ProfilScreen(navController)
+        }
+        composable(route = Screen.Bantuan.route) {
+            BantuanScreen(navController)
+        }
+        composable(route = Screen.Tentang.route) {
+            TentangScreen(navController)
+        }
+        composable(route = Screen.SyaratKetentuan.route) {
+            SyaratKetentuanScreen(navController)
+        }
+        composable(route = Screen.KebijakanPrivasi.route) {
+            KebijakanPrivasiScreen(navController)
+        }
+        composable(route = Screen.Notifikasi.route) {
+            NotifikasiScreen(navController)
         }
         composable(
             route = Screen.DetailRute.route,

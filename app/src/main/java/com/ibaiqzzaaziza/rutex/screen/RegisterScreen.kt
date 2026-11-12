@@ -134,7 +134,9 @@ fun RegisterScreen(navController: NavHostController) {
             onRegisterClick = { nama, email, phone, password, confirmPassword ->
                 viewModel.register(nama, email, phone, password, confirmPassword)
             },
-            onLoginClick = { navController.popBackStack() }
+            onLoginClick = { navController.popBackStack() },
+            onSyaratClick = { navController.navigate(Screen.SyaratKetentuan.route) },
+            onPrivasiClick = { navController.navigate(Screen.KebijakanPrivasi.route) }
         )
     }
 }
@@ -146,7 +148,9 @@ fun RegisterContent(
     isGoogleLoading: Boolean = false,
     onGoogleClick: () -> Unit = {},
     onRegisterClick: (nama: String, email: String, phone: String, password: String, confirmPassword: String) -> Unit,
-    onLoginClick: () -> Unit
+    onLoginClick: () -> Unit,
+    onSyaratClick: () -> Unit = {},
+    onPrivasiClick: () -> Unit = {}
 ) {
     val context = LocalContext.current
     val comingSoon = stringResource(R.string.feature_coming_soon)
@@ -273,7 +277,8 @@ fun RegisterContent(
                 TermsCheckbox(
                     checked = agreeTerms,
                     onCheckedChange = { agreeTerms = it },
-                    onLinkClick = { Toast.makeText(context, comingSoon, Toast.LENGTH_SHORT).show() }
+                    onSyaratClick = onSyaratClick,
+                    onPrivasiClick = onPrivasiClick
                 )
 
                 RutePrimaryButton(
@@ -380,7 +385,8 @@ private fun PhonePrefix() {
 private fun TermsCheckbox(
     checked: Boolean,
     onCheckedChange: (Boolean) -> Unit,
-    onLinkClick: () -> Unit
+    onSyaratClick: () -> Unit,
+    onPrivasiClick: () -> Unit
 ) {
     val linkStyle = TextLinkStyles(
         style = SpanStyle(color = RuteBlue, fontWeight = FontWeight.SemiBold)
@@ -393,11 +399,11 @@ private fun TermsCheckbox(
 
     val termsText = buildAnnotatedString {
         append("$prefix ")
-        withLink(LinkAnnotation.Clickable(tag = "terms", styles = linkStyle) { onLinkClick() }) {
+        withLink(LinkAnnotation.Clickable(tag = "terms", styles = linkStyle) { onSyaratClick() }) {
             append(terms)
         }
         append(" $middle ")
-        withLink(LinkAnnotation.Clickable(tag = "privacy", styles = linkStyle) { onLinkClick() }) {
+        withLink(LinkAnnotation.Clickable(tag = "privacy", styles = linkStyle) { onPrivasiClick() }) {
             append(privacy)
         }
         append(" $suffix")

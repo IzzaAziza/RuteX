@@ -127,6 +127,7 @@ fun HomeScreen(navController: NavHostController) {
             onDestinasiClick = { navController.navigate(Screen.DetailDestinasi.withId(it.id)) },
             onTambahKeRute = { navController.navigate(Screen.RuteManual.withDestinasi(it.name)) },
             onRuteClick = { navController.navigate(Screen.DetailRute.withId(it.id)) },
+            onTipsClick = { navController.navigate(Screen.Bantuan.route) },
             onLihatSemua = {
                 navController.navigate(Screen.Riwayat.route) {
                     popUpTo(Screen.Home.route) { saveState = true }

@@ -50,6 +50,11 @@ fun Context.bukaNavigasi(titik: List<Pair<Double, Double>>, modeKendaraan: Strin
     bukaIntent(Intent(Intent.ACTION_VIEW, uri))
 }
 
+/** Membuka halaman web di browser. */
+fun Context.bukaTautan(url: String) {
+    bukaIntent(Intent(Intent.ACTION_VIEW, Uri.parse(url)))
+}
+
 /** Membagikan teks ke aplikasi lain (WhatsApp, Telegram, dll). */
 fun Context.bagikanTeks(teks: String) {
     val intent = Intent(Intent.ACTION_SEND).apply {
