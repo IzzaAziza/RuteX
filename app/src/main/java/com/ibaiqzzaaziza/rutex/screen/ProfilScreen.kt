@@ -2,14 +2,17 @@ package com.ibaiqzzaaziza.rutex.screen
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.ColumnScope
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
@@ -19,21 +22,31 @@ import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.automirrored.outlined.DirectionsWalk
+import androidx.compose.material.icons.automirrored.outlined.KeyboardArrowRight
+import androidx.compose.material.icons.outlined.AutoAwesome
 import androidx.compose.material.icons.outlined.Bolt
 import androidx.compose.material.icons.outlined.Explore
+import androidx.compose.material.icons.outlined.Schedule
 import androidx.compose.material.icons.outlined.Star
+import androidx.compose.material.icons.outlined.Storefront
 import androidx.compose.material.icons.outlined.VerifiedUser
+import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.saveable.rememberSaveable
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.pluralStringResource
@@ -48,18 +61,26 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import coil.compose.AsyncImage
 import com.ibaiqzzaaziza.rutex.R
+import com.ibaiqzzaaziza.rutex.component.PilihanGandaDialog
+import com.ibaiqzzaaziza.rutex.component.PilihanTunggalDialog
 import com.ibaiqzzaaziza.rutex.component.RuteBottomBar
 import com.ibaiqzzaaziza.rutex.component.RuteMainTopBar
+import com.ibaiqzzaaziza.rutex.model.DurasiPerjalanan
+import com.ibaiqzzaaziza.rutex.model.GayaPerjalanan
+import com.ibaiqzzaaziza.rutex.model.KategoriDestinasi
+import com.ibaiqzzaaziza.rutex.model.PreferensiPerjalanan
 import com.ibaiqzzaaziza.rutex.model.User
 import com.ibaiqzzaaziza.rutex.navigation.Screen
 import com.ibaiqzzaaziza.rutex.ui.theme.RuteBackground
 import com.ibaiqzzaaziza.rutex.ui.theme.RuteBadge
+import com.ibaiqzzaaziza.rutex.ui.theme.RuteBlueLight
 import com.ibaiqzzaaziza.rutex.ui.theme.RuteBrown
 import com.ibaiqzzaaziza.rutex.ui.theme.RuteChip
 import com.ibaiqzzaaziza.rutex.ui.theme.RuteInput
 import com.ibaiqzzaaziza.rutex.ui.theme.RuteNavy
 import com.ibaiqzzaaziza.rutex.ui.theme.RuteOrange
 import com.ibaiqzzaaziza.rutex.ui.theme.RuteOrangeDark
+import com.ibaiqzzaaziza.rutex.ui.theme.RuteOrangeDeep
 import com.ibaiqzzaaziza.rutex.ui.theme.RuteOrangeInk
 import com.ibaiqzzaaziza.rutex.ui.theme.RutePeach
 import com.ibaiqzzaaziza.rutex.ui.theme.RuteSlate
@@ -73,6 +94,10 @@ fun ProfilScreen(navController: NavHostController) {
     val viewModel: ProfilViewModel = viewModel(factory = factory)
     val user by viewModel.user.collectAsState()
     val jumlahRute by viewModel.jumlahRute.collectAsState()
+    val preferensi by viewModel.preferensi.collectAsState()
+
+    // Dialog yang sedang terbuka (null jika tidak ada)
+    var dialog by rememberSaveable { mutableStateOf<DialogProfil?>(null) }
 
     Scaffold(
         topBar = { RuteMainTopBar(navController) },
@@ -89,6 +114,12 @@ fun ProfilScreen(navController: NavHostController) {
         ) {
             ProfilHeader()
             KartuAkun(user = user, jumlahRute = jumlahRute)
+            PreferensiSection(
+                preferensi = preferensi,
+                onJenisClick = { dialog = DialogProfil.JENIS_WISATA },
+                onDurasiClick = { dialog = DialogProfil.DURASI },
+                onGayaClick = { dialog = DialogProfil.GAYA }
+            )
 
             Text(
                 text = stringResource(R.string.profil_footer),
@@ -101,7 +132,49 @@ fun ProfilScreen(navController: NavHostController) {
             )
         }
     }
+
+    when (dialog) {
+        DialogProfil.JENIS_WISATA -> PilihanGandaDialog(
+            title = stringResource(R.string.pref_jenis_wisata),
+            options = KATEGORI_WISATA,
+            selected = preferensi.jenisWisata,
+            label = { stringResource(it.label) },
+            onDismissRequest = { dialog = null },
+            onConfirmation = {
+                viewModel.simpanJenisWisata(it)
+                dialog = null
+            }
+        )
+        DialogProfil.DURASI -> PilihanTunggalDialog(
+            title = stringResource(R.string.pref_durasi),
+            options = DurasiPerjalanan.entries,
+            selected = preferensi.durasi,
+            label = { stringResource(it.label) },
+            onDismissRequest = { dialog = null },
+            onConfirmation = {
+                viewModel.simpanDurasi(it)
+                dialog = null
+            }
+        )
+        DialogProfil.GAYA -> PilihanTunggalDialog(
+            title = stringResource(R.string.pref_gaya),
+            options = GayaPerjalanan.entries,
+            selected = preferensi.gaya,
+            label = { stringResource(it.label) },
+            onDismissRequest = { dialog = null },
+            onConfirmation = {
+                viewModel.simpanGaya(it)
+                dialog = null
+            }
+        )
+        null -> {}
+    }
 }
+
+private enum class DialogProfil { JENIS_WISATA, DURASI, GAYA }
+
+// Kategori "Semua" tidak relevan sebagai minat, jadi tidak ditampilkan
+private val KATEGORI_WISATA = KategoriDestinasi.entries.filter { it != KategoriDestinasi.SEMUA }
 
 @Composable
 private fun ProfilHeader() {
@@ -241,6 +314,187 @@ private fun KartuAkun(user: User, jumlahRute: Int) {
             )
         }
     }
+}
+
+@Composable
+private fun PreferensiSection(
+    preferensi: PreferensiPerjalanan,
+    onJenisClick: () -> Unit,
+    onDurasiClick: () -> Unit,
+    onGayaClick: () -> Unit
+) {
+    val jenisTerpilih = KATEGORI_WISATA
+        .filter { it in preferensi.jenisWisata }
+        .map { stringResource(it.label) }
+
+    Column {
+        Row(verticalAlignment = Alignment.CenterVertically) {
+            Icon(
+                imageVector = Icons.Outlined.AutoAwesome,
+                contentDescription = null,
+                tint = RuteOrange,
+                modifier = Modifier.size(17.dp)
+            )
+            Spacer(modifier = Modifier.width(6.dp))
+            Text(
+                text = stringResource(R.string.pref_title),
+                fontSize = 18.sp,
+                lineHeight = 26.sp,
+                fontWeight = FontWeight.Bold,
+                color = RuteNavy,
+                modifier = Modifier.weight(1f)
+            )
+            Text(
+                text = stringResource(R.string.pref_otomatis_ai),
+                fontSize = 12.sp,
+                fontWeight = FontWeight.SemiBold,
+                color = RuteOrangeDark
+            )
+        }
+        Spacer(modifier = Modifier.height(4.dp))
+        Text(
+            text = stringResource(R.string.pref_desc),
+            fontSize = 12.sp,
+            lineHeight = 19.5.sp,
+            fontWeight = FontWeight.Medium,
+            color = RuteSlate
+        )
+        Spacer(modifier = Modifier.height(12.dp))
+
+        KartuMenu {
+            ItemMenu(
+                icon = Icons.Outlined.Storefront,
+                iconBackground = RutePeach.copy(alpha = 0.6f),
+                iconTint = RuteOrangeDark,
+                title = stringResource(R.string.pref_jenis_wisata),
+                subtitle = jenisTerpilih.joinToString(", "),
+                onClick = onJenisClick
+            ) {
+                Text(
+                    text = stringResource(R.string.pref_jumlah_dipilih, jenisTerpilih.size),
+                    fontSize = 12.sp,
+                    fontWeight = FontWeight.Bold,
+                    color = RuteOrangeDeep,
+                    modifier = Modifier
+                        .background(RutePeach, CircleShape)
+                        .padding(horizontal = 8.dp, vertical = 2.dp)
+                )
+            }
+            PemisahMenu()
+            ItemMenu(
+                icon = Icons.Outlined.Schedule,
+                iconBackground = RuteBlueLight.copy(alpha = 0.6f),
+                iconTint = RuteNavy,
+                title = stringResource(R.string.pref_durasi),
+                subtitle = stringResource(R.string.pref_durasi_desc),
+                onClick = onDurasiClick
+            ) {
+                NilaiMenu(text = stringResource(preferensi.durasi.label))
+            }
+            PemisahMenu()
+            ItemMenu(
+                icon = Icons.AutoMirrored.Outlined.DirectionsWalk,
+                iconBackground = RuteBlueLight.copy(alpha = 0.6f),
+                iconTint = RuteNavy,
+                title = stringResource(R.string.pref_gaya),
+                subtitle = stringResource(preferensi.gaya.deskripsi),
+                onClick = onGayaClick
+            ) {
+                NilaiMenu(text = stringResource(preferensi.gaya.label))
+            }
+        }
+    }
+}
+
+/** Kartu putih yang membungkus beberapa [ItemMenu]. */
+@Composable
+private fun KartuMenu(content: @Composable ColumnScope.() -> Unit) {
+    val shape = RoundedCornerShape(16.dp)
+    Column(
+        modifier = Modifier
+            .fillMaxWidth()
+            .shadow(1.dp, shape)
+            .clip(shape)
+            .background(Color.White),
+        content = content
+    )
+}
+
+@Composable
+private fun ItemMenu(
+    icon: ImageVector,
+    iconBackground: Color,
+    iconTint: Color,
+    title: String,
+    subtitle: String,
+    onClick: (() -> Unit)?,
+    trailing: @Composable () -> Unit = {}
+) {
+    Row(
+        modifier = Modifier
+            .fillMaxWidth()
+            .then(if (onClick != null) Modifier.clickable(onClick = onClick) else Modifier)
+            .heightIn(min = 56.dp)
+            .padding(14.dp),
+        verticalAlignment = Alignment.CenterVertically
+    ) {
+        Box(
+            modifier = Modifier
+                .size(40.dp)
+                .background(iconBackground, RoundedCornerShape(12.dp)),
+            contentAlignment = Alignment.Center
+        ) {
+            Icon(imageVector = icon, contentDescription = null, tint = iconTint, modifier = Modifier.size(18.dp))
+        }
+        Spacer(modifier = Modifier.width(12.dp))
+        Column(modifier = Modifier.weight(1f)) {
+            Text(
+                text = title,
+                fontSize = 14.sp,
+                lineHeight = 20.sp,
+                fontWeight = FontWeight.SemiBold,
+                color = RuteNavy
+            )
+            Text(
+                text = subtitle,
+                fontSize = 12.sp,
+                lineHeight = 16.sp,
+                fontWeight = FontWeight.Medium,
+                color = RuteSlate,
+                maxLines = 1,
+                overflow = TextOverflow.Ellipsis
+            )
+        }
+        Spacer(modifier = Modifier.width(8.dp))
+        trailing()
+        if (onClick != null) {
+            Spacer(modifier = Modifier.width(6.dp))
+            Icon(
+                imageVector = Icons.AutoMirrored.Outlined.KeyboardArrowRight,
+                contentDescription = null,
+                tint = RuteSlate,
+                modifier = Modifier.size(18.dp)
+            )
+        }
+    }
+}
+
+@Composable
+private fun NilaiMenu(text: String) {
+    Text(
+        text = text,
+        fontSize = 13.sp,
+        fontWeight = FontWeight.SemiBold,
+        color = RuteNavy
+    )
+}
+
+@Composable
+private fun PemisahMenu() {
+    HorizontalDivider(
+        color = RuteChip,
+        modifier = Modifier.padding(horizontal = 14.dp)
+    )
 }
 
 /** Foto akun Google jika ada, jika tidak tampil inisial nama. */

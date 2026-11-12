@@ -27,7 +27,7 @@ class ViewModelFactory(private val context: Context) : ViewModelProvider.Factory
         } else if (modelClass.isAssignableFrom(RiwayatViewModel::class.java)) {
             return RiwayatViewModel(dao, dataStore) as T
         } else if (modelClass.isAssignableFrom(ProfilViewModel::class.java)) {
-            return ProfilViewModel(dao, dataStore) as T
+            return ProfilViewModel(dao, dataStore, SettingsDataStore(context)) as T
         }
         throw IllegalArgumentException("Unknown ViewModel class")
     }

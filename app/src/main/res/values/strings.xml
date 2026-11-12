@@ -149,6 +149,25 @@
         <item quantity="one">%1$d Rute Tersimpan di Cirebon</item>
         <item quantity="other">%1$d Rute Tersimpan di Cirebon</item>
     </plurals>
+    <string name="pref_title">Preferensi Perjalanan</string>
+    <string name="pref_otomatis_ai">Otomatis AI</string>
+    <string name="pref_desc">Atur preferensi untuk membantu RuteX memberikan rekomendasi rute yang lebih sesuai dengan minatmu.</string>
+    <string name="pref_jenis_wisata">Jenis Wisata Favorit</string>
+    <string name="pref_jumlah_dipilih">%1$d dipilih</string>
+    <string name="pref_durasi">Durasi Perjalanan</string>
+    <string name="pref_durasi_desc">Beberapa Jam • 1 Hari • 2 Hari • 3+ Hari</string>
+    <string name="pref_gaya">Gaya Perjalanan</string>
+    <string name="durasi_beberapa_jam">Beberapa Jam</string>
+    <string name="durasi_satu_hari">1 Hari</string>
+    <string name="durasi_dua_hari">2 Hari</string>
+    <string name="durasi_tiga_hari">3+ Hari</string>
+    <string name="gaya_santai">Santai</string>
+    <string name="gaya_santai_desc">Santai &amp; tidak terburu-buru</string>
+    <string name="gaya_fleksibel">Fleksibel</string>
+    <string name="gaya_fleksibel_desc">Menyesuaikan kondisi di perjalanan</string>
+    <string name="gaya_padat">Padat</string>
+    <string name="gaya_padat_desc">Kunjungi sebanyak mungkin destinasi</string>
+    <string name="tombol_simpan">Simpan</string>
     <string name="profil_footer">RuteX Cirebon Edition • Hak Cipta Terpelihara</string>
     <string name="error_koneksi">Tidak dapat terhubung ke server. Periksa koneksi internetmu.</string>
 
