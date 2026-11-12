@@ -347,4 +347,9 @@
     <string name="bagikan_lewat">Bagikan lewat</string>
     <string name="bagikan_destinasi">Yuk ke %1$s!\n%2$s\n\nDirekomendasikan oleh RuteX Cirebon.</string>
     <string name="error_tidak_ada_aplikasi">Tidak ada aplikasi yang bisa membuka ini</string>
+    <!-- Rute Manual dengan API -->
+    <string name="memuat_destinasi">Memuat daftar destinasi…</string>
+    <string name="error_titik_awal_kosong">Pilih titik awal terlebih dahulu</string>
+    <string name="error_butuh_login_email">Penyusunan rute membutuhkan akun email RuteX. Silakan keluar lalu masuk dengan email.</string>
+    <string name="error_buat_rute">Gagal menyusun rute. Coba lagi.</string>
 </resources>

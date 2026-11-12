@@ -13,10 +13,10 @@ enum class ModeRute {
     TANPA_CONSTRAINT
 }
 
-enum class Kendaraan(@param:StringRes val label: Int) {
-    MOBIL(R.string.kendaraan_mobil),
-    MOTOR(R.string.kendaraan_motor),
-    JALAN_KAKI(R.string.kendaraan_jalan_kaki)
+enum class Kendaraan(@param:StringRes val label: Int, val apiValue: String, val modeGoogleMaps: String) {
+    MOBIL(R.string.kendaraan_mobil, "mobil", "driving"),
+    MOTOR(R.string.kendaraan_motor, "motor", "two-wheeler"),
+    JALAN_KAKI(R.string.kendaraan_jalan_kaki, "jalan", "walking")
 }
 
 /**
@@ -38,7 +38,9 @@ data class RencanaRute(
     val jumlahDestinasi: Int,
     val dibuatPada: String,
     // Pemilik rencana, agar riwayat tiap akun terpisah di perangkat yang sama
-    val emailPengguna: String = ""
+    val emailPengguna: String = "",
+    // Urutan kunjungan hasil susunan server (/predict) beserta jam tiba & berangkat
+    val itinerary: List<TitikItinerary> = emptyList()
 )
 
 // Serializable agar daftar destinasi di form bisa disimpan dengan rememberSaveable

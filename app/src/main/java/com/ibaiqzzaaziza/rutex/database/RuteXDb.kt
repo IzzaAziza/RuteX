@@ -7,7 +7,7 @@ import androidx.room.RoomDatabase
 import androidx.room.TypeConverters
 import com.ibaiqzzaaziza.rutex.model.RencanaRute
 
-@Database(entities = [RencanaRute::class], version = 2, exportSchema = false)
+@Database(entities = [RencanaRute::class], version = 3, exportSchema = false)
 @TypeConverters(RuteConverters::class)
 abstract class RuteXDb : RoomDatabase() {
 
@@ -28,7 +28,7 @@ abstract class RuteXDb : RoomDatabase() {
                         RuteXDb::class.java,
                         "rutex.db"
                     )
-                        // Versi 2 menambah kolom pemilik rencana. Data lama (hanya data uji) dihapus.
+                        // Versi 3 menambah kolom itinerary. Data lama (hanya data uji) dihapus.
                         .fallbackToDestructiveMigration(dropAllTables = true)
                         .build()
                     INSTANCE = instance

@@ -40,8 +40,18 @@ fun SetupNavGraph(navController: NavHostController = rememberNavController()) {
         composable(route = Screen.BuatRute.route) {
             BuatRuteScreen(navController)
         }
-        composable(route = Screen.RuteManual.route) {
-            RuteManualScreen(navController)
+        composable(
+            route = Screen.RuteManual.route,
+            arguments = listOf(
+                navArgument(KEY_NAMA_DESTINASI) {
+                    type = NavType.StringType
+                    nullable = true
+                    defaultValue = null
+                }
+            )
+        ) { navBackStackEntry ->
+            val destinasi = navBackStackEntry.arguments?.getString(KEY_NAMA_DESTINASI)
+            RuteManualScreen(navController, destinasi)
         }
         composable(route = Screen.RuteAiConstraint.route) {
             RuteAiConstraintScreen(navController)
@@ -62,7 +72,11 @@ fun SetupNavGraph(navController: NavHostController = rememberNavController()) {
             )
         ) { navBackStackEntry ->
             val id = navBackStackEntry.arguments?.getInt(KEY_ID_DESTINASI) ?: 0
-            DetailDestinasiScreen(navController, id)
+            DetailDestinasiScreen(
+                navController = navController,
+                id = id,
+                onTambahKeRute = { navController.navigate(Screen.RuteManual.withDestinasi(it.name)) }
+            )
         }
     }
 }

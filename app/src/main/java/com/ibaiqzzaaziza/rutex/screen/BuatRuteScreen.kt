@@ -90,7 +90,7 @@ private enum class ModePerencanaan(
         icon = Icons.Outlined.EditCalendar,
         iconBackground = RuteBlueLight,
         iconTint = RuteNavy,
-        route = Screen.RuteManual.route
+        route = Screen.RuteManual.withDestinasi(null)
     ),
     DENGAN_CONSTRAINT(
         judul = R.string.mode_constraint_title,

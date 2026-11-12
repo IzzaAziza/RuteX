@@ -1,6 +1,9 @@
 package com.ibaiqzzaaziza.rutex.navigation
 
+import android.net.Uri
+
 const val KEY_ID_DESTINASI = "idDestinasi"
+const val KEY_NAMA_DESTINASI = "destinasi"
 
 sealed class Screen(val route: String) {
     data object Splash : Screen("splashScreen")
@@ -8,7 +11,11 @@ sealed class Screen(val route: String) {
     data object Register : Screen("registerScreen")
     data object Home : Screen("homeScreen")
     data object BuatRute : Screen("buatRuteScreen")
-    data object RuteManual : Screen("ruteManualScreen")
+    // Argumen destinasi bersifat opsional, diisi saat dibuka dari Detail Destinasi
+    data object RuteManual : Screen("ruteManualScreen?$KEY_NAMA_DESTINASI={$KEY_NAMA_DESTINASI}") {
+        fun withDestinasi(nama: String?) =
+            if (nama == null) "ruteManualScreen" else "ruteManualScreen?$KEY_NAMA_DESTINASI=${Uri.encode(nama)}"
+    }
     data object RuteAiConstraint : Screen("ruteAiConstraintScreen")
     data object RuteAiTanpaConstraint : Screen("ruteAiTanpaConstraintScreen")
     data object Riwayat : Screen("riwayatScreen")

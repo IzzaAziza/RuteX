@@ -2,6 +2,7 @@ package com.ibaiqzzaaziza.rutex.network
 
 import com.ibaiqzzaaziza.rutex.model.ApiResponse
 import com.ibaiqzzaaziza.rutex.model.Destinasi
+import com.ibaiqzzaaziza.rutex.model.PrediksiResponse
 import com.ibaiqzzaaziza.rutex.model.ProfilData
 import com.ibaiqzzaaziza.rutex.model.TokenData
 import com.squareup.moshi.Moshi
@@ -85,6 +86,18 @@ interface RuteXApiService {
 
     @GET("locations/{id}")
     suspend fun getLocation(@Path("id") id: Int): ApiResponse<Destinasi>
+
+    @Multipart
+    @POST("predict")
+    suspend fun predict(
+        @Header("Authorization") bearerToken: String,
+        @Part("origin") origin: RequestBody,
+        @Part("destination") destination: RequestBody,
+        @Part("visit_duration") visitDuration: RequestBody,
+        @Part("departure_date") departureDate: RequestBody,
+        @Part("departure_time") departureTime: RequestBody,
+        @Part("transport_mode") transportMode: RequestBody
+    ): Response<PrediksiResponse>
 }
 
 object RuteXApi {

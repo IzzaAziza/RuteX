@@ -32,7 +32,9 @@ import androidx.compose.material.icons.outlined.DirectionsCar
 import androidx.compose.material.icons.outlined.LocationOn
 import androidx.compose.material.icons.outlined.Park
 import androidx.compose.material.icons.outlined.RestaurantMenu
+import androidx.compose.material.icons.outlined.ShoppingBag
 import androidx.compose.material.icons.outlined.TwoWheeler
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.FilledIconButton
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
@@ -41,6 +43,8 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.saveable.rememberSaveable
@@ -79,6 +83,7 @@ import com.ibaiqzzaaziza.rutex.model.KategoriDestinasi
 import com.ibaiqzzaaziza.rutex.model.Kendaraan
 import com.ibaiqzzaaziza.rutex.model.KunjunganDestinasi
 import com.ibaiqzzaaziza.rutex.navigation.Screen
+import com.ibaiqzzaaziza.rutex.network.ApiStatus
 import com.ibaiqzzaaziza.rutex.screen.RuteManualViewModel.Companion.FORMAT_JAM
 import com.ibaiqzzaaziza.rutex.screen.RuteManualViewModel.Companion.MAKS_DESTINASI
 import com.ibaiqzzaaziza.rutex.ui.theme.RuteBackground
@@ -100,17 +105,22 @@ import java.time.format.DateTimeFormatter
 private val FORMAT_TANGGAL: DateTimeFormatter = DateTimeFormatter.ofPattern("dd/MM/yyyy")
 
 @Composable
-fun RuteManualScreen(navController: NavHostController) {
+fun RuteManualScreen(navController: NavHostController, destinasiAwal: String? = null) {
     val context = LocalContext.current
     val factory = ViewModelFactory(context)
     val viewModel: RuteManualViewModel = viewModel(factory = factory)
 
+    val statusLokasi by viewModel.statusLokasi.collectAsState()
+    val statusSimpan by viewModel.statusSimpan.collectAsState()
+    val idTersimpan by viewModel.idTersimpan.collectAsState()
+
     var kategori by rememberSaveable { mutableStateOf(viewModel.kategori.first()) }
     var tanggal by rememberSaveable { mutableStateOf<LocalDate?>(null) }
     var jam by rememberSaveable { mutableStateOf<LocalTime?>(null) }
-    var titikAwal by rememberSaveable { mutableStateOf(viewModel.titikAwal.first()) }
+    var titikAwal by rememberSaveable { mutableStateOf("") }
+    // Jika dibuka dari Detail Destinasi, destinasi tersebut langsung menjadi tujuan pertama
     var kunjungan by rememberSaveable {
-        mutableStateOf(listOf(KunjunganDestinasi(), KunjunganDestinasi()))
+        mutableStateOf(listOf(KunjunganDestinasi(nama = destinasiAwal.orEmpty()), KunjunganDestinasi()))
     }
     var kendaraan by rememberSaveable { mutableStateOf<Kendaraan?>(null) }
 
@@ -121,6 +131,42 @@ fun RuteManualScreen(navController: NavHostController) {
     var showKeluarDialog by rememberSaveable { mutableStateOf(false) }
 
     val error = validasiRuteManual(tanggal, jam, titikAwal, kunjungan, kendaraan)
+
+    // Tab kategori menyesuaikan destinasi yang dikirim dari Detail Destinasi
+    LaunchedEffect(statusLokasi) {
+        if (statusLokasi == ApiStatus.SUCCESS && !destinasiAwal.isNullOrEmpty()) {
+            viewModel.cariKategori(destinasiAwal)?.let { kategori = it }
+        }
+    }
+
+    val pesanGagalKoneksi = stringResource(R.string.error_koneksi)
+    val pesanButuhLogin = stringResource(R.string.error_butuh_login_email)
+    val pesanGagalRute = stringResource(R.string.error_buat_rute)
+    LaunchedEffect(statusSimpan) {
+        when (statusSimpan) {
+            ApiStatus.SUCCESS -> {
+                Toast.makeText(context, R.string.rencana_tersimpan, Toast.LENGTH_SHORT).show()
+                val id = idTersimpan
+                viewModel.clearStatusSimpan()
+                if (id != null) {
+                    // Rencana yang baru disimpan langsung terlihat di Riwayat
+                    navController.navigate(Screen.Riwayat.route) {
+                        popUpTo(Screen.Home.route)
+                    }
+                }
+            }
+            ApiStatus.FAILED -> {
+                val pesan = when {
+                    viewModel.butuhLoginEmail.value -> pesanButuhLogin
+                    viewModel.errorMessage.value != null -> viewModel.errorMessage.value
+                    else -> pesanGagalKoneksi
+                }
+                Toast.makeText(context, pesan ?: pesanGagalRute, Toast.LENGTH_LONG).show()
+                viewModel.clearStatusSimpan()
+            }
+            else -> {}
+        }
+    }
     val adaIsian = tanggal != null || jam != null || kendaraan != null ||
             kunjungan.any { it.nama.isNotEmpty() }
 
@@ -153,6 +199,7 @@ fun RuteManualScreen(navController: NavHostController) {
 
             Spacer(modifier = Modifier.height(16.dp))
             FormCard {
+                StatusDataLokasi(status = statusLokasi, onRetry = { viewModel.muatLokasi() })
                 KategoriTabs(
                     pilihan = viewModel.kategori,
                     terpilih = kategori,
@@ -183,14 +230,18 @@ fun RuteManualScreen(navController: NavHostController) {
                 Spacer(modifier = Modifier.height(6.dp))
                 DropdownField(
                     value = titikAwal,
-                    options = viewModel.titikAwal,
+                    options = viewModel.getTitikAwal(),
                     onSelect = { titikAwal = it },
                     placeholder = stringResource(R.string.placeholder_titik_awal),
-                    leadingIcon = Icons.Outlined.LocationOn
+                    leadingIcon = Icons.Outlined.LocationOn,
+                    isError = tampilkanError && error.titikAwalKosong
                 )
                 FieldHint(
-                    text = stringResource(R.string.hint_titik_awal),
-                    isError = tampilkanError && error.titikAwalSamaDestinasi
+                    text = stringResource(
+                        if (tampilkanError && error.titikAwalKosong) R.string.error_titik_awal_kosong
+                        else R.string.hint_titik_awal
+                    ),
+                    isError = tampilkanError && (error.titikAwalSamaDestinasi || error.titikAwalKosong)
                 )
 
                 HorizontalDivider(
@@ -220,24 +271,21 @@ fun RuteManualScreen(navController: NavHostController) {
                 Spacer(modifier = Modifier.height(24.dp))
                 RutePrimaryButton(
                     text = stringResource(R.string.btn_buat_plan),
+                    isLoading = statusSimpan == ApiStatus.LOADING,
                     onClick = {
                         tampilkanError = true
                         if (error.adaError) {
                             Toast.makeText(context, R.string.error_form_belum_lengkap, Toast.LENGTH_SHORT).show()
                             return@RutePrimaryButton
                         }
-                        viewModel.simpan(
+                        // Server menyusun urutan kunjungan tercepat, lalu hasilnya disimpan ke Room
+                        viewModel.buatPlan(
                             titikAwal = titikAwal,
                             tanggal = tanggal!!,
                             jam = jam!!,
                             kunjungan = kunjungan,
                             kendaraan = kendaraan!!
                         )
-                        Toast.makeText(context, R.string.rencana_tersimpan, Toast.LENGTH_SHORT).show()
-                        // Rencana yang baru disimpan langsung terlihat di Riwayat
-                        navController.navigate(Screen.Riwayat.route) {
-                            popUpTo(Screen.Home.route)
-                        }
                     }
                 )
             }
@@ -301,12 +349,13 @@ fun RuteManualScreen(navController: NavHostController) {
 private data class ErrorRuteManual(
     val tanggal: Boolean,
     val jam: Int?,
+    val titikAwalKosong: Boolean,
     val titikAwalSamaDestinasi: Boolean,
     val destinasi: List<Int?>,
     val kendaraan: Boolean
 ) {
     val adaError: Boolean
-        get() = tanggal || jam != null || titikAwalSamaDestinasi ||
+        get() = tanggal || jam != null || titikAwalKosong || titikAwalSamaDestinasi ||
                 destinasi.any { it != null } || kendaraan
 }
 
@@ -335,10 +384,48 @@ private fun validasiRuteManual(
     return ErrorRuteManual(
         tanggal = tanggal == null,
         jam = jamError,
-        titikAwalSamaDestinasi = kunjungan.any { it.nama == titikAwal },
+        titikAwalKosong = titikAwal.isEmpty(),
+        titikAwalSamaDestinasi = titikAwal.isNotEmpty() && kunjungan.any { it.nama == titikAwal },
         destinasi = destinasiError,
         kendaraan = kendaraan == null
     )
+}
+
+/** Indikator saat daftar destinasi dari server sedang dimuat atau gagal dimuat (Modul 13). */
+@Composable
+private fun StatusDataLokasi(status: ApiStatus, onRetry: () -> Unit) {
+    when (status) {
+        ApiStatus.LOADING -> Row(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(bottom = 12.dp),
+            horizontalArrangement = Arrangement.Center,
+            verticalAlignment = Alignment.CenterVertically
+        ) {
+            CircularProgressIndicator(color = RuteOrange, strokeWidth = 2.dp, modifier = Modifier.size(16.dp))
+            Spacer(modifier = Modifier.width(8.dp))
+            Text(text = stringResource(R.string.memuat_destinasi), fontSize = 12.sp, color = RuteSlate)
+        }
+        ApiStatus.FAILED -> Row(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(bottom = 12.dp)
+                .background(RuteError.copy(alpha = 0.08f), RoundedCornerShape(10.dp))
+                .padding(horizontal = 12.dp, vertical = 4.dp),
+            verticalAlignment = Alignment.CenterVertically
+        ) {
+            Text(
+                text = stringResource(R.string.error_muat_destinasi),
+                fontSize = 12.sp,
+                color = RuteError,
+                modifier = Modifier.weight(1f)
+            )
+            TextButton(onClick = onRetry) {
+                Text(text = stringResource(R.string.tombol_coba_lagi), color = RuteOrangeDark)
+            }
+        }
+        ApiStatus.SUCCESS -> {}
+    }
 }
 
 @Composable
@@ -451,6 +538,7 @@ private fun KategoriTabs(
 private fun KategoriDestinasi.icon(): ImageVector = when (this) {
     KategoriDestinasi.ALAM -> Icons.Outlined.Park
     KategoriDestinasi.KULINER -> Icons.Outlined.RestaurantMenu
+    KategoriDestinasi.BELANJA -> Icons.Outlined.ShoppingBag
     else -> Icons.Outlined.AccountBalance
 }
 
