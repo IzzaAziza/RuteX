@@ -10,6 +10,7 @@ sealed class Screen(val route: String) {
     data object Splash : Screen("splashScreen")
     data object Login : Screen("loginScreen")
     data object Register : Screen("registerScreen")
+    data object LupaPassword : Screen("lupaPasswordScreen")
     data object Home : Screen("homeScreen")
     data object BuatRute : Screen("buatRuteScreen")
     // Argumen destinasi bersifat opsional, diisi saat dibuka dari Detail Destinasi

@@ -365,4 +365,13 @@
     <string name="mulai_dari">Mulai: %1$s</string>
     <string name="belum_ada_rute">Belum ada rute</string>
     <string name="belum_ada_rute_desc">Susun rute pertamamu sekarang</string>
+    <!-- Lupa Kata Sandi -->
+    <string name="lupa_password_topbar">Lupa Kata Sandi</string>
+    <string name="lupa_password_title">Atur Ulang Kata Sandi</string>
+    <string name="lupa_password_desc">Masukkan email akun RuteX kamu. Kami akan mengirim tautan untuk membuat kata sandi baru.</string>
+    <string name="lupa_password_terkirim_title">Cek Email Kamu</string>
+    <string name="lupa_password_terkirim_desc">Tautan untuk mengatur ulang kata sandi sudah dikirim ke %1$s. Buka tautan tersebut lalu buat kata sandi baru.</string>
+    <string name="kirim_tautan_reset">Kirim Tautan Reset</string>
+    <string name="kembali_ke_login">Kembali ke Halaman Masuk</string>
+    <string name="kirim_ulang">Kirim ulang ke email lain</string>
 </resources>

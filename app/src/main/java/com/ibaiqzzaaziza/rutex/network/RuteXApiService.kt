@@ -59,6 +59,12 @@ interface RuteXApiService {
         @Field("token") refreshToken: String
     ): Response<ApiResponse<Any>>
 
+    @FormUrlEncoded
+    @POST("user/password-reset")
+    suspend fun resetPassword(
+        @Field("email") email: String
+    ): Response<ApiResponse<Any>>
+
     @GET("user/{id}")
     suspend fun getUser(
         @Header("Authorization") bearerToken: String,

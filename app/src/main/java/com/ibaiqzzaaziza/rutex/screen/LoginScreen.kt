@@ -108,7 +108,8 @@ fun LoginScreen(navController: NavHostController) {
             onLoginClick = { email, password, rememberMe ->
                 viewModel.login(email, password, rememberMe)
             },
-            onRegisterClick = { navController.navigate(Screen.Register.route) }
+            onRegisterClick = { navController.navigate(Screen.Register.route) },
+            onLupaPasswordClick = { navController.navigate(Screen.LupaPassword.route) }
         )
     }
 }
@@ -120,7 +121,8 @@ fun LoginContent(
     isGoogleLoading: Boolean = false,
     onGoogleClick: () -> Unit = {},
     onLoginClick: (email: String, password: String, rememberMe: Boolean) -> Unit,
-    onRegisterClick: () -> Unit
+    onRegisterClick: () -> Unit,
+    onLupaPasswordClick: () -> Unit = {}
 ) {
     val context = LocalContext.current
     val comingSoon = stringResource(R.string.feature_coming_soon)
@@ -218,9 +220,7 @@ fun LoginContent(
                             color = RuteSlate
                         )
                     }
-                    TextButton(
-                        onClick = { Toast.makeText(context, comingSoon, Toast.LENGTH_SHORT).show() }
-                    ) {
+                    TextButton(onClick = onLupaPasswordClick) {
                         Text(
                             text = stringResource(R.string.forgot_password),
                             fontSize = 14.sp,

@@ -12,6 +12,7 @@ import com.ibaiqzzaaziza.rutex.screen.DetailDestinasiScreen
 import com.ibaiqzzaaziza.rutex.screen.DetailRuteScreen
 import com.ibaiqzzaaziza.rutex.screen.HomeScreen
 import com.ibaiqzzaaziza.rutex.screen.LoginScreen
+import com.ibaiqzzaaziza.rutex.screen.LupaPasswordScreen
 import com.ibaiqzzaaziza.rutex.screen.ProfilScreen
 import com.ibaiqzzaaziza.rutex.screen.RegisterScreen
 import com.ibaiqzzaaziza.rutex.screen.RiwayatScreen
@@ -34,6 +35,9 @@ fun SetupNavGraph(navController: NavHostController = rememberNavController()) {
         }
         composable(route = Screen.Register.route) {
             RegisterScreen(navController)
+        }
+        composable(route = Screen.LupaPassword.route) {
+            LupaPasswordScreen(navController)
         }
         composable(route = Screen.Home.route) {
             HomeScreen(navController)
