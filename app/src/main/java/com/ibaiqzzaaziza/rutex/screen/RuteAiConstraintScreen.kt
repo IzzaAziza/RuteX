@@ -33,6 +33,7 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
@@ -58,8 +59,8 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import com.ibaiqzzaaziza.rutex.R
 import com.ibaiqzzaaziza.rutex.component.AiCard
+import com.ibaiqzzaaziza.rutex.component.AiDropdownField
 import com.ibaiqzzaaziza.rutex.component.AiHint
-import com.ibaiqzzaaziza.rutex.component.AiInputField
 import com.ibaiqzzaaziza.rutex.component.AiLabel
 import com.ibaiqzzaaziza.rutex.component.AiTimeField
 import com.ibaiqzzaaziza.rutex.component.FormHeader
@@ -70,6 +71,7 @@ import com.ibaiqzzaaziza.rutex.component.RuteMainTopBar
 import com.ibaiqzzaaziza.rutex.component.RuteTimePickerDialog
 import com.ibaiqzzaaziza.rutex.model.ModeRute
 import com.ibaiqzzaaziza.rutex.navigation.Screen
+import com.ibaiqzzaaziza.rutex.network.ApiStatus
 import com.ibaiqzzaaziza.rutex.screen.RuteAiViewModel.Companion.MAKS_PREFERENSI
 import com.ibaiqzzaaziza.rutex.screen.RuteAiViewModel.Companion.MAKS_TEMPAT
 import com.ibaiqzzaaziza.rutex.screen.RuteAiViewModel.Companion.MIN_PREFERENSI
@@ -93,9 +95,12 @@ fun RuteAiConstraintScreen(navController: NavHostController) {
     val factory = ViewModelFactory(context)
     val viewModel: RuteAiViewModel = viewModel(factory = factory)
 
-    val lokasiDefault = stringResource(R.string.default_lokasi_awal)
+    val statusGenerate by viewModel.statusGenerate.collectAsState()
+    val lokasi by viewModel.lokasi
+    PantauHasilGenerate(viewModel = viewModel, navController = navController)
+
     var preferensi by rememberSaveable { mutableStateOf("") }
-    var lokasiAwal by rememberSaveable { mutableStateOf(lokasiDefault) }
+    var lokasiAwal by rememberSaveable { mutableStateOf("") }
     var waktuMulai by rememberSaveable { mutableStateOf(LocalTime.now().withSecond(0).withNano(0)) }
     var jumlahTempat by rememberSaveable { mutableIntStateOf(4) }
 
@@ -114,18 +119,13 @@ fun RuteAiConstraintScreen(navController: NavHostController) {
         if (preferensiError || lokasiError) {
             Toast.makeText(context, R.string.error_form_belum_lengkap, Toast.LENGTH_SHORT).show()
         } else {
-            viewModel.simpan(
+            viewModel.generate(
                 mode = ModeRute.DENGAN_CONSTRAINT,
                 preferensi = preferensi,
                 titikAwal = lokasiAwal,
                 jam = waktuMulai,
                 jumlahDestinasi = jumlahTempat
             )
-            Toast.makeText(context, R.string.rencana_ai_tersimpan, Toast.LENGTH_SHORT).show()
-            // Rencana yang baru disimpan langsung terlihat di Riwayat
-            navController.navigate(Screen.Riwayat.route) {
-                popUpTo(Screen.Home.route)
-            }
         }
     }
 
@@ -141,6 +141,7 @@ fun RuteAiConstraintScreen(navController: NavHostController) {
                     GenerateRuteButton(
                         text = stringResource(R.string.btn_generate_rute),
                         onClick = { generate() },
+                        isLoading = statusGenerate == ApiStatus.LOADING,
                         modifier = Modifier.padding(start = 16.dp, end = 16.dp, top = 12.dp, bottom = 16.dp)
                     )
                 }
@@ -175,9 +176,11 @@ fun RuteAiConstraintScreen(navController: NavHostController) {
             Row(horizontalArrangement = Arrangement.spacedBy(12.dp)) {
                 AiCard(modifier = Modifier.weight(1f), contentPadding = 14.dp) {
                     AiLabel(icon = Icons.Outlined.LocationOn, text = stringResource(R.string.label_lokasi_awal))
-                    AiInputField(
+                    // Lokasi awal harus destinasi yang dikenal server agar rute bisa disusun
+                    AiDropdownField(
                         value = lokasiAwal,
-                        onValueChange = { lokasiAwal = it },
+                        options = lokasi.map { it.name },
+                        onSelect = { lokasiAwal = it },
                         placeholder = stringResource(R.string.placeholder_lokasi_awal),
                         isError = tampilkanError && lokasiError
                     )

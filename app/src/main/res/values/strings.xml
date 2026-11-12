@@ -312,8 +312,7 @@
     <string name="inspirasi_keluarga">Family Friendly</string>
     <string name="inspirasi_keluarga_kalimat">Saya ingin wisata santai bersama keluarga dan anak-anak dengan tempat yang nyaman.</string>
     <string name="label_lokasi_awal">Lokasi Awal</string>
-    <string name="placeholder_lokasi_awal">Mulai dari mana?</string>
-    <string name="default_lokasi_awal">Stasiun Cirebon</string>
+    <string name="placeholder_lokasi_awal">Pilih lokasi awal</string>
     <string name="label_waktu_mulai">Waktu Mulai</string>
     <string name="waktu_lokal">WIB (Waktu Lokal)</string>
     <string name="target_destinasi_title">Target Destinasi</string>
@@ -327,7 +326,7 @@
     <string name="ai_info_tanpa">AI RuteX secara otomatis menentukan jumlah destinasi optimal, durasi singgah terbaik, serta urutan rute paling efisien tanpa Anda perlu repot mengatur constraint.</string>
     <string name="btn_generate_rute">Generate Rute</string>
     <string name="estimasi_kalkulasi">Estimasi kalkulasi multi-lokasi ~3 detik</string>
-    <string name="rencana_ai_tersimpan">Permintaan rute AI berhasil disimpan</string>
+    <string name="rencana_ai_tersimpan">Rute berhasil disusun dan disimpan</string>
     <!-- Destinasi dari API -->
     <string name="error_muat_destinasi">Gagal memuat destinasi. Periksa koneksi internetmu.</string>
     <string name="tombol_coba_lagi">Coba Lagi</string>
@@ -367,4 +366,5 @@
     <string name="rencana_tidak_ditemukan">Rencana tidak ditemukan</string>
     <string name="itinerary_kosong">Itinerary belum tersedia untuk rencana ini.</string>
     <string name="bagikan_rute">Rencana perjalananku di Cirebon (%1$s):\n%2$s\n\nDisusun dengan RuteX.</string>
+    <string name="menyusun_rute">Menyusun rute…</string>
 </resources>

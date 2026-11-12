@@ -24,7 +24,7 @@ class ViewModelFactory(private val context: Context) : ViewModelProvider.Factory
         if (modelClass.isAssignableFrom(RuteManualViewModel::class.java)) {
             return RuteManualViewModel(dao, dataStore) as T
         } else if (modelClass.isAssignableFrom(RuteAiViewModel::class.java)) {
-            return RuteAiViewModel(dao, dataStore) as T
+            return RuteAiViewModel(dao, dataStore, SettingsDataStore(context)) as T
         } else if (modelClass.isAssignableFrom(RiwayatViewModel::class.java)) {
             return RiwayatViewModel(dao, dataStore) as T
         } else if (modelClass.isAssignableFrom(DetailRuteViewModel::class.java)) {
