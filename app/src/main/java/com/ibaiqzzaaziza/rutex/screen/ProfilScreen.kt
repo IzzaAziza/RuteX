@@ -1,5 +1,6 @@
 package com.ibaiqzzaaziza.rutex.screen
 
+import android.widget.Toast
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
@@ -21,13 +22,16 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.selection.toggleable
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.outlined.DirectionsWalk
 import androidx.compose.material.icons.automirrored.outlined.HelpOutline
 import androidx.compose.material.icons.automirrored.outlined.KeyboardArrowRight
+import androidx.compose.material.icons.automirrored.outlined.Logout
 import androidx.compose.material.icons.outlined.AutoAwesome
 import androidx.compose.material.icons.outlined.Bolt
+import androidx.compose.material.icons.outlined.Edit
 import androidx.compose.material.icons.outlined.Explore
 import androidx.compose.material.icons.outlined.Info
 import androidx.compose.material.icons.outlined.LightMode
@@ -38,17 +42,22 @@ import androidx.compose.material.icons.outlined.Storefront
 import androidx.compose.material.icons.outlined.Translate
 import androidx.compose.material.icons.outlined.VerifiedUser
 import androidx.compose.material3.AlertDialog
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
+import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Switch
 import androidx.compose.material3.SwitchDefaults
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
@@ -63,6 +72,8 @@ import androidx.compose.ui.res.pluralStringResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.input.ImeAction
+import androidx.compose.ui.text.input.KeyboardCapitalization
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -83,11 +94,18 @@ import com.ibaiqzzaaziza.rutex.model.KategoriDestinasi
 import com.ibaiqzzaaziza.rutex.model.PreferensiPerjalanan
 import com.ibaiqzzaaziza.rutex.model.User
 import com.ibaiqzzaaziza.rutex.navigation.Screen
+import com.ibaiqzzaaziza.rutex.network.ApiStatus
+import com.ibaiqzzaaziza.rutex.network.UserDataStore
+import com.ibaiqzzaaziza.rutex.network.signOut
 import com.ibaiqzzaaziza.rutex.ui.theme.RuteBackground
 import com.ibaiqzzaaziza.rutex.ui.theme.RuteBadge
+import com.ibaiqzzaaziza.rutex.ui.theme.RuteBlue
 import com.ibaiqzzaaziza.rutex.ui.theme.RuteBlueLight
 import com.ibaiqzzaaziza.rutex.ui.theme.RuteBrown
 import com.ibaiqzzaaziza.rutex.ui.theme.RuteChip
+import com.ibaiqzzaaziza.rutex.ui.theme.RuteError
+import com.ibaiqzzaaziza.rutex.ui.theme.RuteErrorContainer
+import com.ibaiqzzaaziza.rutex.ui.theme.RuteErrorDark
 import com.ibaiqzzaaziza.rutex.ui.theme.RuteInput
 import com.ibaiqzzaaziza.rutex.ui.theme.RuteNavy
 import com.ibaiqzzaaziza.rutex.ui.theme.RuteOrange
@@ -98,6 +116,7 @@ import com.ibaiqzzaaziza.rutex.ui.theme.RutePeach
 import com.ibaiqzzaaziza.rutex.ui.theme.RuteSlate
 import com.ibaiqzzaaziza.rutex.ui.theme.RuteXTheme
 import com.ibaiqzzaaziza.rutex.util.ViewModelFactory
+import kotlinx.coroutines.launch
 
 @Composable
 fun ProfilScreen(navController: NavHostController) {
@@ -108,9 +127,34 @@ fun ProfilScreen(navController: NavHostController) {
     val jumlahRute by viewModel.jumlahRute.collectAsState()
     val preferensi by viewModel.preferensi.collectAsState()
     val notifikasi by viewModel.notifikasi.collectAsState()
+    val editStatus by viewModel.editStatus.collectAsState()
+    val errorMessage by viewModel.errorMessage
 
     // Dialog yang sedang terbuka (null jika tidak ada)
     var dialog by rememberSaveable { mutableStateOf<DialogProfil?>(null) }
+
+    val dataStore = remember { UserDataStore(context) }
+    val scope = rememberCoroutineScope()
+    var isLoggingOut by remember { mutableStateOf(false) }
+
+    val pesanEditSukses = stringResource(R.string.edit_profil_sukses)
+    val pesanGagalKoneksi = stringResource(R.string.error_koneksi)
+    val pesanLogout = stringResource(R.string.logout_success)
+
+    LaunchedEffect(editStatus) {
+        when (editStatus) {
+            ApiStatus.SUCCESS -> {
+                Toast.makeText(context, pesanEditSukses, Toast.LENGTH_SHORT).show()
+                dialog = null
+                viewModel.clearEditStatus()
+            }
+            ApiStatus.FAILED -> {
+                Toast.makeText(context, errorMessage ?: pesanGagalKoneksi, Toast.LENGTH_LONG).show()
+                viewModel.clearEditStatus()
+            }
+            else -> {}
+        }
+    }
 
     Scaffold(
         topBar = { RuteMainTopBar(navController) },
@@ -126,7 +170,11 @@ fun ProfilScreen(navController: NavHostController) {
             verticalArrangement = Arrangement.spacedBy(24.dp)
         ) {
             ProfilHeader()
-            KartuAkun(user = user, jumlahRute = jumlahRute)
+            KartuAkun(
+                user = user,
+                jumlahRute = jumlahRute,
+                onEditClick = { dialog = DialogProfil.EDIT_PROFIL }
+            )
             PreferensiSection(
                 preferensi = preferensi,
                 onJenisClick = { dialog = DialogProfil.JENIS_WISATA },
@@ -141,6 +189,7 @@ fun ProfilScreen(navController: NavHostController) {
                 onBantuanClick = { dialog = DialogProfil.BANTUAN },
                 onTentangClick = { dialog = DialogProfil.TENTANG }
             )
+            TombolKeluar(onClick = { dialog = DialogProfil.LOGOUT })
 
             Text(
                 text = stringResource(R.string.profil_footer),
@@ -198,11 +247,137 @@ fun ProfilScreen(navController: NavHostController) {
             text = stringResource(R.string.tentang_isi, BuildConfig.VERSION_NAME),
             onDismissRequest = { dialog = null }
         )
+        DialogProfil.EDIT_PROFIL -> EditNamaDialog(
+            namaAwal = user.name,
+            isLoading = editStatus == ApiStatus.LOADING,
+            onDismissRequest = { dialog = null },
+            onConfirmation = { viewModel.editNama(it) }
+        )
+        DialogProfil.LOGOUT -> AlertDialog(
+            title = { Text(text = stringResource(R.string.logout_konfirmasi_title)) },
+            text = { Text(text = stringResource(R.string.logout_konfirmasi_pesan)) },
+            confirmButton = {
+                TextButton(
+                    enabled = !isLoggingOut,
+                    onClick = {
+                        // signOut adalah suspend function, jadi dipanggil dari coroutine
+                        scope.launch {
+                            isLoggingOut = true
+                            signOut(context, dataStore)
+                            isLoggingOut = false
+                            dialog = null
+                            Toast.makeText(context, pesanLogout, Toast.LENGTH_SHORT).show()
+                            // Seluruh riwayat layar dihapus agar tombol Back tidak kembali ke halaman yang butuh login
+                            navController.navigate(Screen.Login.route) {
+                                popUpTo(navController.graph.id) { inclusive = true }
+                            }
+                        }
+                    }
+                ) {
+                    Text(text = stringResource(R.string.tombol_logout), color = RuteError)
+                }
+            },
+            dismissButton = {
+                TextButton(enabled = !isLoggingOut, onClick = { dialog = null }) {
+                    Text(text = stringResource(R.string.tombol_batal))
+                }
+            },
+            onDismissRequest = { if (!isLoggingOut) dialog = null },
+            containerColor = Color.White
+        )
         null -> {}
     }
 }
 
-private enum class DialogProfil { JENIS_WISATA, DURASI, GAYA, BANTUAN, TENTANG }
+private enum class DialogProfil { JENIS_WISATA, DURASI, GAYA, BANTUAN, TENTANG, EDIT_PROFIL, LOGOUT }
+
+@Composable
+private fun EditNamaDialog(
+    namaAwal: String,
+    isLoading: Boolean,
+    onDismissRequest: () -> Unit,
+    onConfirmation: (String) -> Unit
+) {
+    var nama by rememberSaveable { mutableStateOf(namaAwal) }
+    var namaError by rememberSaveable { mutableStateOf(false) }
+
+    AlertDialog(
+        title = { Text(text = stringResource(R.string.edit_profil)) },
+        text = {
+            OutlinedTextField(
+                value = nama,
+                onValueChange = {
+                    nama = it
+                    namaError = false
+                },
+                label = { Text(text = stringResource(R.string.label_fullname)) },
+                isError = namaError,
+                supportingText = if (namaError) {
+                    { Text(text = stringResource(R.string.error_fullname_empty)) }
+                } else {
+                    null
+                },
+                singleLine = true,
+                enabled = !isLoading,
+                keyboardOptions = KeyboardOptions(
+                    capitalization = KeyboardCapitalization.Words,
+                    imeAction = ImeAction.Done
+                ),
+                modifier = Modifier.fillMaxWidth()
+            )
+        },
+        confirmButton = {
+            TextButton(
+                enabled = !isLoading,
+                onClick = {
+                    namaError = nama.isBlank()
+                    if (!namaError) onConfirmation(nama.trim())
+                }
+            ) {
+                if (isLoading) {
+                    CircularProgressIndicator(strokeWidth = 2.dp, modifier = Modifier.size(18.dp))
+                } else {
+                    Text(text = stringResource(R.string.tombol_simpan))
+                }
+            }
+        },
+        dismissButton = {
+            TextButton(enabled = !isLoading, onClick = onDismissRequest) {
+                Text(text = stringResource(R.string.tombol_batal))
+            }
+        },
+        onDismissRequest = { if (!isLoading) onDismissRequest() },
+        containerColor = Color.White
+    )
+}
+
+@Composable
+private fun TombolKeluar(onClick: () -> Unit) {
+    Row(
+        modifier = Modifier
+            .fillMaxWidth()
+            .height(48.dp)
+            .clip(RoundedCornerShape(16.dp))
+            .background(RuteErrorContainer)
+            .clickable(role = Role.Button, onClick = onClick),
+        horizontalArrangement = Arrangement.Center,
+        verticalAlignment = Alignment.CenterVertically
+    ) {
+        Icon(
+            imageVector = Icons.AutoMirrored.Outlined.Logout,
+            contentDescription = null,
+            tint = RuteErrorDark,
+            modifier = Modifier.size(16.dp)
+        )
+        Spacer(modifier = Modifier.width(8.dp))
+        Text(
+            text = stringResource(R.string.keluar_dari_akun),
+            fontSize = 14.sp,
+            fontWeight = FontWeight.Bold,
+            color = RuteErrorDark
+        )
+    }
+}
 
 @Composable
 private fun InfoDialog(title: String, text: String, onDismissRequest: () -> Unit) {
@@ -402,7 +577,7 @@ private fun ProfilHeader() {
 }
 
 @Composable
-private fun KartuAkun(user: User, jumlahRute: Int) {
+private fun KartuAkun(user: User, jumlahRute: Int, onEditClick: () -> Unit) {
     val shape = RoundedCornerShape(16.dp)
     Column(
         modifier = Modifier
@@ -469,8 +644,30 @@ private fun KartuAkun(user: User, jumlahRute: Int) {
                 text = pluralStringResource(R.plurals.profil_rute_tersimpan, jumlahRute, jumlahRute),
                 fontSize = 12.sp,
                 fontWeight = FontWeight.Medium,
-                color = RuteSlate
+                color = RuteSlate,
+                modifier = Modifier.weight(1f)
             )
+            Row(
+                modifier = Modifier
+                    .clip(CircleShape)
+                    .clickable(role = Role.Button, onClick = onEditClick)
+                    .padding(horizontal = 4.dp, vertical = 2.dp),
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                Text(
+                    text = stringResource(R.string.edit_profil),
+                    fontSize = 13.sp,
+                    fontWeight = FontWeight.SemiBold,
+                    color = RuteBlue
+                )
+                Spacer(modifier = Modifier.width(4.dp))
+                Icon(
+                    imageVector = Icons.Outlined.Edit,
+                    contentDescription = null,
+                    tint = RuteBlue,
+                    modifier = Modifier.size(12.dp)
+                )
+            }
         }
     }
 }

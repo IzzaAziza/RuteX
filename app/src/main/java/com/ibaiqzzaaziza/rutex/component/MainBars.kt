@@ -23,11 +23,7 @@ import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.rememberCoroutineScope
-import androidx.compose.runtime.saveable.rememberSaveable
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
@@ -41,26 +37,20 @@ import com.ibaiqzzaaziza.rutex.R
 import com.ibaiqzzaaziza.rutex.model.User
 import com.ibaiqzzaaziza.rutex.navigation.Screen
 import com.ibaiqzzaaziza.rutex.network.UserDataStore
-import com.ibaiqzzaaziza.rutex.network.signOut
 import com.ibaiqzzaaziza.rutex.ui.theme.RuteBackground
 import com.ibaiqzzaaziza.rutex.ui.theme.RuteNavy
 import com.ibaiqzzaaziza.rutex.ui.theme.RuteOrange
 import com.ibaiqzzaaziza.rutex.ui.theme.RuteOrangeDark
 import com.ibaiqzzaaziza.rutex.ui.theme.RuteSlate
-import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun RuteMainTopBar(navController: NavHostController) {
     val context = LocalContext.current
     val comingSoon = stringResource(R.string.feature_coming_soon)
-    val pesanLogout = stringResource(R.string.logout_success)
 
     val dataStore = remember { UserDataStore(context) }
     val user by dataStore.userFlow.collectAsState(User())
-    val scope = rememberCoroutineScope()
-    var showProfil by rememberSaveable { mutableStateOf(false) }
-    var isLoggingOut by remember { mutableStateOf(false) }
 
     TopAppBar(
         title = {
@@ -96,33 +86,18 @@ fun RuteMainTopBar(navController: NavHostController) {
             UserAvatar(
                 modifier = Modifier.padding(end = 12.dp),
                 photoUrl = user.photoUrl,
-                onClick = { showProfil = true }
+                onClick = {
+                    // Ikon profil membuka layar Profil, sama seperti tab Profil di bottom bar
+                    navController.navigate(Screen.Profil.route) {
+                        popUpTo(Screen.Home.route) { saveState = true }
+                        launchSingleTop = true
+                        restoreState = true
+                    }
+                }
             )
         },
         colors = TopAppBarDefaults.topAppBarColors(containerColor = RuteBackground)
     )
-
-    if (showProfil) {
-        ProfilDialog(
-            user = user,
-            isLoggingOut = isLoggingOut,
-            onDismissRequest = { showProfil = false },
-            onConfirmation = {
-                // signOut adalah suspend function, jadi dipanggil dari coroutine
-                scope.launch {
-                    isLoggingOut = true
-                    signOut(context, dataStore)
-                    isLoggingOut = false
-                    showProfil = false
-                    Toast.makeText(context, pesanLogout, Toast.LENGTH_SHORT).show()
-                    // Seluruh riwayat layar dihapus agar tombol Back tidak kembali ke halaman yang butuh login
-                    navController.navigate(Screen.Login.route) {
-                        popUpTo(navController.graph.id) { inclusive = true }
-                    }
-                }
-            }
-        )
-    }
 }
 
 private enum class BottomNavItem(

@@ -185,6 +185,11 @@
     <string name="tentang_desc">Informasi versi aplikasi dan pengembang</string>
     <string name="tentang_isi">RuteX Cirebon Edition\nVersi %1$s\n\nAplikasi perencana wisata Cirebon.\nDikembangkan oleh Baiq Izza Aziza.</string>
     <string name="versi_singkat">v%1$s</string>
+    <string name="edit_profil">Edit Profil</string>
+    <string name="edit_profil_sukses">Nama berhasil diperbarui</string>
+    <string name="keluar_dari_akun">Keluar dari Akun</string>
+    <string name="logout_konfirmasi_title">Keluar dari akun?</string>
+    <string name="logout_konfirmasi_pesan">Kamu perlu masuk lagi untuk melihat riwayat dan membuat rute baru.</string>
     <string name="profil_footer">RuteX Cirebon Edition • Hak Cipta Terpelihara</string>
     <string name="error_koneksi">Tidak dapat terhubung ke server. Periksa koneksi internetmu.</string>
 

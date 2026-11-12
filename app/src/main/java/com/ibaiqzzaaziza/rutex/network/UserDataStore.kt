@@ -57,6 +57,10 @@ class UserDataStore(private val context: Context) {
         }
     }
 
+    suspend fun saveNama(nama: String) {
+        context.dataStore.edit { it[USER_NAME] = nama }
+    }
+
     suspend fun clear() {
         context.dataStore.edit { it.clear() }
     }
