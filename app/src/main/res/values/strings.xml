@@ -168,6 +168,23 @@
     <string name="gaya_padat">Padat</string>
     <string name="gaya_padat_desc">Kunjungi sebanyak mungkin destinasi</string>
     <string name="tombol_simpan">Simpan</string>
+    <string name="pengaturan_title">Pengaturan Aplikasi</string>
+    <string name="pengaturan_notifikasi">Notifikasi</string>
+    <string name="pengaturan_notifikasi_desc">Kelola pemberitahuan dari RuteX</string>
+    <string name="pengaturan_bahasa">Bahasa</string>
+    <string name="pengaturan_bahasa_desc">Pengaturan bahasa antarmuka</string>
+    <string name="pengaturan_bahasa_nilai">Bahasa Indonesia</string>
+    <string name="pengaturan_tema">Mode Tampilan</string>
+    <string name="pengaturan_tema_desc">Penyesuaian tema visual</string>
+    <string name="pengaturan_tema_nilai">Terang</string>
+    <string name="bantuan_section_title">Bantuan &amp; Informasi</string>
+    <string name="bantuan_title">Bantuan</string>
+    <string name="bantuan_desc">Temukan jawaban atas pertanyaanmu</string>
+    <string name="bantuan_isi">• Buat rute di menu Buat Rute, pilih mode Manual atau AI.\n• Rencana yang disimpan muncul di menu Riwayat dan bisa dihapus dari sana.\n• Ubah preferensi perjalanan di halaman Profil agar rekomendasi lebih sesuai.</string>
+    <string name="tentang_title">Tentang RuteX</string>
+    <string name="tentang_desc">Informasi versi aplikasi dan pengembang</string>
+    <string name="tentang_isi">RuteX Cirebon Edition\nVersi %1$s\n\nAplikasi perencana wisata Cirebon.\nDikembangkan oleh Baiq Izza Aziza.</string>
+    <string name="versi_singkat">v%1$s</string>
     <string name="profil_footer">RuteX Cirebon Edition • Hak Cipta Terpelihara</string>
     <string name="error_koneksi">Tidak dapat terhubung ke server. Periksa koneksi internetmu.</string>
 

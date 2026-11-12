@@ -18,23 +18,33 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.selection.toggleable
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.outlined.DirectionsWalk
+import androidx.compose.material.icons.automirrored.outlined.HelpOutline
 import androidx.compose.material.icons.automirrored.outlined.KeyboardArrowRight
 import androidx.compose.material.icons.outlined.AutoAwesome
 import androidx.compose.material.icons.outlined.Bolt
 import androidx.compose.material.icons.outlined.Explore
+import androidx.compose.material.icons.outlined.Info
+import androidx.compose.material.icons.outlined.LightMode
+import androidx.compose.material.icons.outlined.NotificationsActive
 import androidx.compose.material.icons.outlined.Schedule
 import androidx.compose.material.icons.outlined.Star
 import androidx.compose.material.icons.outlined.Storefront
+import androidx.compose.material.icons.outlined.Translate
 import androidx.compose.material.icons.outlined.VerifiedUser
+import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Scaffold
+import androidx.compose.material3.Switch
+import androidx.compose.material3.SwitchDefaults
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
@@ -51,6 +61,7 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.pluralStringResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
@@ -60,6 +71,7 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import coil.compose.AsyncImage
+import com.ibaiqzzaaziza.rutex.BuildConfig
 import com.ibaiqzzaaziza.rutex.R
 import com.ibaiqzzaaziza.rutex.component.PilihanGandaDialog
 import com.ibaiqzzaaziza.rutex.component.PilihanTunggalDialog
@@ -95,6 +107,7 @@ fun ProfilScreen(navController: NavHostController) {
     val user by viewModel.user.collectAsState()
     val jumlahRute by viewModel.jumlahRute.collectAsState()
     val preferensi by viewModel.preferensi.collectAsState()
+    val notifikasi by viewModel.notifikasi.collectAsState()
 
     // Dialog yang sedang terbuka (null jika tidak ada)
     var dialog by rememberSaveable { mutableStateOf<DialogProfil?>(null) }
@@ -119,6 +132,14 @@ fun ProfilScreen(navController: NavHostController) {
                 onJenisClick = { dialog = DialogProfil.JENIS_WISATA },
                 onDurasiClick = { dialog = DialogProfil.DURASI },
                 onGayaClick = { dialog = DialogProfil.GAYA }
+            )
+            PengaturanSection(
+                notifikasi = notifikasi,
+                onNotifikasiChange = { viewModel.simpanNotifikasi(it) }
+            )
+            BantuanSection(
+                onBantuanClick = { dialog = DialogProfil.BANTUAN },
+                onTentangClick = { dialog = DialogProfil.TENTANG }
             )
 
             Text(
@@ -167,11 +188,149 @@ fun ProfilScreen(navController: NavHostController) {
                 dialog = null
             }
         )
+        DialogProfil.BANTUAN -> InfoDialog(
+            title = stringResource(R.string.bantuan_title),
+            text = stringResource(R.string.bantuan_isi),
+            onDismissRequest = { dialog = null }
+        )
+        DialogProfil.TENTANG -> InfoDialog(
+            title = stringResource(R.string.tentang_title),
+            text = stringResource(R.string.tentang_isi, BuildConfig.VERSION_NAME),
+            onDismissRequest = { dialog = null }
+        )
         null -> {}
     }
 }
 
-private enum class DialogProfil { JENIS_WISATA, DURASI, GAYA }
+private enum class DialogProfil { JENIS_WISATA, DURASI, GAYA, BANTUAN, TENTANG }
+
+@Composable
+private fun InfoDialog(title: String, text: String, onDismissRequest: () -> Unit) {
+    AlertDialog(
+        title = { Text(text = title) },
+        text = { Text(text = text, lineHeight = 22.sp) },
+        confirmButton = {
+            TextButton(onClick = onDismissRequest) {
+                Text(text = stringResource(R.string.tombol_tutup))
+            }
+        },
+        onDismissRequest = onDismissRequest,
+        containerColor = Color.White
+    )
+}
+
+@Composable
+private fun JudulSection(text: String) {
+    Text(
+        text = text,
+        fontSize = 18.sp,
+        lineHeight = 26.sp,
+        fontWeight = FontWeight.Bold,
+        color = RuteNavy,
+        modifier = Modifier.padding(bottom = 10.dp)
+    )
+}
+
+@Composable
+private fun PengaturanSection(
+    notifikasi: Boolean,
+    onNotifikasiChange: (Boolean) -> Unit
+) {
+    Column {
+        JudulSection(text = stringResource(R.string.pengaturan_title))
+        KartuMenu {
+            // Baris notifikasi bisa diklik di mana saja untuk mengubah toggle
+            Row(
+                modifier = Modifier.toggleable(
+                    value = notifikasi,
+                    onValueChange = onNotifikasiChange,
+                    role = Role.Switch
+                )
+            ) {
+                ItemMenu(
+                    icon = Icons.Outlined.NotificationsActive,
+                    iconBackground = RuteChip,
+                    iconTint = RuteNavy,
+                    title = stringResource(R.string.pengaturan_notifikasi),
+                    subtitle = stringResource(R.string.pengaturan_notifikasi_desc),
+                    onClick = null
+                ) {
+                    Switch(
+                        checked = notifikasi,
+                        onCheckedChange = null,
+                        colors = SwitchDefaults.colors(
+                            checkedTrackColor = RuteOrange,
+                            checkedThumbColor = Color.White,
+                            checkedBorderColor = RuteOrange
+                        )
+                    )
+                }
+            }
+            PemisahMenu()
+            // Saat ini RuteX hanya tersedia dalam Bahasa Indonesia dan tema terang
+            ItemMenu(
+                icon = Icons.Outlined.Translate,
+                iconBackground = RuteChip,
+                iconTint = RuteNavy,
+                title = stringResource(R.string.pengaturan_bahasa),
+                subtitle = stringResource(R.string.pengaturan_bahasa_desc),
+                onClick = null
+            ) {
+                NilaiMenu(text = stringResource(R.string.pengaturan_bahasa_nilai), color = RuteSlate)
+            }
+            PemisahMenu()
+            ItemMenu(
+                icon = Icons.Outlined.LightMode,
+                iconBackground = RuteChip,
+                iconTint = RuteNavy,
+                title = stringResource(R.string.pengaturan_tema),
+                subtitle = stringResource(R.string.pengaturan_tema_desc),
+                onClick = null
+            ) {
+                NilaiMenu(text = stringResource(R.string.pengaturan_tema_nilai), color = RuteSlate)
+            }
+        }
+    }
+}
+
+@Composable
+private fun BantuanSection(
+    onBantuanClick: () -> Unit,
+    onTentangClick: () -> Unit
+) {
+    Column {
+        JudulSection(text = stringResource(R.string.bantuan_section_title))
+        KartuMenu {
+            ItemMenu(
+                icon = Icons.AutoMirrored.Outlined.HelpOutline,
+                iconBackground = RuteChip,
+                iconTint = RuteNavy,
+                title = stringResource(R.string.bantuan_title),
+                subtitle = stringResource(R.string.bantuan_desc),
+                onClick = onBantuanClick
+            )
+            PemisahMenu()
+            ItemMenu(
+                icon = Icons.Outlined.Info,
+                iconBackground = RuteChip,
+                iconTint = RuteNavy,
+                title = stringResource(R.string.tentang_title),
+                subtitle = stringResource(R.string.tentang_desc),
+                onClick = onTentangClick
+            ) {
+                Text(
+                    text = stringResource(R.string.versi_singkat, BuildConfig.VERSION_NAME),
+                    fontSize = 11.sp,
+                    fontWeight = FontWeight.Bold,
+                    color = RuteBrown,
+                    modifier = Modifier
+                        .background(RuteBadge, CircleShape)
+                        .padding(horizontal = 8.dp, vertical = 2.dp)
+                )
+            }
+        }
+    }
+}
 
 // Kategori "Semua" tidak relevan sebagai minat, jadi tidak ditampilkan
 private val KATEGORI_WISATA = KategoriDestinasi.entries.filter { it != KategoriDestinasi.SEMUA }
@@ -480,12 +639,12 @@ private fun ItemMenu(
 }
 
 @Composable
-private fun NilaiMenu(text: String) {
+private fun NilaiMenu(text: String, color: Color = RuteNavy) {
     Text(
         text = text,
         fontSize = 13.sp,
-        fontWeight = FontWeight.SemiBold,
-        color = RuteNavy
+        fontWeight = if (color == RuteNavy) FontWeight.SemiBold else FontWeight.Medium,
+        color = color
     )
 }
 

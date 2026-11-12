@@ -3,6 +3,7 @@ package com.ibaiqzzaaziza.rutex.util
 import android.content.Context
 import androidx.datastore.core.DataStore
 import androidx.datastore.preferences.core.Preferences
+import androidx.datastore.preferences.core.booleanPreferencesKey
 import androidx.datastore.preferences.core.edit
 import androidx.datastore.preferences.core.stringPreferencesKey
 import androidx.datastore.preferences.core.stringSetPreferencesKey
@@ -25,6 +26,15 @@ class SettingsDataStore(private val context: Context) {
         private val JENIS_WISATA = stringSetPreferencesKey("jenis_wisata")
         private val DURASI = stringPreferencesKey("durasi_perjalanan")
         private val GAYA = stringPreferencesKey("gaya_perjalanan")
+        private val NOTIFIKASI = booleanPreferencesKey("notifikasi")
+    }
+
+    val notifikasiFlow: Flow<Boolean> = context.settingsDataStore.data.map { preferences ->
+        preferences[NOTIFIKASI] ?: true
+    }
+
+    suspend fun saveNotifikasi(aktif: Boolean) {
+        context.settingsDataStore.edit { it[NOTIFIKASI] = aktif }
     }
 
     private val default = PreferensiPerjalanan()

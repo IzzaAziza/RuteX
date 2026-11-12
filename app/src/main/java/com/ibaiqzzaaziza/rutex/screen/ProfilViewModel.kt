@@ -50,6 +50,16 @@ class ProfilViewModel(
             initialValue = 0
         )
 
+    val notifikasi: StateFlow<Boolean> = settings.notifikasiFlow.stateIn(
+        scope = viewModelScope,
+        started = SharingStarted.WhileSubscribed(),
+        initialValue = true
+    )
+
+    fun simpanNotifikasi(aktif: Boolean) {
+        viewModelScope.launch(Dispatchers.IO) { settings.saveNotifikasi(aktif) }
+    }
+
     fun simpanJenisWisata(jenis: Set<KategoriDestinasi>) {
         viewModelScope.launch(Dispatchers.IO) { settings.saveJenisWisata(jenis) }
     }
