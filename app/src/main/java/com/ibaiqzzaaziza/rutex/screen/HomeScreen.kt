@@ -29,11 +29,12 @@ import androidx.compose.material.icons.automirrored.filled.ArrowForward
 import androidx.compose.material.icons.automirrored.outlined.ArrowForward
 import androidx.compose.material.icons.automirrored.outlined.KeyboardArrowRight
 import androidx.compose.material.icons.filled.Check
-import androidx.compose.material.icons.filled.Star
 import androidx.compose.material.icons.outlined.Add
 import androidx.compose.material.icons.outlined.AltRoute
 import androidx.compose.material.icons.outlined.AutoAwesome
+import androidx.compose.material.icons.outlined.BrokenImage
 import androidx.compose.material.icons.outlined.DirectionsSubway
+import androidx.compose.material.icons.outlined.Image
 import androidx.compose.material.icons.outlined.Landscape
 import androidx.compose.material.icons.outlined.LocationOn
 import androidx.compose.material.icons.outlined.MoreVert
@@ -45,14 +46,17 @@ import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
+import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
 import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.saveable.rememberSaveable
@@ -66,6 +70,7 @@ import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.graphics.vector.rememberVectorPainter
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalResources
@@ -73,6 +78,7 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.ImeAction
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -80,12 +86,16 @@ import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
+import coil.compose.AsyncImage
+import coil.request.ImageRequest
 import com.ibaiqzzaaziza.rutex.R
 import com.ibaiqzzaaziza.rutex.component.RuteBottomBar
 import com.ibaiqzzaaziza.rutex.component.RuteMainTopBar
 import com.ibaiqzzaaziza.rutex.model.Destinasi
 import com.ibaiqzzaaziza.rutex.model.KategoriDestinasi
 import com.ibaiqzzaaziza.rutex.navigation.Screen
+import com.ibaiqzzaaziza.rutex.network.ApiStatus
+import com.ibaiqzzaaziza.rutex.network.RuteXApi
 import com.ibaiqzzaaziza.rutex.ui.theme.RuteBackground
 import com.ibaiqzzaaziza.rutex.ui.theme.RuteBadge
 import com.ibaiqzzaaziza.rutex.ui.theme.RuteBlue
@@ -100,8 +110,8 @@ import com.ibaiqzzaaziza.rutex.ui.theme.RuteOrange
 import com.ibaiqzzaaziza.rutex.ui.theme.RuteOrangeDark
 import com.ibaiqzzaaziza.rutex.ui.theme.RutePeach
 import com.ibaiqzzaaziza.rutex.ui.theme.RuteSlate
-import com.ibaiqzzaaziza.rutex.ui.theme.RuteStar
 import com.ibaiqzzaaziza.rutex.ui.theme.RuteXTheme
+import com.ibaiqzzaaziza.rutex.util.formatRupiah
 
 @Composable
 fun HomeScreen(navController: NavHostController) {
@@ -135,10 +145,13 @@ fun HomeContent(
     var query by rememberSaveable { mutableStateOf("") }
     var kategori by rememberSaveable { mutableStateOf(KategoriDestinasi.SEMUA) }
 
+    val status by viewModel.status.collectAsState()
+    val semuaDestinasi by viewModel.destinasiPopuler
+
     // Destinasi difilter berdasarkan chip kategori dan kata kunci pencarian
-    val destinasi = viewModel.destinasiPopuler.filter {
+    val destinasi = semuaDestinasi.filter {
         (kategori == KategoriDestinasi.SEMUA || it.kategori == kategori) &&
-                (query.isBlank() || it.nama.contains(query.trim(), ignoreCase = true))
+                (query.isBlank() || it.name.contains(query.trim(), ignoreCase = true))
     }
 
     Column(
@@ -159,11 +172,13 @@ fun HomeContent(
         }
 
         PopularDestinationsSection(
+            status = status,
             destinasi = destinasi,
             kategoriTerpilih = kategori,
             onKategoriClick = { kategori = it },
+            onRetry = { viewModel.retrieveData() },
             onAddClick = { item ->
-                val message = resources.getString(R.string.added_to_plan, item.nama)
+                val message = resources.getString(R.string.added_to_plan, item.name)
                 Toast.makeText(context, message, Toast.LENGTH_SHORT).show()
             }
         )
@@ -533,9 +548,11 @@ private fun RecentRouteSection() {
 
 @Composable
 private fun PopularDestinationsSection(
+    status: ApiStatus,
     destinasi: List<Destinasi>,
     kategoriTerpilih: KategoriDestinasi,
     onKategoriClick: (KategoriDestinasi) -> Unit,
+    onRetry: () -> Unit,
     onAddClick: (Destinasi) -> Unit
 ) {
     Column(modifier = Modifier.fillMaxWidth()) {
@@ -565,7 +582,35 @@ private fun PopularDestinationsSection(
         }
 
         Spacer(modifier = Modifier.height(8.dp))
-        if (destinasi.isEmpty()) {
+        if (status == ApiStatus.LOADING) {
+            Box(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .height(160.dp),
+                contentAlignment = Alignment.Center
+            ) {
+                CircularProgressIndicator(color = RuteOrange)
+            }
+        } else if (status == ApiStatus.FAILED) {
+            // Modul 13: tampilkan pesan dan tombol coba lagi saat data gagal dimuat
+            Column(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(horizontal = 16.dp, vertical = 24.dp),
+                horizontalAlignment = Alignment.CenterHorizontally
+            ) {
+                Text(
+                    text = stringResource(R.string.error_muat_destinasi),
+                    fontSize = 14.sp,
+                    color = RuteSlate,
+                    textAlign = TextAlign.Center
+                )
+                Spacer(modifier = Modifier.height(8.dp))
+                OutlinedButton(onClick = onRetry) {
+                    Text(text = stringResource(R.string.tombol_coba_lagi), color = RuteOrangeDark)
+                }
+            }
+        } else if (destinasi.isEmpty()) {
             Text(
                 text = stringResource(R.string.empty_destination),
                 fontSize = 14.sp,
@@ -633,32 +678,13 @@ private fun DestinationCard(destinasi: Destinasi, onAddClick: () -> Unit) {
                 .fillMaxWidth()
                 .height(144.dp)
         ) {
-            if (destinasi.gambar != null) {
-                Image(
-                    painter = painterResource(destinasi.gambar),
-                    contentDescription = stringResource(R.string.destination_image_desc, destinasi.nama),
-                    modifier = Modifier.fillMaxSize(),
-                    contentScale = ContentScale.Crop
-                )
-            } else {
-                // Placeholder selama foto destinasi belum tersedia
-                Box(
-                    modifier = Modifier
-                        .fillMaxSize()
-                        .background(Brush.linearGradient(listOf(RutePeach, RuteBlueLight))),
-                    contentAlignment = Alignment.Center
-                ) {
-                    Icon(
-                        imageVector = Icons.Outlined.Landscape,
-                        contentDescription = null,
-                        tint = Color.White,
-                        modifier = Modifier.size(48.dp)
-                    )
-                }
-            }
+            FotoDestinasi(
+                destinasi = destinasi,
+                modifier = Modifier.fillMaxSize()
+            )
 
             Text(
-                text = destinasi.label,
+                text = stringResource(destinasi.kategori.label),
                 color = RuteOrangeDark,
                 fontSize = 12.sp,
                 fontWeight = FontWeight.SemiBold,
@@ -678,14 +704,14 @@ private fun DestinationCard(destinasi: Destinasi, onAddClick: () -> Unit) {
                 verticalAlignment = Alignment.CenterVertically
             ) {
                 Icon(
-                    imageVector = Icons.Filled.Star,
+                    imageVector = Icons.Outlined.Schedule,
                     contentDescription = null,
-                    tint = RuteStar,
+                    tint = Color.White,
                     modifier = Modifier.size(12.dp)
                 )
                 Spacer(modifier = Modifier.width(4.dp))
                 Text(
-                    text = destinasi.rating.toString(),
+                    text = stringResource(R.string.jam_operasional, destinasi.jamBuka, destinasi.jamTutup),
                     color = Color.White,
                     fontSize = 12.sp,
                     fontWeight = FontWeight.Medium
@@ -700,7 +726,7 @@ private fun DestinationCard(destinasi: Destinasi, onAddClick: () -> Unit) {
             verticalArrangement = Arrangement.SpaceBetween
         ) {
             Text(
-                text = destinasi.nama,
+                text = destinasi.name,
                 fontWeight = FontWeight.Bold,
                 fontSize = 18.sp,
                 lineHeight = 26.sp,
@@ -718,7 +744,7 @@ private fun DestinationCard(destinasi: Destinasi, onAddClick: () -> Unit) {
                 )
                 Spacer(modifier = Modifier.width(4.dp))
                 Text(
-                    text = destinasi.lokasi,
+                    text = destinasi.address,
                     fontSize = 12.sp,
                     fontWeight = FontWeight.Medium,
                     color = RuteSlate,
@@ -735,13 +761,13 @@ private fun DestinationCard(destinasi: Destinasi, onAddClick: () -> Unit) {
             ) {
                 Column {
                     Text(
-                        text = destinasi.labelHarga,
+                        text = stringResource(R.string.tiket_masuk),
                         fontSize = 12.sp,
                         fontWeight = FontWeight.Medium,
                         color = RuteSlate
                     )
                     Text(
-                        text = destinasi.harga,
+                        text = hargaTiket(destinasi.ticketPrice),
                         fontWeight = FontWeight.Bold,
                         fontSize = 14.sp,
                         color = RuteOrangeDark
@@ -763,6 +789,47 @@ private fun DestinationCard(destinasi: Destinasi, onAddClick: () -> Unit) {
                     }
                 }
             }
+        }
+    }
+}
+
+@Composable
+fun hargaTiket(harga: Int?): String = when {
+    harga == null -> stringResource(R.string.harga_tidak_diketahui)
+    harga == 0 -> stringResource(R.string.gratis)
+    else -> formatRupiah(harga)
+}
+
+/**
+ * Foto utama destinasi dari server (Modul 12–13).
+ * Selama dimuat tampil warna gradasi, dan jika gagal tampil ikon gambar rusak.
+ */
+@Composable
+fun FotoDestinasi(destinasi: Destinasi, modifier: Modifier = Modifier, indexFoto: Int = 0) {
+    val path = destinasi.images.getOrNull(indexFoto)?.image
+    Box(
+        modifier = modifier.background(Brush.linearGradient(listOf(RutePeach, RuteBlueLight))),
+        contentAlignment = Alignment.Center
+    ) {
+        if (path == null) {
+            Icon(
+                imageVector = Icons.Outlined.Landscape,
+                contentDescription = null,
+                tint = Color.White,
+                modifier = Modifier.size(48.dp)
+            )
+        } else {
+            AsyncImage(
+                model = ImageRequest.Builder(LocalContext.current)
+                    .data(RuteXApi.getImageUrl(path))
+                    .crossfade(true)
+                    .build(),
+                contentDescription = stringResource(R.string.destination_image_desc, destinasi.name),
+                contentScale = ContentScale.Crop,
+                placeholder = rememberVectorPainter(Icons.Outlined.Image),
+                error = rememberVectorPainter(Icons.Outlined.BrokenImage),
+                modifier = Modifier.fillMaxSize()
+            )
         }
     }
 }

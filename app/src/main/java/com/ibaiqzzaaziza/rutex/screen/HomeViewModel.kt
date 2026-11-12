@@ -1,52 +1,42 @@
 package com.ibaiqzzaaziza.rutex.screen
 
+import android.util.Log
+import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import com.ibaiqzzaaziza.rutex.model.Destinasi
-import com.ibaiqzzaaziza.rutex.model.KategoriDestinasi
+import com.ibaiqzzaaziza.rutex.model.khususCirebon
+import com.ibaiqzzaaziza.rutex.network.ApiStatus
+import com.ibaiqzzaaziza.rutex.network.RuteXApi
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.launch
 
 class HomeViewModel : ViewModel() {
 
-    // Data dummy sementara, nantinya diambil dari database/API
-    val destinasiPopuler = listOf(
-        Destinasi(
-            id = 1,
-            nama = "Keraton Kasepuhan",
-            lokasi = "Jalan Kasepuhan, Lemahwungkuk",
-            label = "Wisata Budaya",
-            labelHarga = "Tiket Masuk",
-            harga = "Rp25.000",
-            rating = 4.8,
-            kategori = KategoriDestinasi.BUDAYA
-        ),
-        Destinasi(
-            id = 2,
-            nama = "Nasi Jamblang Ibu Nur",
-            lokasi = "Jl. Cangkring 2, Kejaksan",
-            label = "Kuliner Legendaris",
-            labelHarga = "Mulai Dari",
-            harga = "Rp30.000",
-            rating = 4.9,
-            kategori = KategoriDestinasi.KULINER
-        ),
-        Destinasi(
-            id = 3,
-            nama = "Taman Sari Gua Sunyaragi",
-            lokasi = "Sunyaragi, Kesambi",
-            label = "Cagar Budaya",
-            labelHarga = "Tiket Masuk",
-            harga = "Rp15.000",
-            rating = 4.7,
-            kategori = KategoriDestinasi.SEJARAH
-        ),
-        Destinasi(
-            id = 4,
-            nama = "Batik Trusmi Village",
-            lokasi = "Plered, Cirebon",
-            label = "Sentra Kerajinan",
-            labelHarga = "Akses Masuk",
-            harga = "Gratis",
-            rating = 4.8,
-            kategori = KategoriDestinasi.BUDAYA
-        )
-    )
+    // Destinasi prioritas dari server, ditampilkan di bagian Destinasi Populer
+    var destinasiPopuler = mutableStateOf(emptyList<Destinasi>())
+        private set
+
+    var status = MutableStateFlow(ApiStatus.LOADING)
+        private set
+
+    init {
+        retrieveData()
+    }
+
+    fun retrieveData() {
+        viewModelScope.launch(Dispatchers.IO) {
+            status.value = ApiStatus.LOADING
+            try {
+                destinasiPopuler.value = RuteXApi.service.getPriorityLocations().data
+                    .orEmpty()
+                    .khususCirebon()
+                status.value = ApiStatus.SUCCESS
+            } catch (e: Exception) {
+                Log.d("HomeViewModel", "Failure: ${e.message}")
+                status.value = ApiStatus.FAILED
+            }
+        }
+    }
 }

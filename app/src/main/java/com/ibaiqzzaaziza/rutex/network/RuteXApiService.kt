@@ -1,6 +1,7 @@
 package com.ibaiqzzaaziza.rutex.network
 
 import com.ibaiqzzaaziza.rutex.model.ApiResponse
+import com.ibaiqzzaaziza.rutex.model.Destinasi
 import com.ibaiqzzaaziza.rutex.model.ProfilData
 import com.ibaiqzzaaziza.rutex.model.TokenData
 import com.squareup.moshi.Moshi
@@ -19,6 +20,7 @@ import retrofit2.http.POST
 import retrofit2.http.PUT
 import retrofit2.http.Part
 import retrofit2.http.Path
+import retrofit2.http.Query
 
 // Semua endpoint RuteX selalu diawali /api, contoh: /auth/login -> https://api.rutex.id/api/auth/login
 private const val BASE_URL = "https://api.rutex.id/api/"
@@ -71,12 +73,29 @@ interface RuteXApiService {
         @Part("name") name: RequestBody,
         @Part("phone") phone: RequestBody
     ): Response<ApiResponse<Any>>
+
+    // category: budaya, kuliner, alam, atau berbelanja. Null berarti semua kategori.
+    @GET("locations")
+    suspend fun getLocations(
+        @Query("category") category: String? = null
+    ): ApiResponse<List<Destinasi>>
+
+    @GET("locations/priority")
+    suspend fun getPriorityLocations(): ApiResponse<List<Destinasi>>
+
+    @GET("locations/{id}")
+    suspend fun getLocation(@Path("id") id: Int): ApiResponse<Destinasi>
 }
 
 object RuteXApi {
+    // Gambar destinasi dikirim server dalam bentuk path, contoh: /media/locations/foto.jpg
+    private const val HOST_URL = "https://api.rutex.id"
+
     val service: RuteXApiService by lazy {
         retrofit.create(RuteXApiService::class.java)
     }
+
+    fun getImageUrl(path: String): String = HOST_URL + path
 
     private val errorAdapter = moshi.adapter<ApiResponse<Any>>(
         Types.newParameterizedType(ApiResponse::class.java, Any::class.java)
