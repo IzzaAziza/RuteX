@@ -26,9 +26,9 @@ import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.outlined.ArrowForward
 import androidx.compose.material.icons.automirrored.outlined.DirectionsWalk
+import androidx.compose.material.icons.automirrored.outlined.FormatListBulleted
 import androidx.compose.material.icons.outlined.AutoAwesome
 import androidx.compose.material.icons.outlined.DirectionsCar
-import androidx.compose.material.icons.outlined.FormatListBulleted
 import androidx.compose.material.icons.outlined.LocationOn
 import androidx.compose.material.icons.outlined.Map
 import androidx.compose.material.icons.outlined.Navigation
@@ -95,7 +95,7 @@ import com.ibaiqzzaaziza.rutex.util.bukaPeta
 import com.ibaiqzzaaziza.rutex.util.formatTanggalRencana
 
 private enum class TabDetailRute(val label: Int, val icon: ImageVector) {
-    ITINERARY(R.string.tab_itinerary, Icons.Outlined.FormatListBulleted),
+    ITINERARY(R.string.tab_itinerary, Icons.AutoMirrored.Outlined.FormatListBulleted),
     PETA(R.string.tab_peta_rute, Icons.Outlined.Map)
 }
 
